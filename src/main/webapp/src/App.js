@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from './icons/logo.svg';
+import './css/App.css';
 import {Navbar} from 'react-bootstrap';
-import MovieCard from './MovieCard'
-import MyNav from './MyNav'
+import MovieCard from './components/MovieCard';
+import MyNav from './components/MyNav';
+import MovieRecPage from './pages/MovieRecPage';
 
 class App extends Component {
   render() {
     return (
         <div>
           <MyNav value={"YOOOOO!"}/>
+          <MovieRecPage/>
         </div>
     );
   }

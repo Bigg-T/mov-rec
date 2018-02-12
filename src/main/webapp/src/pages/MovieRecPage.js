@@ -2,17 +2,14 @@
  * Created by t on 2/11/18.
  */
 import React, {Component} from 'react';
-import {Grid, Header, Container, Divider} from 'semantic-ui-react';
-import MovieCard from './MovieCard';
-import MyNav from './MyNav';
-
-import './MovieRecPage.css';
+import {Grid, Header, Container} from 'semantic-ui-react';
+import MovieCard from '../components/MovieCard';
+import '../css/MovieRecPage.css';
 
 class MovieRecPage extends Component {
   render() {
     return (
         <div className="mysection">
-          <MyNav/>
           <Container>
             <MovieSection sectionName={"What's Hot"}/>
           </Container>
