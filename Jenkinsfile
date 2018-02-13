@@ -11,14 +11,21 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building"
-                sh 'mvn -f project/pom.xml  compile'
-                sh 'mvn -f project/pom.xml  package'
+              avadhera-patch-3-1
+                sh 'mvn -f team-31-spring18/pom.xml  compile'
+                sh 'mvn -f team-31-spring18/pom.xml  package'
+
+               
+  spring2
             }
         }
         stage('Test'){
             steps {
                 echo "Testing"
-                sh 'mvn -f project/pom.xml  test'
+              avadhera-patch-3-1
+                sh 'mvn -f team-31-spring18/pom.xml  test'
+
+spring2
             }
         }
     }
