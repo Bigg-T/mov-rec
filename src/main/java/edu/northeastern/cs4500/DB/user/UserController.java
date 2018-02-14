@@ -28,5 +28,18 @@ public class UserController {
 	public List<UserObject> selectAllUserObjects() {
 		return UserRepository.findAll();
 	}
+	
+	public boolean validateLogin(String username, String pw) {
+		return false;
+	}
+	
+	@RequestMapping("/api/user/add_User")
+	public void addUser(String fname, String lname, String email, String pw, String username) {
+		
+	}
+	
+	private boolean userExists(String username) {
+		return false;
+	}
 
 }
