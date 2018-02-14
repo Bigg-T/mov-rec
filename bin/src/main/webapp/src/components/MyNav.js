@@ -46,7 +46,6 @@ class BasicNav extends Component {
     );
   }
 }
-
 class LoggedInNav extends Component {
   render() {
     return (
