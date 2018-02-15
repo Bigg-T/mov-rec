@@ -12,11 +12,11 @@ class MovieCard extends Component {
         <Card>
           <Card.Content>
             <Card.Header>
-              {this.props.movieName}
+              Movie Name Holder {this.props.movieName}
             </Card.Header>
             <Card.Meta>
               <Grid columns="equal">
-                <Grid.Column width={10}>
+                <Grid.Column width={12}>
                   <span className="date">
                     Released on 2016 {this.props.releaseDate}
                   </span>
@@ -37,6 +37,5 @@ class MovieCard extends Component {
     );
   }
 }
-
 
 export default MovieCard;

@@ -3,7 +3,6 @@
  */
 
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom'
 import {Navbar, NavItem, Nav} from 'react-bootstrap';
 
 class MyNav extends Component {
@@ -29,20 +28,17 @@ class BasicNav extends Component {
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to={`/`}><a>Movi3Hall</a></Link>
-              MM
+              <a href="/">Movi3Hall</a>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              <NavItem eventKey={1}>
-                <Link to={`/signin`}> Sign In </Link>
-                si
+              <NavItem eventKey={1} href="#">
+                Sign In
               </NavItem>
-              <NavItem eventKey={1}>
-                <Link to={`/signup`}>Register</Link>
-                su
+              <NavItem eventKey={1} href="#">
+                Register
               </NavItem>
             </Nav>
           </Navbar.Collapse>
@@ -50,7 +46,6 @@ class BasicNav extends Component {
     );
   }
 }
-
 class LoggedInNav extends Component {
   render() {
     return (
