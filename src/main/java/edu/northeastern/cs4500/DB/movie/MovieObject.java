@@ -2,14 +2,16 @@ package edu.northeastern.cs4500.DB.movie;
 
 import javax.persistence.Entity;
 
+import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.*;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+//import javax.persistence.JoinColumn;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
+//import javax.persistence.Id;
+//import javax.persistence.JoinTable;
+//import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -18,14 +20,15 @@ import javax.validation.constraints.NotNull;
 @Entity(name="Movie")
 public class MovieObject {
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+	//@Id
+	//@GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	public int id;
 	
 	@NotNull
 	private String title;
 	
-	private double rating;
 	private String overview; //description
 	private int populatiry;
 	private String poster_path;
@@ -37,30 +40,44 @@ public class MovieObject {
 	private Set<GenreObject> genres; //MANY TO MANY relationship with Genres Class
 	
 	public MovieObject() {
-		
+		//Set<GenreObject> test = new HashSet<>();
+		this.genres = new HashSet<>();
+//		private Set<GenreObject> roles = new HashSet()<>;
+//		this.genres = new Set<>;;
 	}
 	
-	public MovieObject(String title, double rating) {
+	public MovieObject(String title, double vote_average) {
+		this.vote_count = 1;
 		this.title = title;
-		this.rating = rating;
+		this.vote_average = vote_average;
+		this.genres = new HashSet<>();
 	}
 	
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	    public int getId() {
+	        return id;
+	    }
+
+	    public void setId(int id) {
+	        this.id = id;
+	    }
 
 	public double getRating() {
-		return rating;
+		return this.vote_average;
 	}
 
-	public void setRating(double rating) {
-		this.rating = rating;
+	public void setRating(double vote_average) {
+		this.vote_average = vote_average;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+//	public int getId() {
+//		return id;
+//	}
+//
+//	public void setId(int id) {
+//		this.id = id;
+//	}
 
 	public String getOverview() {
 		return overview;
@@ -143,8 +160,8 @@ public class MovieObject {
 		this.vote_average = (this.vote_average + vote) / this.vote_count;
 	}
 
-    @ManyToMany()
-    @JoinTable(name = "movieGenres", joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "movieGenre", joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
     public Set<GenreObject> getGenres() {
         return genres;
     }
