@@ -46,7 +46,7 @@ class MovieSection extends Component {
     });
     console.log(a.substring(1,5));
     for (let i = 0; i < cardNum; i++) {
-      let a = _.truncate(overview[0], {
+      let a = _.truncate(overview[i], {
         'length': 100,
         'separator': ' '
       });
