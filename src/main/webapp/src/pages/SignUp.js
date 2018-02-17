@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {Container, Form } from 'semantic-ui-react';
+import axios from 'axios';
+import {NavLink} from 'react-router-dom';
 
 const options = [
   { key: 'm', text: 'Male', value: 'male' },
@@ -17,16 +19,36 @@ class SignUp extends Component {
       email: '',
       gender: '',
       submittedName: '',
-      submittedEmail: '' };
+      submittedEmail: '',
+      errorMsg: ''};
   }
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value })
+  handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   handleSubmit() {
     const { name, email } = this.state;
+    let URL = "http://localhost:8081/api/user/add_User/?";
+    let fname = "fname=" + this.state.firstName + "&";
+    let lname = "lname=" + this.state.lastName + "&";
+    let emailForm = "email=" + this.state.email + "&";
+    let pw = "pw=" + this.state.password + "&";
+    let username = "username=" + this.state.username;
 
     //should be doing post to backend
-    this.setState({ submittedName: name, submittedEmail: email })
+    this.setState({ submittedName: name, submittedEmail: email });
+    axios.get(URL+fname+lname+emailForm+pw+username)
+    .then((code) => {
+      console.log(code);
+      this.setState({isLoggedin : code.data.isSuccess});
+      // console.log("Status of account logged in:" + code.data.isSuccess);
+      let isSucess = code.data.isSuccess;
+      if (isSucess) {
+        window.location.href = '/';// change the history path, to reroute (hack)
+        window.localStorage['isLoggedIn'] = true;
+      } else {
+        this.setState({errorMsg : "User with the same email is already created"})
+      }
+    });
   }
 
   render() {
@@ -41,6 +63,7 @@ class SignUp extends Component {
 
     return (
         <Container>
+          <div>{this.state.errorMsg}. <NavLink to="/signin">Sign in</NavLink></div>
           <Form onSubmit={() => this.handleSubmit()}>
             <Form.Group widths="equal">
               <Form.Field>
@@ -69,7 +92,8 @@ class SignUp extends Component {
                            onChange={this.handleChange}/>
             </Form.Group >
             <Form.Group widths="equal">
-              <Form.Input fluid label="Email" placeholder='Email' name='email'
+              <Form.Input fluid required
+                          label="Email" placeholder='Email' name='email'
                           value={this.state.email} onChange={this.handleChange}/>
             </Form.Group>
             <Form.Checkbox label='I agree to the Terms and Conditions' />
