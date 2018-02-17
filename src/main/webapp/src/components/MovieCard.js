@@ -18,20 +18,19 @@ class MovieCard extends Component {
               <Grid columns="equal">
                 <Grid.Column width={10}>
                   <span className="date">
-                    Released on 2016 {this.props.releaseDate}
+                    Released on {this.props.year} {this.props.releaseDate}
                   </span>
                 </Grid.Column>
                 <Grid.Column>
-                  <Badge>4/10 {this.props.rate} <Glyphicon glyph="star" /></Badge>
+                  <Badge>{this.props.rate}/10 <Glyphicon glyph="star" /></Badge>
                 </Grid.Column>
               </Grid>
             </Card.Meta>
             <Card.Description>
-              This movie is all about JP.
-              {this.props.movieDescription}
+              {this.props.movieOverview}
             </Card.Description>
           </Card.Content>
-          <Image src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAWxAAAAJGFiMTBjY2M5LTI4ZTAtNDNlOC04NTczLTI3ZmI1OThhMTAyZQ.jpg"/>
+          <Image src={this.props.movieURL}/>
 
         </Card>
     );

@@ -5,13 +5,15 @@ import {Navbar} from 'react-bootstrap';
 import MovieCard from './components/MovieCard';
 import MyNav from './components/MyNav';
 import MovieRecPage from './pages/MovieRecPage';
+import MyRoute from './components/MyRoute';
 
 class App extends Component {
   render() {
     return (
         <div>
           <MyNav value={"YOOOOO!"}/>
-          <MovieRecPage/>
+          <MyRoute/>
+          {/*<MovieRecPage/>*/}
         </div>
     );
   }
