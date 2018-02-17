@@ -50,6 +50,7 @@ public class UserController {
 		return userService.validateLogin(username, pw);
 	}
 
+	//NOTE: This should not me a GET mapping it should be a POST mapping
 	//Returns true or false depending on whether or not the user was added
 	@GetMapping("/api/user/add_User/")
 	public Map<String,Boolean> addUser(String fname, String lname, String email, String pw, String username) {
