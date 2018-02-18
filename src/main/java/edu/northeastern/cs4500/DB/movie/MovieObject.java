@@ -25,6 +25,7 @@ public class MovieObject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	public int id;
+    private int movieId; //movie id saved from API we are using
 	
 	@NotNull
 	private String title;
@@ -169,5 +170,13 @@ public class MovieObject {
     public void setGenres(Set<GenreObject> genres) {
         this.genres = genres;
     }
+
+	public int getMovie_id() {
+		return movieId;
+	}
+
+	public void setMovie_id(int movie_id) {
+		this.movieId = movie_id;
+	}
 		
 }
