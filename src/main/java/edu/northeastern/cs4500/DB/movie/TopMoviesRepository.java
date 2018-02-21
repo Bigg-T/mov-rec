@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface TopMoviesRepository extends JpaRepository<TopMoviesObject, Integer> {
 
-  @Query("SELECT * FROM TopMovies t WHERE t.user_id = :id LIMIT :lim")
+  @Query("SELECT * FROM TopMovies t WHERE t.user_id = :id")
   List<TopMoviesObject> findByUserId(@Param("id") int id, @Param("lim") int lim);
 
 }

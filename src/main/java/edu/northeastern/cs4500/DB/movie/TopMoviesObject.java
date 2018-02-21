@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 public class TopMoviesObject {
 
   @Id
+  @OneToMany
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int id;
 
@@ -37,6 +38,7 @@ public class TopMoviesObject {
 
 
   @Id
+  @OneToMany
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int getId() {
     return id;
