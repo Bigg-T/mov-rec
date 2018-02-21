@@ -7,9 +7,13 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 /**
- * Created by amrita on 2/19/18.
+ * UserRatesRepository for UserRatesObject
  */
 public interface UserRatesRepository extends JpaRepository<UserRatesObject, Integer> {
-  @Query("SELECT * FROM UserRates t WHERE t.user_id = :id")
-  List<UserRatesObject> findByUserId(@Param("id") int id);
+//  @Query("SELECT * FROM UserRates t WHERE t.user_id = :id")
+//  List<UserRatesObject> findByUserId(@Param("id") int id);
+	
+	@Query(value = "SELECT t.movie_id, t.rate FROM UserRates t WHERE t.user_id = ?1")
+	public List<Integer> findByUserId(Integer user_id);
+	
 }
