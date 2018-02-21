@@ -6,12 +6,15 @@
   import {Item, Image, Grid, Rating, Container} from 'semantic-ui-react';
   import {Badge, Glyphicon, Label} from 'react-bootstrap';
   import { View, Text, AppRegistry } from 'react';
+  import {genImageURL5} from '../MovieDBConstant'
   //import {View} from 'react-native';
 
 
   class MovieDescription extends Component{
 
     render() {
+      console.log("referrer")
+      console.log(this.props.location.state.referrer);
       return (
 
 
@@ -21,7 +24,8 @@
         <Grid.Row streched>
            <Grid.Column width={14}>
            <h3>
-           The Hunger Games: Mockingjay, Part 1
+           {/*The Hunger Games: Mockingjay, Part 1*/}
+             {this.props.location.state.referrer.title}
            </h3>
            </Grid.Column>
            <Grid.Column width={2}>
@@ -32,23 +36,23 @@
 
         <Grid.Row>
           <Grid.Column width={1}>
-               <Badge>4/10 {this.props.rate} <Glyphicon glyph="star" /></Badge>
+               <Badge>{this.props.location.state.referrer.vote_average}/10 <Glyphicon glyph="star" /></Badge>
           </Grid.Column>
           <Grid.Column width={1}>
                <Label>120 Min </Label>
           </Grid.Column>
           <Grid.Column width={2}>
-               <Label> Action/Science Fiction </Label>
+               <Label> {this.props.location.state.referrer.genre_ids} </Label>
           </Grid.Column>
           <Grid.Column width={2}>
-               <Label> 11-20-2014 </Label>
+               <Label> {this.props.location.state.referrer.release_date}</Label>
           </Grid.Column>
 
         </Grid.Row>
 
             <Grid.Row>
-              <Grid.Column width={3}>
-                <Image src='https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAWxAAAAJGFiMTBjY2M5LTI4ZTAtNDNlOC04NTczLTI3ZmI1OThhMTAyZQ.jpg' />
+              <Grid.Column width={6}>
+                <Image src={genImageURL5(this.props.location.state.referrer.poster_path)} />
 
 
               </Grid.Column>
@@ -60,7 +64,7 @@
             <Grid.Row>
               <Grid.Column width={15}>
                 <span>
-                Description: Katniss Everdeen is in District 13 after she shatters the games forever. Under the leadership of President Coin and the advice of her trusted friends, Katniss spreads her wings as she fights to save Peeta and a nation moved by her courage.
+                  {this.props.location.state.referrer.overview}
                 </span>
               </Grid.Column>
             </Grid.Row>
