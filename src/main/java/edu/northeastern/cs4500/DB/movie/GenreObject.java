@@ -31,7 +31,7 @@ public class GenreObject {
 	private Set<MovieObject> movies;
 
 	
-	GenreObject(String name) {
+	public GenreObject(String name) {
 		this.name = name;
 	}
 	
