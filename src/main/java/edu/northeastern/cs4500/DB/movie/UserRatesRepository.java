@@ -14,6 +14,6 @@ public interface UserRatesRepository extends JpaRepository<UserRatesObject, Inte
 //  List<UserRatesObject> findByUserId(@Param("id") int id);
 	
 	@Query(value = "SELECT t.movie_id, t.rate FROM UserRates t WHERE t.user_id = ?1")
-	public List<Integer> findByUserId(Integer user_id);
+	public List<UserRatesObject> findByUserId(Integer user_id);
 	
 }

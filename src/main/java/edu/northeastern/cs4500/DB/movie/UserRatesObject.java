@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 public class UserRatesObject {
 
   @Id
-  @OneToMany
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int id;
 
@@ -33,7 +32,6 @@ public class UserRatesObject {
 
 
   @Id
-  @OneToMany
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int getId() {
     return id;

@@ -43,7 +43,7 @@ public class TopMoviesController {
 
   @RequestMapping("/api/movie/getTopMovies/{use_id}/{limit}")
   public List<TopMoviesObject> selectAllHelloObjects(Integer user_id, Integer limit) {
-    List<TopMoviesObject> userTopMovies = topMoviesRepository.findByUserId(user_id, limit);
+    List<TopMoviesObject> userTopMovies = topMoviesRepository.findByUserId(user_id);
     return topMoviesRepository.findAll();
   }
 
