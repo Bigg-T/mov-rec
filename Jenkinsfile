@@ -11,8 +11,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building"
-                sh 'mvn -f team-31-spring18/pom.xml  compile'
-                sh 'mvn -f team-31-spring18/pom.xml  package'
+                sh 'mvn compile -f team-31-spring18/pom.xml  compile'
+                sh 'mvn package -f team-31-spring18/pom.xml  package'
 
               
             }
@@ -20,7 +20,7 @@ pipeline {
         stage('Test'){
             steps {
                 echo "Testing"
-                sh 'mvn -f team-31-spring18/pom.xml  test'
+                sh 'mvn test -f team-31-spring18/pom.xml  test'
 
             }
         }
