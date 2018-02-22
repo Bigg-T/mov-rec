@@ -17,13 +17,36 @@ pipeline {
               
             }
         }
+}
+
         stage('Test'){
             steps {
-                echo "Testing"
-              avadhera-patch-3-1
+                echo "Testing
                 sh 'mvn test -f team-31-spring18/pom.xml  test'
 
             }
+}
+
+	 stage('SonarQube') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                        sh 'mvn clean install'
+                        sh 'mvn sonar:sonar'
+                }
+            }
+        }
+            
+        stage('Quality') {
+            steps {
+                   script {
+                         timeout(time: 1, unit: 'HOURS') {
+                            def qg = waitForQualityGate()
+                            if (qg.status != 'OK') {
+                                error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                            }
+
         }
     }
 }
+                       }
+                   }
