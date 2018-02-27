@@ -13,6 +13,8 @@ pipeline {
                 echo "Building"
                 sh 'mvn comile -f team-31-spring18/pom.xml  compile'
                 sh 'mvn package -f team-31-spring18/pom.xml  package'
+                sh 'mvn compile'
+                sh 'mvn package'
 
               
             }
@@ -23,6 +25,8 @@ pipeline {
             steps {
                 echo "Testing
                 sh 'mvn test -f team-31-spring18/pom.xml  test'
+                echo "Testing"
+                sh 'mvn test'
 
             }
 }
