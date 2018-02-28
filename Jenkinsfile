@@ -21,7 +21,7 @@ pipeline {
 
         stage('Test'){
             steps {
-                echo "Testing
+                echo "Testing"
                 sh 'mvn test -f team-31-spring18/pom.xml  test'
 
             }
