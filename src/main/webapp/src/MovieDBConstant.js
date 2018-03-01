@@ -27,3 +27,8 @@ export const genGenreID = (id) => {
 export const genPopular = (num) => {
   return '';
 };
+
+export const genMovieVid = (movieID) => {
+  //https://api.themoviedb.org/3/movie/211672/videos?api_key=492a79d4999e65c2324dc924891cb137
+  return MDB_BASE_URL + 'movie/'+ movieID +'/videos?api_key=' + MDB_API_KEY;
+};

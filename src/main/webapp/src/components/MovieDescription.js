@@ -2,19 +2,44 @@
   * Created by Amit on 2/13/18
   */
 
-  import React, {Component} from 'react';
-  import {Item, Image, Grid, Rating, Container} from 'semantic-ui-react';
-  import {Badge, Glyphicon, Label} from 'react-bootstrap';
-  import { View, Text, AppRegistry } from 'react';
-  import {genImageURL5} from '../MovieDBConstant'
+import React, {Component} from 'react';
+import {Item, Image, Grid, Rating, Container} from 'semantic-ui-react';
+import {Badge, Glyphicon, Label} from 'react-bootstrap';
+import { View, Text, AppRegistry } from 'react';
+import {genImageURL5} from '../MovieDBConstant';
+import axios from 'axios';
+import {genMovieVid} from '../MovieDBConstant';
+import YouTube from './YouTube';
   //import {View} from 'react-native';
 
 
-  class MovieDescription extends Component{
+  class MovieDescription extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        youtube : [''],
+      }
+    }
+    componentWillMount() {
+      let movieID = this.props.location.state.referrer.id;//
+      axios.get(genMovieVid(movieID))
+      .then(res => {
+        if (res.data.results.length != 0) {
+          let data = res.data.results[0];
+          console.log('KEYYYYYYY');
+          console.log(data);
+          this.setState({youtube : [data.key]});
+        }
 
+      });
+
+    }
     render() {
+      let YOUTUBE_BASE = 'https://www.youtube.com/watch?v=';
       console.log("referrer")
       console.log(this.props.location.state.referrer);
+      let name = this.state.youtube.map(a => a);
+      let YOUTUBE_VID = YOUTUBE_BASE+name[0];
       return (
 
 
@@ -54,11 +79,10 @@
               <Grid.Column width={6}>
                 <Image src={genImageURL5(this.props.location.state.referrer.poster_path)} />
 
-
               </Grid.Column>
              <Grid.Column width={8} className="centered">
-               <Image width={1000} height={200} src='https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAWxAAAAJGFiMTBjY2M5LTI4ZTAtNDNlOC04NTczLTI3ZmI1OThhMTAyZQ.jpg' />
-               </Grid.Column>
+               <YouTube video={name[0]} autoplay="0" rel="0" modest="1" />
+             </Grid.Column>
             </Grid.Row>
 
             <Grid.Row>
