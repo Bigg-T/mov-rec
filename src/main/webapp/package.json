@@ -6,7 +6,8 @@
     "jest-cli": "^22.4.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-router-dom": "^4.2.2"
+    "react-router-dom": "^4.2.2",
+    "webpack": "^3.11.0"
   },
   "devDependencies": {
     "axios": "^0.17.1",
@@ -22,6 +23,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build_prod": "cp ./src/config.js ./src/config.bak.js && cp ./src/config-prod.js ./src/config.js && npm build && mv ./src/config.bak.js ./src/config.js",
+    "deploy": "aws s3 cp --recursive ./build s3://movi3hall.cs4500.com2",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
