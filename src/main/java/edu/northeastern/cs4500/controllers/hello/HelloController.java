@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbMovies;
+import info.movito.themoviedbapi.model.MovieDb;
+
 @RestController
 public class HelloController {
 
@@ -37,8 +41,10 @@ public class HelloController {
 	}
 	
 	@RequestMapping("/api/hello/object")
-	public HelloObject sayHelloObject() {
-		HelloObject obj = new HelloObject("Hello Thien!");
+	public MovieDb sayHelloObject() {
+		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
+		MovieDb obj = movies.getMovie(5353, "en");
+		//HelloObject obj = new HelloObject("Hello Thien!");
 		return obj;
 	}
 }
