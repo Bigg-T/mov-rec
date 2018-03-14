@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {Container, Form, Header } from 'semantic-ui-react';
 import axios from 'axios';
+import Footer from '../components/Footer';
+import '../css/Footer.css';
 
 class SignIn extends Component {
   constructor(props) {
@@ -74,6 +76,7 @@ class SignIn extends Component {
           </Form>
           {/*<div>{Object.keys(this.state).map(key => key + " : " + this.state[key] + "\n")}</div>*/}
           {/*<p>{this.state.isLoggedin}</p>*/}
+          <Footer title={Footer}/>
         </Container>
     );
   }

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {Container, Form } from 'semantic-ui-react';
 import axios from 'axios';
 import {NavLink} from 'react-router-dom';
+import Footer from '../components/Footer';
+import '../css/Footer.css';
 
 const options = [
   { key: 'm', text: 'Male', value: 'male' },
@@ -100,6 +102,7 @@ class SignUp extends Component {
             <Form.Button>Submit</Form.Button>
           </Form>
           {/*<div>{Object.keys(this.state).map(key => key + " : " + this.state[key] + "\n")}</div>*/}
+          <Footer title={Footer}/>
         </Container>
     );
   }

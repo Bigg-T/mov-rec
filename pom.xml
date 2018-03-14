@@ -71,6 +71,10 @@
 			<artifactId>cors-filter</artifactId>
 			<version>1.3.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+		</dependency>
 
 	</dependencies>
 	<repositories>

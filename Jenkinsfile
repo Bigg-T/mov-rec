@@ -5,8 +5,6 @@ pipeline {
            args '-v /root/.m2:/root/.m2'
        }
    }
-
-
     stages {
         stage('Build') {
             steps {
@@ -14,7 +12,6 @@ pipeline {
                 sh 'mvn compile'
                 sh 'mvn package'
 
-              
             }
         }
 
