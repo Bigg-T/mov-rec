@@ -1,6 +1,3 @@
-  /**
-  * Created by Amit on 2/13/18
-  */
 
 import React, {Component} from 'react';
 import {Item, Image, Grid, Rating, Container} from 'semantic-ui-react';
@@ -10,6 +7,8 @@ import {genImageURL5} from '../MovieDBConstant';
 import axios from 'axios';
 import {genMovieVid} from '../MovieDBConstant';
 import YouTube from './YouTube';
+import '../css/Profile.css';
+
   //import {View} from 'react-native';
 
 
@@ -42,84 +41,36 @@ import YouTube from './YouTube';
       //let YOUTUBE_VID = YOUTUBE_BASE+name[0];
       return (
 
-
 <Container>
-
-        <Grid >
-        <Grid.Row streched>
-           <Grid.Column width={14}>
-           <h3>
-           Jean Paul Torre
-           </h3>
-           </Grid.Column>
-           <Grid.Column width={5}>
-           <span> Add Friend </span>
-{/*           <span> Remove Friend </span> */}
-           </Grid.Column>
-       </Grid.Row>
-
-       
-       
-        <Grid.Row>
-        <Grid.Column width={4}>
-        <Image src={"http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"} />
-                 </Grid.Column>
-        
-        <Grid.Column width={10}>
-        <Image src={"http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"} />
-                 </Grid.Column>
-        </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Column width={6}>
-              <h3>About Me:</h3>
-              </Grid.Column>
-            </Grid.Row>
-
-              <Grid.Row>
-              <Grid.Column width={3}>
-              <p>"I love movies, which is why I decided to join this website. I would like to meet people to watch movies with"</p>
-              </Grid.Column>
-            </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Column width={15}>
-                <span>
-                </span>
-              </Grid.Column>
-            </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Column width={15}>
-                <span>
-                Director:  Francis Lawrence
-                </span>
-              </Grid.Column>
-            </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Column width={15}>
-                <span>
-                Writers:  Peter Craig (screenplay), Danny Strong (screenplay)
-                </span>
-              </Grid.Column>
-              </Grid.Row>
-            <Grid.Row>
-              <Grid.Column width={11}>
-                <span>
-                Stars: Jennifer Lawrence, Josh Hutcherson, Liam Hemsworth
-                </span>
-              </Grid.Column>
-
-              <Grid.Column width={5}>
-              <span>
-              Reccomended By: JP, JP, JP
-              </span>
-
-              </Grid.Column>
-            </Grid.Row>
-
-          </Grid>
+	<Grid>
+		<Grid.Column width={4}>
+			<Grid.Row>
+				<h3>Jean Paul Torre</h3>
+			</Grid.Row>
+			<Grid.Row>
+				Add Friend
+			</Grid.Row>
+			<Grid.Row width={1}>
+				<Image src={"http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"} />
+			</Grid.Row>
+			<Grid.Row>About Me</Grid.Row>
+			<Grid.Row>
+			 <p>"I love movies, which is why I decided to join this website. I would like to meet people to watch movies with"</p>
+			 </Grid.Row>
+		</Grid.Column>
+		<Grid.Column width={10} margin-right={40}>
+		<Grid.Row>
+		</Grid.Row>
+		<Grid.Row>
+		<div class="topMovies">
+		<div class="topMoviesTitle">
+		<h2>Top Movies </h2>
+		</div>
+		</div>
+		</Grid.Row>
+		
+		</Grid.Column>
+	</Grid>
           </Container>
          );
 
