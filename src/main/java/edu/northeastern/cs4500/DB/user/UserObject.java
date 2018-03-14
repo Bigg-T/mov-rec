@@ -45,8 +45,8 @@ public class UserObject {
 	private boolean allow_location;
 	
 	@JoinTable(name = "user_friends", joinColumns = {
-			 @JoinColumn(name = "userId", referencedColumnName = "idperson", nullable = false)}, inverseJoinColumns = {
-			 @JoinColumn(name = "friendId", referencedColumnName = "idperson", nullable = false)})
+			 @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
+			 @JoinColumn(name = "friendId", referencedColumnName = "id", nullable = false)})
 	@ManyToMany
 	private Collection<UserObject> friends;	
 	
