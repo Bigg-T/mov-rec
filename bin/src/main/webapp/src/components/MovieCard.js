@@ -4,38 +4,61 @@
 import React, {Component} from 'react';
 import {Card, Image, Grid} from 'semantic-ui-react'
 import {Badge, Glyphicon} from 'react-bootstrap';
+import {Route, Redirect} from 'react-router-dom';
 
 class MovieCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isRedirect : false
+    }
+  }
 
+  handleClick() {
+    this.setState({isRedirect : true})
+  }
   render() {
     return (
-        <Card>
-          <Card.Content>
-            <Card.Header>
-              Movie Name Holder {this.props.movieName}
-            </Card.Header>
-            <Card.Meta>
-              <Grid columns="equal">
-                <Grid.Column width={12}>
-                  <span className="date">
-                    Released on 2016 {this.props.releaseDate}
-                  </span>
-                </Grid.Column>
-                <Grid.Column>
-                  <Badge>4/10 {this.props.rate} <Glyphicon glyph="star" /></Badge>
-                </Grid.Column>
-              </Grid>
-            </Card.Meta>
-            <Card.Description>
-              This movie is all about JP.
-              {this.props.movieDescription}
-            </Card.Description>
-          </Card.Content>
-          <Image src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAWxAAAAJGFiMTBjY2M5LTI4ZTAtNDNlOC04NTczLTI3ZmI1OThhMTAyZQ.jpg"/>
-
-        </Card>
+        <div>
+          <div>
+            <Route exact path="/" render={() => (
+                this.state.isRedirect ? (
+                        <Redirect to={{
+                          pathname: '/movie/'+this.props.id,
+                          state: { referrer: this.props.movieJSON }
+                        }}/>
+                    ) : (
+                        ""
+                    )
+            )}/>
+          </div>
+          <Card link={true} onClick={() => this.handleClick()}>
+            <Card.Content>
+              <Card.Header>
+                {this.props.movieName}
+              </Card.Header>
+              <Card.Meta>
+                <Grid columns="equal">
+                  <Grid.Column width={10}>
+                    <span className="date">
+                      Released on {this.props.year} {this.props.releaseDate}
+                    </span>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Badge>{this.props.rate}/10 <Glyphicon glyph="star" /></Badge>
+                  </Grid.Column>
+                </Grid>
+              </Card.Meta>
+              <Card.Description>
+                {this.props.movieOverview}
+              </Card.Description>
+            </Card.Content>
+            <Image src={this.props.movieURL}/>
+          </Card>
+        </div>
     );
   }
 }
+
 
 export default MovieCard;

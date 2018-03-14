@@ -3,8 +3,8 @@
  */
 
 import React, {Component} from 'react';
+import {NavLink} from 'react-router-dom'
 import {Navbar, NavItem, Nav} from 'react-bootstrap';
-
 class MyNav extends Component {
   constructor(props) {
     super(props);
@@ -28,53 +28,54 @@ class BasicNav extends Component {
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="/">Movi3Hall</a>
+              <NavLink to={`/`}><h2>Movi3Hall</h2></NavLink>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              <NavItem eventKey={1} href="#">
-                Sign In
-              </NavItem>
-              <NavItem eventKey={1} href="#">
-                Register
-              </NavItem>
+              <Navbar.Brand eventKey={1} >
+                <NavLink to={`/signin`}><h4>Sign In</h4></NavLink>
+              </Navbar.Brand>
+              <Navbar.Brand eventKey={1}>
+                <NavLink to={`/signup`}><h4>Register</h4></NavLink>
+              </Navbar.Brand>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
     );
   }
 }
+
 class LoggedInNav extends Component {
   render() {
     return (
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="/">Movi3Hall</a>
+              <NavLink to={`/`}><h2>Movi3Hall</h2></NavLink>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              <NavItem eventKey={1} href="#">
-                My Rec
-              </NavItem>
-              <NavItem eventKey={2} href="#">
-                Watch Later
-              </NavItem>
-              <NavItem eventKey={3} href="#" >
-                Group
-              </NavItem>
-              <NavItem eventKey={4} href="#">
-                Movie News
-              </NavItem>
+              <Navbar.Brand eventKey={1} >
+                <NavLink to={`/`}><h4>MyRec</h4></NavLink>
+              </Navbar.Brand>
+              <Navbar.Brand eventKey={2} >
+                <NavLink to={`/`}><h4>Watch Later</h4></NavLink>
+              </Navbar.Brand>
+              <Navbar.Brand eventKey={3} >
+                <NavLink to={`/`}><h4>Group</h4></NavLink>
+              </Navbar.Brand>
+              <Navbar.Brand eventKey={4} >
+                <NavLink to={`/`}><h4>Movie News</h4></NavLink>
+              </Navbar.Brand>
             </Nav>
             <Nav pullRight>
-              <NavItem eventKey={1} href="#">
-                Sign Out
-              </NavItem>
+              <Navbar.Brand eventKey={1}>
+                <NavLink to={`/`}><h4>Sign Out</h4></NavLink>
+              </Navbar.Brand>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
