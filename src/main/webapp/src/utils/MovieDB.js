@@ -1,6 +1,27 @@
 /**
  * Created by t on 2/12/18.
  */
+import _ from 'lodash';
+
+export const filterGenre = (jsonList, genreId) => {
+  return jsonList.filter(mov => {
+    let isContain = false;
+    for(let i = 0; i < mov.genre_ids.length; i++) {
+      console.log("movie IIIIDDD");
+      if (mov.genre_ids[i] == genreId) {
+        console.log(mov.genre_ids[i]);
+        isContain = true;
+        break;
+      }
+    }
+    return isContain;
+  });
+};
+
+export const sortByAvgRate = (listMovie) => {
+  return _.orderBy(listMovie, 'vote_average', 'desc');
+};
+
 
 class MovieDB {
 
