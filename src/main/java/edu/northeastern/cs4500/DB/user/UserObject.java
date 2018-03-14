@@ -1,5 +1,6 @@
 package edu.northeastern.cs4500.DB.user;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 
 
 /**
@@ -20,7 +22,6 @@ public class UserObject {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	
 	@NotNull
 	private String first_name;
 	@NotNull
@@ -28,7 +29,7 @@ public class UserObject {
 	@NotNull
 	@Column(unique=true)
 	private String email;
-	@NotNull
+	@NotNull //This should be hashed
 	private String password;
 	@NotNull
 	@Column(unique=true)
@@ -42,6 +43,12 @@ public class UserObject {
 	private String prof_pic;
 	private String about_me;
 	private boolean allow_location;
+	
+	@JoinTable(name = "user_friends", joinColumns = {
+			 @JoinColumn(name = "userId", referencedColumnName = "idperson", nullable = false)}, inverseJoinColumns = {
+			 @JoinColumn(name = "friendId", referencedColumnName = "idperson", nullable = false)})
+	@ManyToMany
+	private Collection<UserObject> friends;	
 	
 	/**
 	 * Can add any default fields here
@@ -148,5 +155,14 @@ public class UserObject {
 	public void setFirst_name(String first_name) {
 		this.first_name = first_name;
 	}
+
+	public Collection<UserObject> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(Collection<UserObject> friends) {
+		this.friends = friends;
+	}
+	
 	
 }
