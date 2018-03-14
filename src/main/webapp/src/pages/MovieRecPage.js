@@ -8,6 +8,7 @@ import MovieSection from '../components/MovieSection';
 import MySearch from '../components/MySearch';
 import axios from 'axios';
 import {genPopularList} from '../MovieDBConstant';
+import {sortByAvgRate, filterGenre} from '../utils/MovieDB';
 
 class MovieRecPage extends Component {
 
@@ -44,13 +45,13 @@ class MovieRecPage extends Component {
           <Container > <MySearch className='text-right'/></Container>
           <div className="mysection">
             <Container>
-              <MovieSection myData ={temp} sectionName={"What's Hot"} perRow={2} perCol={3}/>
+              <MovieSection myData ={sortByAvgRate(temp)} sectionName={"What's Hot"} perRow={2} perCol={3}/>
             </Container>
             <Container>
-              <MovieSection myData ={temp} sectionName={"Action"} perRow={2} perCol={3} />
+              <MovieSection myData ={filterGenre(temp,28)} sectionName={"Action"} perRow={2} perCol={3} />
             </Container>
             <Container>
-              <MovieSection myData ={temp} sectionName={"Comedy"} perRow={2} perCol={3} />
+              <MovieSection myData ={filterGenre(temp,35)} sectionName={"Comedy"} perRow={2} perCol={3} />
             </Container>
           </div>
         </div>

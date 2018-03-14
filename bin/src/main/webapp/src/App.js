@@ -6,7 +6,6 @@ import MovieCard from './components/MovieCard';
 import MyNav from './components/MyNav';
 import MovieRecPage from './pages/MovieRecPage';
 import MyRoute from './components/MyRoute';
-
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Footer from './components/Footer';
@@ -19,16 +18,12 @@ class App extends Component {
     return (
         <div>
           <MyNav value={"YOOOOO!"}/>
-
-
           <div>
           {/*<MovieRecPage/>*/}
           <MyRoute/>
           </div>
-
-
-
-        
+          <MyRoute/>
+          {/*<MovieRecPage/>*/}
         </div>
     );
   }

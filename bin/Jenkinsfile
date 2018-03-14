@@ -9,15 +9,20 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building"
-                sh 'mvn compile -f team-31-spring18/pom.xml  compile'
-                sh 'mvn package -f team-31-spring18/pom.xml  package'
+                sh 'mvn compile'
+                sh 'mvn package'
+
             }
         }
+
+
         stage('Test'){
             steps {
                 echo "Testing"
-                sh 'mvn test -f team-31-spring18/pom.xml  test'
+                sh 'mvn test'
+
             }
-        }
-    }
 }
+                   }
+}
+

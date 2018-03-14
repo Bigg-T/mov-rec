@@ -18,6 +18,7 @@ class MySearch extends Component {
       id: '',
       myData : [],
       movie: {},
+      myData : [],
       isRedirect: false
     };
   }
@@ -30,6 +31,7 @@ class MySearch extends Component {
     let URL = BASE_MDB_URL+'/movie/popular?api_key='+MDB_API_KEY + '&language=en-US&page=1';
 
     axios.get(genPopularList())
+    axios.get(UM2)
     .then(res => {
       const data = res.data;
       console.log('MyData');
@@ -90,6 +92,9 @@ class MySearch extends Component {
                           pathname: '/movie/'+this.state.id,
                           search: '?keyword='+this.state.value,
                           state: { referrer: this.state.movie }
+                          pathname: '/movie/:name',
+                          search: '?keyword='+this.state.value,
+                          state: { referrer: this.state.myData }
                         }}/>
                     ) : (
                         ""
@@ -101,6 +106,7 @@ class MySearch extends Component {
 
           </Grid.Column>
           <Grid.Column width={4}>
+          <Grid.Column width={8}>
             <Search
                 loading={isLoading}
                 onResultSelect={this.handleResultSelect}

@@ -100,12 +100,10 @@ class SignUp extends Component {
             </Form.Group>
             <Form.Checkbox label='I agree to the Terms and Conditions' />
             <Form.Button>Submit</Form.Button>
-
           </Form>
           {/*<div>{Object.keys(this.state).map(key => key + " : " + this.state[key] + "\n")}</div>*/}
           <Footer title={Footer}/>
         </Container>
-
     );
   }
 }
