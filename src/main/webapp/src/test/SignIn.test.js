@@ -36,10 +36,10 @@ describe('<SignIn />', () => {
     //expect(wrapper.contains(<p>Status is {'On'}</p>)).toBe(true);
 
 });
-});
 
 
-/*
+
+
 it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(<SignIn />, div);
@@ -59,4 +59,5 @@ var expects = require('expect');
     //const spy = jest.spyOn(wrapper.instance(), 'handleSubmit');
     expects(spy).toHaveBeenCalled();
   });
-  */
+
+});
