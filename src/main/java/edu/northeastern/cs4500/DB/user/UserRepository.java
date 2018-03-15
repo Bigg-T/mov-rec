@@ -12,6 +12,6 @@ public interface UserRepository extends JpaRepository<UserObject, Integer>{
 
 	@Async
 	@Query("SELECT first_name, last_name, prof_pic, about_me FROM User WHERE id = :id")
-	public List<Object> getUserProfileData(@Param("id") Integer userId);
+	public String getUserProfileData(@Param("id") Integer userId);
 
 }

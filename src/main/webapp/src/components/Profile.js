@@ -15,9 +15,9 @@ import '../css/Profile.css';
   class Profile extends Component {
     constructor(props) {
       super(props);
-//      this.state = {
-//        youtube : [''],
-//      }
+      this.state = {
+        userData : [''],
+      }
     }
     componentWillMount() {
 //      let movieID = this.props.location.state.referrer.id;//

@@ -26,6 +26,7 @@ import org.springframework.scheduling.annotation.Async;
 
 
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+
 @RestController
 public class UserProfile {
 
@@ -36,16 +37,15 @@ public class UserProfile {
 	@Autowired
 	UserRepository userRepository;
 	
-
+/**
+ * Gets the User Data needed for the profile page	
+ * @param userId
+ * @return
+ */
 @GetMapping("/api/user/profile/")
-public Map<String,Boolean> getUserData(Integer userId) {
+public String getUserData(Integer userId) {
 	Integer test = 1;
-	System.out.println("SHOULD PRINT OUT THE USER INFORMATION");
-	List<Object> result = userRepository.getUserProfileData(test);
-    System.out.println(result.get(0));
-    
-	return null;
-}
-
-
+	String result = userRepository.getUserProfileData(test);
+	return result;
+	}
 }
