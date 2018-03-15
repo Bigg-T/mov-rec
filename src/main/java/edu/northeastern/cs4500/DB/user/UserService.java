@@ -1,7 +1,7 @@
 package edu.northeastern.cs4500.DB.user;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
