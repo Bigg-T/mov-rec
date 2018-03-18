@@ -1,7 +1,7 @@
 package edu.northeastern.cs4500.DB.user;
 
-import java.util.Collections;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -69,19 +69,7 @@ public class UserService {
 		return false;
 	}
 	
-	/**
-	 * Checks if a user exists of not
-	 * @param userId
-	 * @return true if user exists; false otherwise
-	 */
-	protected boolean userExists(int userId) {
-		UserObject user = UserRepository.getOne(userId);
-		if (user != null) {
-			return true;
-		} 
-		return false;
-	}
-	
+
 	/**
 	 * Adds a friend if friend exists
 	 * @param userId
@@ -99,6 +87,20 @@ public class UserService {
 		} catch (Exception e) {
 			return Collections.singletonMap("isSuccess", false);
 		}
+	}
+	
+	
+	/**
+	 * Checks if a user exists of not
+	 * @param userId
+	 * @return true if user exists; false otherwise
+	 */
+	protected boolean userExists(int userId) {
+		UserObject user = UserRepository.getOne(userId);
+		if (user != null) {
+			return true;
+		} 
+		return false;
 	}
 	
 	/**
