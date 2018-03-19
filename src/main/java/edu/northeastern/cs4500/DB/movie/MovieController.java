@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,55 +32,13 @@ import info.movito.themoviedbapi.model.MovieDb;
 public class MovieController {
 
 	@Autowired
-	MovieRepository movieRepository;
-	
-	@Autowired
-	GenreRepository genreRepository;
-	
-	@Autowired
-	MovieRatingRepository movieRatingsRepository;
-	
-	/**
-	 * I guess we can currently send through URL, but we should really be sending
-	 * get requests
-	 * @return
-	 */
-	@RequestMapping("/api/movie/create")
-	public void createMovie() {
-		MovieObject obj = new MovieObject("My Name is Khan", 8.3);
-		movieRepository.save(obj);
-		//return obj;
-	}
-	
-	@RequestMapping("/api/movie/all_movies")
-	public List<MovieObject> selectAllUserObjects() {
-       // movieRepository.deleteAllInBatch();
-     //   genreRepository.deleteAllInBatch();
-		return movieRepository.findAll();
-	}
-	
-	
-//	@PostMapping("/api/movie/add/{name}")
-//	public @ResponseBody ResponseEntity<String> post(@PathVariable String name) {
-//	    return new ResponseEntity<String>("POST Response: " + name, HttpStatus.OK);
-//	}
-	
-	//Should have the following methods:
+	MovieService movieService;
 	
 	@GetMapping("/api/movie/{id}")
 	public @ResponseBody ResponseEntity<String>
 	  getByName(@PathVariable String id) {
 	    return new ResponseEntity<String>("GET Response : "
 	      + id, HttpStatus.OK);
-	}
-	
-	//Note: Sometimes it saved multiple times, talk to TA to figure out why
-	@RequestMapping("/api/movie/movie_category")
-	public void movieCategoryTest() {
-		MovieObject movie1 = new MovieObject("The TEST", 8.9);
-		GenreObject genre1 = new GenreObject("Sci-Fi");
-		movie1.getGenres().add(genre1); //adds a genre to a movie
-		movieRepository.save(movie1);
 	}
 	
 	/**
@@ -92,22 +49,8 @@ public class MovieController {
 	 */
 	@RequestMapping("/api/movie/genre/")
 	public List<MovieDb> getMovieGenre(String genre) {
-		//1) Get the top rated movies in this genre.
-		
-		List<Integer> tmdbApiByRating = movieRatingsRepository.gettmdbIdByGenre(genre);
-		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
-		List<MovieDb> tmdbApiMovies = new ArrayList<MovieDb>();
-			
-		//2) Query tmdbAPI
-		//We'll return the top 10 best movies.
-		for (int i = 0; i < 10; i++) {
-			Integer tmdbId = tmdbApiByRating.get(i);
-			if (tmdbId != 0) {
-				MovieDb curMovie = movies.getMovie(tmdbId, "en");
-				tmdbApiMovies.add(curMovie);
-			}
-		}
-		return tmdbApiMovies;
+		List<MovieDb> ans = movieService.getMovieGenre(genre);
+		return ans;
 	}
 	
 	/**
@@ -117,30 +60,9 @@ public class MovieController {
 	 * @return
 	 */
 	@RequestMapping("api/movie/popular/")
-	public Integer getMoviePopular(Integer num) {
-		//860 tmdbApi's in here
-		List<Integer> tmdbApiByRating = movieRatingsRepository.gettmdbIdByInteger();
-		
-		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
-		List<MovieDb> tmdbApiMovies = new ArrayList<MovieDb>();
-			
-		int j = 0;
-		
-		//We'll return the top num best movies.
-		for (int i = 0; i < num; i++) {
-			if (i % 2 == 0) {
-				j = i;
-			} else {
-				j = i * 2;
-			}
-			Integer tmdbId = tmdbApiByRating.get(j);
-			
-			if (tmdbId != 0) {
-				MovieDb curMovie = movies.getMovie(tmdbId, "en");
-				tmdbApiMovies.add(curMovie);
-			}
-		}
-		return tmdbApiMovies.size();
+	public List<MovieDb> getMoviePopular(Integer num) {
+		List<MovieDb> ans = movieService.getMoviePopular(num); 
+		return ans;
 	}
 	
 	/**
@@ -148,28 +70,7 @@ public class MovieController {
 	 */
 	@RequestMapping("/api/movie/userId/")
 	public List<MovieDb> getMovieUser(Integer userId) {
-		String genres[]={"Comedy", "Crime", "Action", "Documentary", "Drama", 
-				"Sci-fi", "Horror", "Horror", "Thriller", "Children"};
-		
-		Random rand = new Random();
-		int genreIndex = rand.nextInt(9);
-		
-		//Supposed to generate a random genre of movie per user.
-		String genre = genres[genreIndex];
-		
-		List<Integer> tmdbApiByRating = movieRatingsRepository.gettmdbIdByGenre(genre);
-		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
-		List<MovieDb> tmdbApiMovies = new ArrayList<MovieDb>();
-			
-		//2) Query tmdbAPI
-		//We'll return the top 10 best movies.
-		for (int i = 0; i < 10; i++) {
-			Integer tmdbId = tmdbApiByRating.get(i);
-			if (tmdbId != 0) {
-				MovieDb curMovie = movies.getMovie(tmdbId, "en");
-				tmdbApiMovies.add(curMovie);
-			}
-		}
-		return tmdbApiMovies;
+		List<MovieDb> ans = movieService.getMovieUser(userId);
+		return ans;
 	}
 }

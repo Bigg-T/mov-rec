@@ -30,8 +30,7 @@ public class UserController {
 	 * I guess we can currently send through URL, but we should really be sending
 	 * get requests
 	 * @return
-	 */
-	
+	 */	
 	@RequestMapping("/api/user/create")
 	public UserObject createUser() {
 		//UserObject obj = new UserObject("Jean Paul", "Torre", "torre.j@husky.neu.edu", "123456789", "jeanpaulrt");
