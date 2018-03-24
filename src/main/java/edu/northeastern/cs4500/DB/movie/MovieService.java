@@ -2,6 +2,7 @@ package edu.northeastern.cs4500.DB.movie;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
@@ -32,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.northeastern.cs4500.JPARepositories.MovieRatingRepository;
 
+@Component
 public class MovieService {
 
 	@Autowired
@@ -59,23 +62,33 @@ public class MovieService {
 		return tmdbApiMovies;
 	}
 	
+	/**
+	 * This method returns a list of distinct random
+	 * integers between 0 and whatever the maximum number is (inclusive).
+	 * @param max the largest number in the set.
+	 */
+	private List<Integer> getDistinctRandomNums(Integer max) {
+		List<Integer> ans = new ArrayList<Integer>();
+		for(int i = 0; i < max; i++) {
+			ans.add(i);
+		}
+		Collections.shuffle(ans);
+		return ans;
+	}
+	
 	public List<MovieDb> getMoviePopular(Integer num) {
 		//860 tmdbApi's in here
 		List<Integer> tmdbApiByRating = movieRatingsRepository.gettmdbIdByInteger();
 		
 		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
 		List<MovieDb> tmdbApiMovies = new ArrayList<MovieDb>();
-			
-		int j = 0;
+		
+		List<Integer> chosenIds = getDistinctRandomNums(num);
 		
 		//We'll return the top num best movies.
 		for (int i = 0; i < num; i++) {
-			if (i % 2 == 0) {
-				j = i;
-			} else {
-				j = i * 2;
-			}
-			Integer tmdbId = tmdbApiByRating.get(j);
+			
+			Integer tmdbId = tmdbApiByRating.get(chosenIds.get(i));
 			
 			if (tmdbId != 0) {
 				MovieDb curMovie = movies.getMovie(tmdbId, "en");

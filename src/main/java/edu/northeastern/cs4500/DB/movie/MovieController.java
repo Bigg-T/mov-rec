@@ -1,21 +1,11 @@
 package edu.northeastern.cs4500.DB.movie;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import edu.northeastern.cs4500.JPARepositories.MovieRatingRepository;
-import edu.northeastern.cs4500.models.MovieRatingsObject;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,11 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbMovies;
+
 import info.movito.themoviedbapi.model.MovieDb;
 
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:3000", 
+		"http://movi3hall.cs4500.com2.s3-website.us-east-2.amazonaws.com/"}, maxAge = 3600)
 @RestController
 public class MovieController {
 
@@ -59,9 +49,9 @@ public class MovieController {
 	 * @param num given number.
 	 * @return
 	 */
-	@RequestMapping("api/movie/popular/")
+	@RequestMapping("/api/movie/popular/")
 	public List<MovieDb> getMoviePopular(Integer num) {
-		List<MovieDb> ans = movieService.getMoviePopular(num); 
+		List<MovieDb> ans = movieService.getMoviePopular(num);
 		return ans;
 	}
 	
