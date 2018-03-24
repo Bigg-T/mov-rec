@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * DATA MODEL for USER table in database
  *
  */
-@Entity(name="User")
+@Entity(name="user")
 public class UserObject {
 
 	@Id
@@ -63,7 +63,9 @@ public class UserObject {
 		this.username = username;
 	}
 	
-	
+	public int getId() {
+		return id;
+	}
 	public boolean isAllow_location() {
 		return allow_location;
 	}
