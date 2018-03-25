@@ -125,19 +125,58 @@ public class UserService {
 	 * @param friendRequestedId
 	 * @return true if friend was successfully added to user; false otherwise
 	 */
-	public Map<String, Boolean> addFriend(int userId, int friendRequestedId) {
+	//edge cases: Friend already in friends list
+	public HashMap<String, Object> addFriend(int userId, int friendRequestedId) {
+		HashMap<String, Object> context = new HashMap<String, Object>();
+
+		if (!userExists(userId)) {
+			System.out.println("USER DOES NOT EXIST");
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.NOT_FOUND);
+			context.put("message", "User does not exist");
+			return context;
+		}
+		
+		if (!userExists(friendRequestedId)) {
+			System.out.println("FRIEND DOES NOT EXIST");
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.NOT_FOUND);
+			context.put("message", "Friend Requested does not exist");
+			return context;
+		}
+		
+		if (userId == friendRequestedId) {
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.BAD_REQUEST);
+			context.put("message", "User cannot add itself");
+			return context;
+		}
+		
 		UserObject user = userRepository.getOne(userId);
 		UserObject requestedFriend = userRepository.getOne(friendRequestedId);
+		
+		Collection<UserObject> userFriends = user.getFriends();
+		boolean alreadyFriends = userFriends.contains(requestedFriend);
+
+		if (alreadyFriends) {
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.CONFLICT);
+			context.put("message", "Already Friends");
+			return context;
+		}
 		try {
-			Collection<UserObject> userFriends = user.getFriends();
 			userFriends.add(requestedFriend);
 			userRepository.save(user);
-			return Collections.singletonMap("isSuccess", true);
+			context.put("isSuccess", true);
+			context.put("status", HttpStatus.OK);
+			return context;
 		} catch (Exception e) {
-			return Collections.singletonMap("isSuccess", false);
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+			context.put("message", "Something went wrong, please try again");
+			return context;
 		}
 	}
-	
 	
 	/**
 	 * Checks if a user exists of not
@@ -145,11 +184,14 @@ public class UserService {
 	 * @return true if user exists; false otherwise
 	 */
 	protected boolean userExists(int userId) {
-		UserObject user = userRepository.getOne(userId);
-		if (user != null) {
+		UserObject user;
+		try {
+			user = userRepository.getOne(userId);
+			user.getEmail();
 			return true;
-		} 
-		return false;
+		} catch(Exception e) {
+			return false;
+		}
 	}
 	
 	/**
@@ -158,16 +200,50 @@ public class UserService {
 	 * @param removedFriendId
 	 * @return true if friend was successfully removed from user; false otherwise
 	 */
-	public Map<String, Boolean> removeFriend(int userId, int removedFriendId) {
+	public HashMap<String, Object> removeFriend(int userId, int friendId) {
+		HashMap<String, Object> context = new HashMap<String, Object>();
+		if (!userExists(userId)) {
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.NOT_FOUND);
+			context.put("message", "User does not exist");
+			return context;
+		}
+		
+		if (!userExists(friendId)) {
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.NOT_FOUND);
+			context.put("message", "Friend does not exist");
+			return context;
+		}		
+		
+		if (userId == friendId) {
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.BAD_REQUEST);
+			context.put("message", "User cannot remove itself");
+			return context;
+		}
+		
 		UserObject user = userRepository.getOne(userId);
-		UserObject removedFriend = userRepository.getOne(removedFriendId);
+		UserObject removedFriend = userRepository.getOne(friendId);
+				
 		try {
 			Collection<UserObject> userFriends = user.getFriends();
-			userFriends.remove(removedFriend);
-			userRepository.save(user);
-			return Collections.singletonMap("isSuccess", true);
+			if (!userFriends.contains(removedFriend)) {
+				context.put("isSuccess", false);
+				context.put("status", HttpStatus.BAD_REQUEST);
+				context.put("message", "User's are not friends");
+				return context;
+			} else {
+				userFriends.remove(removedFriend);
+				userRepository.save(user);
+				context.put("isSuccess", true);
+				context.put("status", HttpStatus.OK);
+				return context;
+			}
 		} catch (Exception e) {
-			return Collections.singletonMap("isSuccess", false);
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+			return context;
 		}
 	}
 }

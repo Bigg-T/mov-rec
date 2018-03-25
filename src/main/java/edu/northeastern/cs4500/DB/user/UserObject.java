@@ -47,7 +47,7 @@ public class UserObject {
 	@JoinTable(name = "user_friends", joinColumns = {
 			 @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
 			 @JoinColumn(name = "friendId", referencedColumnName = "id", nullable = false)})
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Collection<UserObject> friends;	
 	
 	/**

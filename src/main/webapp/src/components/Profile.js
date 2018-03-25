@@ -3,10 +3,7 @@ import React, {Component} from 'react';
 import {Item, Image, Grid, Rating, Container} from 'semantic-ui-react';
 import {Badge, Glyphicon, Label} from 'react-bootstrap';
 import { View, Text, AppRegistry } from 'react';
-import {genImageURL5} from '../MovieDBConstant';
 import axios from 'axios';
-import {genMovieVid} from '../MovieDBConstant';
-import YouTube from './YouTube';
 import '../css/Profile.css';
 
   //import {View} from 'react-native';
