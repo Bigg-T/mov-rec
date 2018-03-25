@@ -26,11 +26,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Controller;
 
 
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-
-@RestController
+@Controller
 public class UserProfile {
 
 	public UserProfile() {

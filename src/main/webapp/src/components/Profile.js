@@ -16,36 +16,34 @@ import '../css/Profile.css';
     constructor(props) {
       super(props);
       this.state = {
-        userData : [''],
+        firstName : "",
+        lastName : "",
+        aboutMe: "",
+        profPic: "",
       }
     }
     componentWillMount() {
-//      let movieID = this.props.location.state.referrer.id;//
-//      axios.get(genMovieVid(movieID))
-//      .then(res => {
-//        if (res.data.results.length != 0) {
-//          let data = res.data.results[0];
-//          console.log('KEYYYYYYY');
-//          console.log(data);
-//          this.setState({youtube : [data.key]});
-//        }
-//
-//      });
-
+    	
+    	axios.get("http://localhost:8081/api/user/profile/?id=1")
+        .then((code) => {
+        	console.log("------------");
+          console.log(code);
+          this.setState({firstName : code.data.first_name, lastName : code.data.last_name})
+          if (code.data.about_me == null) {
+        	  this.setState({aboutMe: "Empty"})
+          } else {
+        	  this.setState({aboutMe: code.data.about_me})
+          }
+          
+        });
     }
     render() {
-      //let YOUTUBE_BASE = 'https://www.youtube.com/watch?v=';
-      //console.log("referrer")
-//      console.log(this.props.location.state.referrer);
-//      let name = this.state.youtube.map(a => a);
-      //let YOUTUBE_VID = YOUTUBE_BASE+name[0];
       return (
-
 <Container>
 	<Grid>
 		<Grid.Column width={4}>
 			<Grid.Row>
-				<h3>Jean Paul Torre</h3>
+				<h3>{this.state.firstName} {this.state.lastName}</h3>
 			</Grid.Row>
 			<Grid.Row>
 				Add Friend
@@ -55,7 +53,7 @@ import '../css/Profile.css';
 			</Grid.Row>
 			<Grid.Row>About Me</Grid.Row>
 			<Grid.Row>
-			 <p>"I love movies, which is why I decided to join this website. I would like to meet people to watch movies with"</p>
+			 <p>{this.state.aboutMe}</p>
 			 </Grid.Row>
 		</Grid.Column>
 		<Grid.Column width={10} margin-right={40}>
