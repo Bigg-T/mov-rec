@@ -1,14 +1,12 @@
 package edu.northeastern.cs4500;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringRunner.class)
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class Cs4500Spring2018NguyenApplicationTests {
 
