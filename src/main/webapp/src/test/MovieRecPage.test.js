@@ -13,15 +13,15 @@ import MovieDescription from '../pages/MovieDescription';
 describe('<App />', () => {
 
 //MovieRecPage
-it('renders 1 <Footer /> component', () => {
-  const component = shallow(<MovieRecPage name="footer" />);
+it('renders 1 <MovieRecPage /> component', () => {
+  const component = shallow(<MovieRecPage name="movierecpage" />);
   console.log(component);
   expect(component).toHaveLength(1);
 });
 describe('it renders props correctly', () => {
-  const component = shallow(<Footer name="footer" />);
+  const component = shallow(<MovieRecPage name="movierecpage" />);
   console.log(component.instance().props);
-  expect(component.instance().props.name).toBe('footer');
+  expect(component.instance().props.name).toBe('movierecpage');
 });
 
 });

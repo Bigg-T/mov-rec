@@ -1,63 +1,36 @@
+
 import React from 'react';
-import {shallow} from 'enzyme';
-import SignIn from '../pages/SignIn';
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import ReactDOM from 'react-dom';
+import App from '../APP';
+import MyNav from '../components/MyNav';
+import MyRoute from '../components/MyRoute';
+import Footer from '../components/Footer';
+import SignIn from '../pages/SIGNIN';
+import SignUp from '../pages/SIGNUP';
+import MovieRecPage from '../pages/MovieRecPage';
+import MovieDescription from '../pages/MovieDescription';
 
-Enzyme.configure({ adapter: new Adapter() });
+describe('<App />', () => {
 
-jest.unmock('../pages/SignIn');
-
-//import React from 'react';
-//import { shallow } from 'enzyme';
-
-//import SignIn from '../SignIn';
-import App from '../App';
-
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<SignIn />, div);
-  ReactDOM.unmountComponentAtNode(div);
-});
-
-describe('<SignIn />', () => {
-
-  it('expects to change the status when clicking the button', () => {
-    const wrapper = shallow(<SignIn />);
-
-    expect(wrapper.state().username).toBe('');
-    //expect(wrapper.contains(<p>Status is {'Off'}</p>)).toBe(true);
-
-    //wrapper.find("submitButton").simulate('click');
-
-    expect(wrapper.state().password).toBe('');
-    //expect(wrapper.contains(<p>Status is {'On'}</p>)).toBe(true);
-
-});
-
-
-
-
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<SignIn />, div);
-  ReactDOM.unmountComponentAtNode(div);
-});
-
-
-
-
-it('checks "handlesubmit()" on click', () => {
-var expects = require('expect');
-    const wrapper = mount(<SignIn />);
-    wrapper.update();
-    const spy = jest.spyOn(wrapper.instance(), 'handleSubmit');
-
-    wrapper.find('#submitButton').simulate('click');
-    //const spy = jest.spyOn(wrapper.instance(), 'handleSubmit');
-    expects(spy).toHaveBeenCalled();
+//SignIn tests
+  it('renders 1 <SignIn /> component', () => {
+    const component = shallow(<SignIn name="signin" />);
+    console.log(component);
+    expect(component).toHaveLength(1);
+  });
+  describe('it renders props correctly', () => {
+    const component = shallow(<SignIn name="signin" />);
+    console.log(component.instance().props);
+    expect(component.instance().props.name).toBe('signin');
+  });
+  describe('it updates the submit on button click', () => {
+    const component = mount(<SignIn name="signin" />);
+    const button = component.find('button');
+    button.simulate('click');
+    console.log(component.state());
+    expect(component.state().username).toEqual('');
+    expect(component.state().password).toEqual('');
   });
 
-});
+    });
