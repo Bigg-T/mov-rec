@@ -51,6 +51,7 @@ public class MovieController {
 	 */
 	@RequestMapping("/api/movie/popular/")
 	public List<MovieDb> getMoviePopular(Integer num) {
+		//Need to sanitize input to make sure it is an integer here
 		List<MovieDb> ans = movieService.getMoviePopular(num);
 		return ans;
 	}

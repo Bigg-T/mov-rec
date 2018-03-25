@@ -16,7 +16,7 @@ public interface MovieRatingRepository extends JpaRepository<MovieRatingsObject,
 			// Later on we can distinguish between what year we want the movies from specifically,
 			// but for now, we'll just return the highest rated movies of all time.
 			//+ " AND title LIKE \'%(2010)%\'" 
-			+ " AND tmdb_id IS NOT NULL ORDER BY rating")
+			+ " AND tmdb_id IS NOT NULL AND tmdb_id != 0 ORDER BY rating")
 	public List<Integer> gettmdbIdByGenre(String genre);
 	
 	
@@ -29,6 +29,6 @@ public interface MovieRatingRepository extends JpaRepository<MovieRatingsObject,
 			// Later on we can distinguish between what year we want the movies from specifically,
 			// but for now, we'll just return the highest rated movies of all time.
 			+ " title LIKE \'%(2015)%\' OR title LIKE \'%(2014)%\'" 
-			+ " AND tmdb_id IS NOT NULL ORDER BY rating")
+			+ " AND tmdb_id IS NOT NULL AND tmdb_id != 0 ORDER BY rating")
 	public List<Integer> gettmdbIdByInteger();
 }

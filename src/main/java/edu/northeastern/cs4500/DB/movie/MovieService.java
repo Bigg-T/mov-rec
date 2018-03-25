@@ -76,20 +76,27 @@ public class MovieService {
 		return ans;
 	}
 	
+	/**
+	 * This method returns up to 50 random and popular movies
+	 * based off of movielens database data. It queries the
+	 * tmdbAPI with this data and returns those movies. 
+	 * @param num number of movies to return.
+	 */
 	public List<MovieDb> getMoviePopular(Integer num) {
+		if (num > 50) { num = 50; }
+		
 		//860 tmdbApi's in here
 		List<Integer> tmdbApiByRating = movieRatingsRepository.gettmdbIdByInteger();
 		
 		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
 		List<MovieDb> tmdbApiMovies = new ArrayList<MovieDb>();
 		
-		List<Integer> chosenIds = getDistinctRandomNums(num);
+		int numOfRandoms = num * 5;
+		List<Integer> chosenIds = getDistinctRandomNums(numOfRandoms);
 		
 		//We'll return the top num best movies.
 		for (int i = 0; i < num; i++) {
-			
 			Integer tmdbId = tmdbApiByRating.get(chosenIds.get(i));
-			
 			if (tmdbId != 0) {
 				MovieDb curMovie = movies.getMovie(tmdbId, "en");
 				tmdbApiMovies.add(curMovie);
