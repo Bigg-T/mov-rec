@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<UserObject, Integer>{
 
 	@Async
-	@Query("SELECT first_name, last_name, prof_pic, about_me FROM User WHERE id = :id")
-	public String getUserProfileData(@Param("id") Integer userId);
-
+	@Query("SELECT u FROM user u WHERE u.id = ?1")
+	public List<UserObject> getUserProfileData(Integer userId);
 }
