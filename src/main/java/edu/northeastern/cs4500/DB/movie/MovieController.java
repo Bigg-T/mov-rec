@@ -1,5 +1,6 @@
 package edu.northeastern.cs4500.DB.movie;
 
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,9 +39,14 @@ public class MovieController {
 	 * movies one by one. 
 	 */
 	@RequestMapping("/api/movie/genre/")
-	public List<MovieDb> getMovieGenre(String genre) {
+	public HashMap<String, Object> getMovieGenre(String genre) {
 		List<MovieDb> ans = movieService.getMovieGenre(genre);
-		return ans;
+		HashMap<String, Object> ansHash = new HashMap<>();
+		ansHash.put("page", 1);
+		ansHash.put("total_results", 20055);
+		ansHash.put("total_pages", 1003);
+		ansHash.put("results", ans);
+		return ansHash;
 	}
 	
 	/**
@@ -50,18 +56,28 @@ public class MovieController {
 	 * @return
 	 */
 	@RequestMapping("/api/movie/popular/")
-	public List<MovieDb> getMoviePopular(Integer num) {
+	public HashMap<String, Object> getMoviePopular(Integer num) {
 		//Need to sanitize input to make sure it is an integer here
 		List<MovieDb> ans = movieService.getMoviePopular(num);
-		return ans;
+		HashMap<String, Object> ansHash = new HashMap<>();
+		ansHash.put("page", 1);
+		ansHash.put("total_results", 20055);
+		ansHash.put("total_pages", 1003);
+		ansHash.put("results", ans);
+		return ansHash;
 	}
 	
 	/**
 	 * This movie should just return a different set of movies per user.
 	 */
 	@RequestMapping("/api/movie/userId/")
-	public List<MovieDb> getMovieUser(Integer userId) {
+	public HashMap<String, Object> getMovieUser(Integer userId) {
 		List<MovieDb> ans = movieService.getMovieUser(userId);
-		return ans;
+		HashMap<String, Object> ansHash = new HashMap<>();
+		ansHash.put("page", 1);
+		ansHash.put("total_results", 20055);
+		ansHash.put("total_pages", 1003);
+		ansHash.put("results", ans);
+		return ansHash;
 	}
 }

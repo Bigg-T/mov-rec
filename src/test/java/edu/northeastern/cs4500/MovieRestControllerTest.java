@@ -1,5 +1,6 @@
 package edu.northeastern.cs4500;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Assert;
@@ -42,12 +43,15 @@ public class MovieRestControllerTest {
 				HttpMethod.GET, entity, String.class);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		
-		List<MovieDb> movieDbList =
-			    mapper.readValue(response.getBody(), new TypeReference<List<MovieDb>>() {});
+		HashMap<String, Object> responseList = mapper.readValue(response.getBody(), new TypeReference<HashMap<String,Object>>() {});
+		@SuppressWarnings("unchecked")
+		List<MovieDb> movieDbList = (List<MovieDb>) responseList.get("results");
+			    
 		
 		Assert.assertEquals(movieDbList.size(), numMovies);
 	}
+	
+	
 	
 	@Test
 	public void testGetPopularMovieMany() throws Exception {
@@ -59,9 +63,9 @@ public class MovieRestControllerTest {
 				HttpMethod.GET, entity, String.class);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		
-		List<MovieDb> movieDbList =
-			    mapper.readValue(response.getBody(), new TypeReference<List<MovieDb>>() {});
+		HashMap<String, Object> responseList = mapper.readValue(response.getBody(), new TypeReference<HashMap<String,Object>>() {});
+		@SuppressWarnings("unchecked")
+		List<MovieDb> movieDbList = (List<MovieDb>) responseList.get("results");
 		
 		Assert.assertEquals(movieDbList.size(), 50);
 	}
@@ -75,9 +79,9 @@ public class MovieRestControllerTest {
 				HttpMethod.GET, entity, String.class);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		
-		List<MovieDb> movieDbList =
-			    mapper.readValue(response.getBody(), new TypeReference<List<MovieDb>>() {});
+		HashMap<String, Object> responseList = mapper.readValue(response.getBody(), new TypeReference<HashMap<String,Object>>() {});
+		@SuppressWarnings("unchecked")
+		List<MovieDb> movieDbList = (List<MovieDb>) responseList.get("results");
 		
 		Assert.assertEquals(movieDbList.size(), 10);
 		
@@ -96,28 +100,12 @@ public class MovieRestControllerTest {
 				HttpMethod.GET, entity, String.class);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		
-		List<MovieDb> movieDbList =
-			    mapper.readValue(response.getBody(), new TypeReference<List<MovieDb>>() {});
+		HashMap<String, Object> responseList = mapper.readValue(response.getBody(), new TypeReference<HashMap<String,Object>>() {});
+		@SuppressWarnings("unchecked")
+		List<MovieDb> movieDbList = (List<MovieDb>) responseList.get("results");
 		
 		Assert.assertEquals(movieDbList.size(), 10);
 	}
-	
-//	/**
-//	 * Quick method that checks to see whether a list of
-//	 * genres contains the given genre.
-//	 * @param genres
-//	 * @param genre
-//	 * @return
-//	 */
-//	private boolean genreContained(List<Genre> genres, String genre) {
-//		for (int i = 0; i < genres.size(); i++) {
-//			if (genres.get(i).getName().equals(genre)) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
 	
 	private String createURLWithPort(String uri) {
 		return "http://localhost:" + port + uri;
