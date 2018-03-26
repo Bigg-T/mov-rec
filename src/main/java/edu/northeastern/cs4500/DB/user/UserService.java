@@ -36,6 +36,10 @@ public class UserService {
 				if (curUser.getPassword().equals(pw)) { 
 					context.put("isSuccess", true);
 					context.put("status", HttpStatus.OK);
+					context.put("username", username);
+					context.put("user_id", curUser.getId());
+					curUser.setLogged(true);
+					userRepository.save(curUser);
 					return context;
 				} 
 			}
@@ -59,12 +63,14 @@ public class UserService {
 		HashMap<String, Object> context = new HashMap<String, Object>();  
 		if (!usernameExists(username)) {
 			if (!emailExists(email)) {
-				UserObject obj = new UserObject(fname, lname, email, pw, username);			
+				UserObject obj = new UserObject(fname, lname, email, pw, username);	
+				obj.setLogged(true);
 				try {
 					userRepository.save(obj);
 					context.put("id", obj.getId());
 					context.put("status", HttpStatus.OK);
 					context.put("isSuccess", true);
+					context.put("user_id", obj.getId());
 					return context; 
 				} catch (Exception e) {
 					context.put("id", null);

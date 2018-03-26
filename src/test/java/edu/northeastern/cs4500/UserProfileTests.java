@@ -52,21 +52,35 @@ public class UserProfileTests {
     @Test
     public void testGetUserProfileData() throws Exception {
     //	String first_name, String last_name, String email, String password, String username
+	    String l_first_name = "test-first";
+	    String l_last_name = "test-last";
+	    String l_email = "test-email-2";
+	    String l_password = "test-password";
+	    String l_username = "test-username-2";
+	    String l_about_me = "Test About me";
+	    String l_prof_pic = "Profile Picture";
+    		UserObject ltestUser = new UserObject(l_first_name, l_last_name, l_email, l_password, l_username);
+		ltestUser.setLogged(true);
+		
     	    String first_name = "test-first";
     	    String last_name = "test-last";
-    	    String email = "test-email-2";
+    	    String email = "test-email-3";
     	    String password = "test-password";
-    	    String username = "test-username-2";
+    	    String username = "test-username-3";
     	    String about_me = "Test About me";
     	    String prof_pic = "Profile Picture";
     		UserObject testUser = new UserObject(first_name, last_name, email, password, username);
     		testUser.setAbout_me(about_me);
     		testUser.setProf_pic(prof_pic);
+    		
+    		//testUser.setLogged(true);
     		userRepo.save(testUser);
+    		userRepo.save(ltestUser);
     		int test_user_id = testUser.getId();
+    		int ltest_user_id = ltestUser.getId();
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
-				createURLWithPort("/api/user/profile/?id=" + test_user_id),
+				createURLWithPort("/api/user/profile/?id=" + test_user_id + "&user_request=" + ltest_user_id),
 				HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> context = response.getBody();
 		Assert.assertEquals(response.getStatusCodeValue(), 200);
@@ -76,6 +90,7 @@ public class UserProfileTests {
 		Assert.assertEquals((String)context.get("about_me"), about_me);
 		Assert.assertEquals((boolean)context.get("isSuccess"), true);
 		userRepo.delete(testUser);
+		userRepo.delete(ltestUser);
     }
     
     /**

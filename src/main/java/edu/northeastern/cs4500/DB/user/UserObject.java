@@ -49,6 +49,7 @@ public class UserObject {
 			 @JoinColumn(name = "friendId", referencedColumnName = "id", nullable = false)})
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Collection<UserObject> friends;	
+	private boolean logged;
 	
 	/**
 	 * Can add any default fields here
@@ -164,6 +165,14 @@ public class UserObject {
 
 	public void setFriends(Collection<UserObject> friends) {
 		this.friends = friends;
+	}
+
+	public boolean isLogged() {
+		return logged;
+	}
+
+	public void setLogged(boolean logged) {
+		this.logged = logged;
 	}
 	
 	

@@ -40,8 +40,9 @@ class SignIn extends Component {
       // console.log("Status of account logged in:" + code.data.isSuccess);
       let isSucess = code.data.isSuccess;
       if (isSucess) {
-        window.location.href = '/';// change the history path, to reroute (hack)
-        window.localStorage['isLoggedIn'] = true;
+    	  	 window.localStorage['isLoggedIn'] = true;
+         window.localStorage['user_id'] = code.data.user_id;
+         window.location.href = '/';// change the history path, to reroute (hack)
       } else {
         this.setState({errorMsg : "You incorrect password or username."})
       }

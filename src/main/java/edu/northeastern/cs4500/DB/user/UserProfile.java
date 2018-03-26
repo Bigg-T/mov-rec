@@ -24,30 +24,56 @@ public class UserProfile {
 	
 	@Autowired
 	UserRepository userRepository;
-	
-/**
- * Gets the User Data needed for the profile page	
- * @param userId
- * @return
- */
-@GetMapping("/api/user/profile/")
-@ResponseBody
-public HashMap<String, Object> getUserData(Integer id) {
-	List<UserObject> result = userRepository.getUserProfileData(id);
-	HashMap<String, Object> userData = new HashMap<String, Object>();
 
-	if (result.size() > 0) {
-		UserObject user = result.get(0);
-		userData.put("about_me", user.getAbout_me());
-		userData.put("profile_picture", user.getProf_pic());
-		userData.put("first_name", user.getFirst_name());
-		userData.put("last_name", user.getLast_name());
-		userData.put("isSuccess", true);
-		userData.put("status", HttpStatus.OK);	
+	/**
+	 * Gets the User Data needed for the profile page	
+	 * @param userId
+	 * @return
+	 */
+	@GetMapping("/api/user/profile/")
+	@ResponseBody
+	public HashMap<String, Object> getUserData(Integer id, Integer user_request) {
+		List<UserObject> result = userRepository.getUserProfileData(id);
+		HashMap<String, Object> userData = new HashMap<String, Object>();
+		Boolean isLogged = false;
+		if (id == null || user_request == null) {
+			userData.put("isSuccess", false);
+			userData.put("message", "Incorrect Input");
+			userData.put("status", HttpStatus.BAD_REQUEST);
+			return userData;
+		}
+
+		try {
+			UserObject userLogged = userRepository.getOne(user_request);
+			isLogged = userLogged.isLogged();
+		} catch(Exception e) {
+			userData.put("isSuccess", false);
+		userData.put("message", "User Does Not Exist");
+		//I should probably redirect to an error page instead 
+		userData.put("status", HttpStatus.NOT_FOUND);
+		return userData;
+		}
+		if (isLogged) {
+			if (result.size() > 0) {
+				UserObject user = result.get(0);
+				userData.put("about_me", user.getAbout_me());
+				userData.put("profile_picture", user.getProf_pic());
+				userData.put("first_name", user.getFirst_name());
+				userData.put("last_name", user.getLast_name());
+				userData.put("isSuccess", true);
+				userData.put("status", HttpStatus.OK);
+				userData.put("userId", id);
+				} else {
+				userData.put("isSuccess", false);
+				userData.put("status", HttpStatus.NOT_FOUND);	
+			}
+			return userData;
 		} else {
-		userData.put("isSuccess", false);
-		userData.put("status", HttpStatus.NOT_FOUND);	
-	}
-	return userData;
+			//I should probably redirect to an error page instead 
+			userData.put("isSuccess", false);
+			userData.put("message", "User Not Logged In");
+			userData.put("status", HttpStatus.BAD_REQUEST);
+				return userData;
+			}
 	}
 }
