@@ -21,12 +21,12 @@ public class SimpleSVDTest {
 
   @Test(expected = IllegalArgumentException.class)  // must be a edge
   public void constructor3() throws Exception {
-    new SimpleSVD(new double[][]{{1,3}},1);
+    new SimpleSVD(new double[][]{{1,3}},1.01);
   }
 
   @Test(expected = IllegalArgumentException.class) // must be a edge
   public void constructor4() throws Exception {
-    new SimpleSVD(new double[][]{{1,3}},0);
+    new SimpleSVD(new double[][]{{1,3}},-0.01);
   }
 
   @Test(expected = IllegalArgumentException.class) // No element
@@ -34,9 +34,14 @@ public class SimpleSVDTest {
     new SimpleSVD(new double[][]{},.5);
   }
 
-  @Test(expected = IllegalArgumentException.class) // null
+  @Test(expected = Exception.class) // null
   public void constructor6() throws Exception {
     new SimpleSVD(null,.5);
+  }
+
+  @Test(expected = Exception.class) // null
+  public void constructor7() throws Exception {
+    new SimpleSVD(new double[][]{null,null},.5);
   }
 
   @Test

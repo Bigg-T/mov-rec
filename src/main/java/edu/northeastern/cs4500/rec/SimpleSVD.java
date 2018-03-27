@@ -20,13 +20,13 @@ public class SimpleSVD implements ICFAlgo {
    * @param modePercent mode (recommended to  be around .6t for testing or mostly 0
    */
   SimpleSVD(double[][] userItem, double modePercent) {
-    if (modePercent > 0.999 || modePercent < 0.001) {
-      throw new IllegalArgumentException("Percentage must be (.001,0.999)");
+    Objects.requireNonNull(userItem);
+    if (modePercent > 1.000 || modePercent < 0.000) {
+      throw new IllegalArgumentException("Percentage must be (0.000,1.000)");
     }
     if (userItem.length < 1) {
       throw new IllegalArgumentException("Must contain rating");
     }
-    Objects.requireNonNull(userItem);
     this.userItem = new Array2DRowRealMatrix(userItem);
     this.modePercent = modePercent;
   }
@@ -59,19 +59,20 @@ public class SimpleSVD implements ICFAlgo {
   /**
    * The number of column to use to perform prediction.
    * @param diagValues the diagonal values of svd
-   * @param mp the mode precentage
+   * @param mp the mode percentage
    * @return the number of columns to use
    */
   private int determineMode(double[] diagValues, double mp) {
     double sum = Arrays.stream(diagValues).sum();
     double runningSum = 0.0;
-    for (int i = 0; i < diagValues.length; i++) {
-      runningSum += diagValues[i];
+    int mode;
+    for (mode = 0; mode < diagValues.length; mode++) {
+      runningSum += diagValues[mode];
       if ((runningSum/sum) > mp) {
-        return i;
+        break; // could of return, but final return would never reach
       }
     }
-    return (int)(diagValues.length * mp); //just because, impossible
+    return mode;
   }
 
 }
