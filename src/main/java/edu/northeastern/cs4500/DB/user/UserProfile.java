@@ -42,9 +42,9 @@ public class UserProfile {
 			userData.put("status", HttpStatus.BAD_REQUEST);
 			return userData;
 		}
-
+		UserObject userLogged;
 		try {
-			UserObject userLogged = userRepository.getOne(user_request);
+			userLogged = userRepository.getOne(user_request);
 			isLogged = userLogged.isLogged();
 		} catch(Exception e) {
 			userData.put("isSuccess", false);
@@ -63,7 +63,18 @@ public class UserProfile {
 				userData.put("isSuccess", true);
 				userData.put("status", HttpStatus.OK);
 				userData.put("userId", id);
+				if (id == user_request) {
+					userData.put("isFriend", false);
 				} else {
+					if (userLogged.getFriends().contains(user)) {
+						userData.put("isFriend", true);
+					}
+					else {
+						userData.put("isFriend", false);	
+					}
+				}
+					//user.getFriends().contains(o)
+			    } else {
 				userData.put("isSuccess", false);
 				userData.put("status", HttpStatus.NOT_FOUND);	
 			}
