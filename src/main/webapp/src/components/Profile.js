@@ -17,12 +17,15 @@ import '../css/Profile.css';
         lastName : "",
         aboutMe: "",
         profPic: "",
+        isFriend: false,
+        friendButton: "",
       }
     }
     
+    /**
+     * Logic for Adding a friend
+     */
         handleAddFriend() {
-        	console.log("YOOOOOOOOO HANDLE ADD FRIEND");
-    		//e.preventDefault();
     	    let user_request = window.localStorage.getItem("user_id");
     		if (user_request != null) {
     			let profileId = this.props.match.params.id;
@@ -32,6 +35,7 @@ import '../css/Profile.css';
     				let isSuccess = response.data.isSuccess;
     				if (isSuccess) {
     					window.alert("Successfully Added Friend");
+    					window.location.reload();
     				} else {
     					if (response.data.message != null) {
     						window.alert(response.data.message);
@@ -45,6 +49,33 @@ import '../css/Profile.css';
     			});	
     		}
     }
+        
+        /**
+         * Logic for Removing a friend
+         */
+        handleDeleteFriend() {
+        	let user_request = window.localStorage.getItem("user_id");
+        	if (user_request != null) {
+        		let profileId = this.props.match.params.id;
+        		axios.post("http://localhost:8081/api/user/remove_friend/?userId=" + user_request + "&friendId=" + profileId)
+        		.then(function (response) {
+        			let isSuccess = response.data.isSuccess;
+        			if (isSuccess) {
+        				window.alert("Successfully Removed Friend");
+        				window.location.reload(); // for now, see if better alternatives later
+        			} else {
+        				if (response.data.message != null) {
+        					window.alert(response.data.message);
+        				} else {
+        					window.alert("There was an error :(");
+        				}
+        			}
+        		})
+        		.catch(function (e) {
+        			window.alert("There was an error :(");
+        		});
+        	}
+        }
     componentWillMount() {
 //    	 let profileId = this.props.params.id;
 //    	 let user_request = window.localStorage.getItem("user_id");
@@ -58,7 +89,8 @@ import '../css/Profile.css';
           console.log(code);
           let isSuccess = code.data.isSuccess;
           if (isSuccess) {
-        	  	this.setState({firstName : code.data.first_name, lastName : code.data.last_name})
+        	  	this.setState({firstName : code.data.first_name, lastName : code.data.last_name,
+        	  		isFriend: code.data.isFriend})
         	  	if (code.data.about_me == null) {
         	  		this.setState({aboutMe: "Empty"})
         	  	} else {
@@ -71,6 +103,12 @@ import '../css/Profile.css';
   
     
     render() {
+    	
+    	if (this.state.isFriend) {
+    		this.friendButton = <a href="#" onClick={() => this.handleDeleteFriend()}> Delete Friend </a>;
+    	} else {
+    		this.friendButton = <a href="#" onClick={() => this.handleAddFriend()}> Add Friend </a>;
+    	}
       return (
 <Container>
 	<Grid>
@@ -79,9 +117,7 @@ import '../css/Profile.css';
 				<h3>{this.state.firstName} {this.state.lastName}</h3>
 			</Grid.Row>
 			<Grid.Row>
-				<a href="#" onClick={() => this.handleAddFriend()}>
-				Add Friend
-				</a>
+			{this.friendButton}
 			</Grid.Row>
 			<Grid.Row width={1}>
 				<Image src={"http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"} />
