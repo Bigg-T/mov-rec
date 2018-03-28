@@ -12,14 +12,14 @@ import org.apache.commons.math3.linear.SingularValueDecomposition;
  */
 public class SimpleSVD implements ICFAlgo {
   private Array2DRowRealMatrix userItem;
-  double modePercent = .75;
+  private double modePercent = .75;
 
   /**
    *
-   * @param userItem the matrix user and item rating
-   * @param modePercent mode (recommended to  be around .6t for testing or mostly 0
+   * @param userItem the matrix user and item. The rating of each user rated on the items.
+   * @param modePercent mode (recommended to  be around .6t for testing or mostly 0 in the matrix
    */
-  SimpleSVD(double[][] userItem, double modePercent) {
+  public SimpleSVD(double[][] userItem, double modePercent) {
     Objects.requireNonNull(userItem);
     if (modePercent > 1.000 || modePercent < 0.000) {
       throw new IllegalArgumentException("Percentage must be (0.000,1.000)");
@@ -43,6 +43,9 @@ public class SimpleSVD implements ICFAlgo {
    * @return the predict given some Y (users) predict on X (items)
    */
   private double[][] compute(double modePercent) {
+    if (this.userItem.getColumnDimension() <= 1 || this.userItem.getRowDimension() <= 1) {
+      return this.userItem.getData();
+    }
     SingularValueDecomposition svd = new SingularValueDecomposition(this.userItem);
     double[] diagValues = svd.getSingularValues();
     int numMode = this.determineMode(diagValues, modePercent);

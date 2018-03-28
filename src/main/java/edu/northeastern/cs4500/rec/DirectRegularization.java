@@ -10,6 +10,6 @@ public class DirectRegularization implements ICFAlgo {
   @Override
   public double[][] compute() {
     // TODO Will implement
-    return new double[0][];
+    return null;
   }
 }

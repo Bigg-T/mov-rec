@@ -44,6 +44,12 @@ public class SimpleSVDTest {
     new SimpleSVD(new double[][]{null,null},.5);
   }
 
+  @Test //edge case for about to construct
+  public void constructor8() throws Exception {
+    new SimpleSVD(new double[][]{{1}},1.0);
+    new SimpleSVD(new double[][]{{1}},0.0);
+  }
+
   @Test
   public void compute1() throws Exception {
     double[][] test3 = {
@@ -51,10 +57,27 @@ public class SimpleSVDTest {
         {6.2, 0.0, 0.0, 0.0},
         {0.0, 0.0, 5.0, 6.0},
         {0.0, 0.0, 0.0, 6.0}};//[1,1]
-    SimpleSVD a = new SimpleSVD(test3, .65);
+    ICFAlgo a = new SimpleSVD(test3, .65);
     double[][] predict = a.compute();
     assertEquals(2.81,predict[1][1] ,.1);
     assertEquals(2.36,predict[3][2] ,.1);
   }
+
+  @Test // picking all 100% mode doesn't change score
+  public void compute2() throws Exception {
+    double[][] test3 = {{5.0}};//
+    ICFAlgo a = new SimpleSVD(test3, 1.0);
+    double[][] predict = a.compute();
+    assertEquals(5.0,predict[0][0],.1);
+  }
+
+  @Test //same as being small modes
+  public void compute3() throws Exception {
+    double[][] test3 = {{5.0, 0.0},{0.0, 4.0}};//
+    ICFAlgo a = new SimpleSVD(test3, 0.0);
+    double[][] predict = a.compute();
+    assertEquals(0.0,predict[0][1],.1);
+  }
+
 
 }
