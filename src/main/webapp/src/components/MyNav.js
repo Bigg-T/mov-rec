@@ -6,10 +6,19 @@ import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom'
 import {Navbar, NavItem, Nav} from 'react-bootstrap';
 class MyNav extends Component {
+	
   constructor(props) {
+	let userIsLoggedIn = window.localStorage.getItem("isLoggedIn");
+	if (userIsLoggedIn == null) {
+		userIsLoggedIn = false
+	}
+	console.log("-------------");
+	console.log(userIsLoggedIn);
+	console.log(window.localStorage.getItem("user_id"));
+	console.log("-------------");
     super(props);
     this.state = {
-      isLoggedIn : false
+      isLoggedIn : userIsLoggedIn,
     }
   }
   render() {
@@ -48,6 +57,12 @@ class BasicNav extends Component {
 }
 
 class LoggedInNav extends Component {
+	  constructor(props) {
+		    super(props);
+		    this.state = {
+		      user: '/profile/' + window.localStorage.getItem("user_id"),
+		    }
+		  }
   render() {
     return (
         <Navbar inverse collapseOnSelect>
@@ -73,7 +88,11 @@ class LoggedInNav extends Component {
               </Navbar.Brand>
             </Nav>
             <Nav pullRight>
-              <Navbar.Brand eventKey={1}>
+              
+               <Navbar.Brand eventKey={1} >
+            <NavLink to={this.state.user}><h4>Profile</h4></NavLink>
+             </Navbar.Brand>
+             <Navbar.Brand eventKey={2}>
                 <NavLink to={`/`}><h4>Sign Out</h4></NavLink>
               </Navbar.Brand>
             </Nav>

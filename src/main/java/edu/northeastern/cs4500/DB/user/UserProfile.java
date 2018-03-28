@@ -33,6 +33,11 @@ public class UserProfile {
 	@GetMapping("/api/user/profile/")
 	@ResponseBody
 	public HashMap<String, Object> getUserData(Integer id, Integer user_request) {
+		System.out.println("************************");
+		System.out.println(id);
+		System.out.println(user_request);
+		System.out.println(id.compareTo(user_request) == 0);
+		System.out.println("************************");
 		List<UserObject> result = userRepository.getUserProfileData(id);
 		HashMap<String, Object> userData = new HashMap<String, Object>();
 		Boolean isLogged = false;
@@ -63,9 +68,11 @@ public class UserProfile {
 				userData.put("isSuccess", true);
 				userData.put("status", HttpStatus.OK);
 				userData.put("userId", id);
-				if (id == user_request) {
+				if (id.compareTo(user_request) == 0) {
 					userData.put("isFriend", false);
+					userData.put("myProfile", true);
 				} else {
+					userData.put("myProfile", false);
 					if (userLogged.getFriends().contains(user)) {
 						userData.put("isFriend", true);
 					}
