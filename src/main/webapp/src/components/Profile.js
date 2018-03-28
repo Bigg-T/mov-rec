@@ -112,7 +112,7 @@ import '../css/Profile.css';
     	} else {
     		if (this.state.myProfile) {
     			//console.log(this.myProfile);
-    			this.state.friendButton = "";
+    			this.state.friendButton = <a href="/profile_edit"> Edit Profile </a>;
     		} else {
         		this.state.friendButton = <a href="#" onClick={() => this.handleAddFriend()}> Add Friend </a>;
 

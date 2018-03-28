@@ -88,7 +88,6 @@ class LoggedInNav extends Component {
               </Navbar.Brand>
             </Nav>
             <Nav pullRight>
-              
                <Navbar.Brand eventKey={1} >
             <NavLink to={this.state.user}><h4>Profile</h4></NavLink>
              </Navbar.Brand>

@@ -117,6 +117,7 @@ public class UserProfile {
 			user.setAbout_me(about_me);
 			user.setFirst_name(first_name);
 			user.setLast_name(last_name);
+			userRepository.save(user);
 			context.put("isSuccess", true);
 			context.put("status", HttpStatus.OK);
 			context.put("message", "Succesfully Updated Profile");
