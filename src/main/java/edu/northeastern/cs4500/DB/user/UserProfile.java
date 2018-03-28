@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.stereotype.Controller;
@@ -93,5 +94,75 @@ public class UserProfile {
 			userData.put("status", HttpStatus.BAD_REQUEST);
 				return userData;
 			}
+	}
+	
+	
+	/**
+	 * Updates the user profile
+	 * @param user_request
+	 * @param about_me
+	 * @param first_name
+	 * @param last_name
+	 * @return
+	 */
+	@PostMapping("/api/user/profile/edit")
+	@ResponseBody
+	public HashMap<String, Object> editUserData(Integer user_request, String about_me, String first_name,
+			String last_name) {
+		UserObject user;
+		HashMap<String, Object> context = new HashMap<String, Object>();
+		try {
+			user = userRepository.getOne(user_request);
+			if (user.isLogged()) {
+			user.setAbout_me(about_me);
+			user.setFirst_name(first_name);
+			user.setLast_name(last_name);
+			context.put("isSuccess", true);
+			context.put("status", HttpStatus.OK);
+			context.put("message", "Succesfully Updated Profile");
+			} else {
+				context.put("isSuccess", false);
+				context.put("status", HttpStatus.BAD_REQUEST);
+				context.put("message", "User Not Logged In");
+			}	
+		} catch (Exception e) {
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.BAD_REQUEST);
+			context.put("message", "User Does Not Exist");
+		}
+		return context;
+	}
+	
+	
+	/**
+	 * Gets the User Data needed for the profile page	
+	 * @param userId
+	 * @return
+	 */
+	@GetMapping("/api/user/profile/edit")
+	@ResponseBody
+	public HashMap<String, Object> getUserEditData(Integer user_request) {
+		UserObject user;
+		HashMap<String, Object> context = new HashMap<String, Object>();
+		try {
+			user = userRepository.getOne(user_request);
+			if (user.isLogged()) {
+			context.put("about_me", user.getAbout_me());
+			context.put("first_name", user.getFirst_name());
+			context.put("last_name", user.getLast_name());
+			context.put("isSuccess", true);
+			context.put("status", HttpStatus.OK);
+			} else {
+				context.put("isSuccess", false);
+				context.put("status", HttpStatus.BAD_REQUEST);
+				context.put("message", "User Not Logged In");
+			}	
+		} catch (Exception e) {
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.BAD_REQUEST);
+			context.put("message", "User Does Not Exist");
+		}
+		
+		return context;
 	}
 }
