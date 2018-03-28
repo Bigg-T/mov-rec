@@ -7,7 +7,6 @@ import MovieRecPage from '../pages/MovieRecPage';
 import SignUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
 import MovieDescription from './MovieDescription';
-
 class MyRoute extends Component {
 
   render() {

@@ -20,8 +20,41 @@ pipeline {
             steps {
                 echo "Testing"
                 sh 'mvn test'
+<<<<<<< HEAD
+=======
 
             }
+}
+>>>>>>> origin/TEAM31-100
+
+stage('SonarQube') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                        sh 'mvn clean install'
+                        sh 'mvn sonar:sonar'
+                }
+            }
+<<<<<<< HEAD
+=======
+        }
+            
+        stage('Quality') {
+          steps {
+            sh 'sleep 30'
+            timeout(time: 10, unit: 'SECONDS') {
+               retry(5) {
+                  script {
+                    def qg = waitForQualityGate()
+                    if (qg.status != 'OK') {
+                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+          }
+        }
+      }
+    }
+  }
+}
+>>>>>>> origin/TEAM31-100
 }
                    }
 }

@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:3000",
+						"http://movi3hall.cs4500.com2.s3-website.us-east-2.amazonaws.com/"}, maxAge = 3600)
 @RestController
 public class UserController {
 	
@@ -30,8 +31,7 @@ public class UserController {
 	 * I guess we can currently send through URL, but we should really be sending
 	 * get requests
 	 * @return
-	 */
-	
+	 */	
 	@RequestMapping("/api/user/create")
 	public UserObject createUser() {
 		//UserObject obj = new UserObject("Jean Paul", "Torre", "torre.j@husky.neu.edu", "123456789", "jeanpaulrt");

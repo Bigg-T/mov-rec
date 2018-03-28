@@ -78,6 +78,7 @@ class SignIn extends Component {
           {/*<p>{this.state.isLoggedin}</p>*/}
           <Footer title={Footer}/>
         </Container>
+
     );
   }
 }
