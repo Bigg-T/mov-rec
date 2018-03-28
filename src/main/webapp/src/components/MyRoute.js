@@ -7,6 +7,7 @@ import MovieRecPage from '../pages/MovieRecPage';
 import SignUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
 import MovieDescription from './MovieDescription';
+import Profile from './Profile'
 class MyRoute extends Component {
 
   render() {
@@ -17,7 +18,8 @@ class MyRoute extends Component {
             <Route path='/signup' component={SignUp}/>
             <Route path='/signin' component={SignIn}/>
             <Route path='/movie/:id' component={MovieDescription}/>
-          </Switch>
+            <Route path='/profile/:id' component={Profile}/>
+            </Switch>
       </main>
     );
   }
