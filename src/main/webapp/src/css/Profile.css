@@ -1,0 +1,13 @@
+.topMovies {
+	background-color: grey;
+	height: 500px;
+	position: relative;
+	left: 40px;
+	top: 40px;
+}
+
+.topMoviesTitle {
+	background-color: black;
+	text-align: center;
+	color: white;
+}
