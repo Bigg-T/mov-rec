@@ -20,9 +20,11 @@ import '../css/Profile.css';
         isFriend: false,
         friendButton: "",
         myProfile: true,
+        curUrl: "http://moviehall.us-east-2.elasticbeanstalk.com"
+        //"http://localhost:8081"
       }
     }
-    
+
     /**
      * Logic for Adding a friend
      */
@@ -30,9 +32,10 @@ import '../css/Profile.css';
     	    let user_request = window.localStorage.getItem("user_id");
     		if (user_request != null) {
     			let profileId = this.props.match.params.id;
-    			axios.post("http://localhost:8081/api/user/add_friend/?userId=" + user_request + "&friendId=" + profileId)
+    			axios.post(this.state.curUrl + "/api/user/add_friend/?userId="
+          + user_request + "&friendId=" + profileId)
     			.then(function (response) {
-    				
+
     				let isSuccess = response.data.isSuccess;
     				if (isSuccess) {
     					window.alert("Successfully Added Friend");
@@ -47,10 +50,10 @@ import '../css/Profile.css';
     			})
     			.catch(function (e) {
     				window.alert("There was an error :( ");
-    			});	
+    			});
     		}
     }
-        
+
         /**
          * Logic for Removing a friend
          */
@@ -58,7 +61,8 @@ import '../css/Profile.css';
         	let user_request = window.localStorage.getItem("user_id");
         	if (user_request != null) {
         		let profileId = this.props.match.params.id;
-        		axios.post("http://localhost:8081/api/user/remove_friend/?userId=" + user_request + "&friendId=" + profileId)
+        		axios.post(this.state.curUrl +
+              "/api/user/remove_friend/?userId=" + user_request + "&friendId=" + profileId)
         		.then(function (response) {
         			let isSuccess = response.data.isSuccess;
         			if (isSuccess) {
@@ -85,7 +89,8 @@ import '../css/Profile.css';
     	let profileId = this.props.match.params.id;
     	console.log("profileId: " + profileId);
     	console.log("user_request: " + user_request);
-    	axios.get("http://localhost:8081/api/user/profile/?id=" + profileId + "&user_request="+ user_request)
+    	axios.get(this.state.curUrl +
+        "/api/user/profile/?id=" + profileId + "&user_request="+ user_request)
         .then((code) => {
         	console.log("--------------------");
         	  console.log(window.localStorage.getItem("user_id"));
@@ -103,10 +108,10 @@ import '../css/Profile.css';
         });
     }
     }
-  
-    
+
+
     render() {
-    	
+
     	if (this.state.isFriend) {
     		this.state.friendButton = <a href="#" onClick={() => this.handleDeleteFriend()}> Delete Friend </a>;
     	} else {
@@ -146,7 +151,7 @@ import '../css/Profile.css';
 		</div>
 		</div>
 		</Grid.Row>
-		
+
 		</Grid.Column>
 	</Grid>
           </Container>

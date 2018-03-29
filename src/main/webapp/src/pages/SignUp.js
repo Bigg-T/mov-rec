@@ -30,6 +30,8 @@ class SignUp extends Component {
   handleSubmit() {
     const { name, email } = this.state;
     let URL = "http://localhost:8081/api/user/add_User/?";
+    let URL2 = "http://moviehall.us-east-2.elasticbeanstalk.com"
+              + "/api/user/add_User/?";
     let fname = "fname=" + this.state.firstName + "&";
     let lname = "lname=" + this.state.lastName + "&";
     let emailForm = "email=" + this.state.email + "&";
@@ -38,7 +40,7 @@ class SignUp extends Component {
 
     //should be doing post to backend
     this.setState({ submittedName: name, submittedEmail: email });
-    axios.get(URL+fname+lname+emailForm+pw+username)
+    axios.get(URL2+fname+lname+emailForm+pw+username)
     .then((code) => {
       console.log(code);
       this.setState({isLoggedin : code.data.isSuccess});

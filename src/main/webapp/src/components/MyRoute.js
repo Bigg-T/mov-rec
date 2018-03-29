@@ -19,7 +19,7 @@ class MyRoute extends Component {
             <Route path='/signup' component={SignUp}/>
             <Route path='/signin' component={SignIn}/>
             <Route path='/movie/:id' component={MovieDescription}/>
-            <Route path='/profile/:id' component={Profile}/>" +
+            <Route path='/profile/:id' component={Profile}/> +
             	<Route path='/profile_edit' component={EditProfile}/> +
             </Switch>
       </main>

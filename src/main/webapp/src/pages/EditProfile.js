@@ -12,18 +12,21 @@ class EditProfile extends Component {
     this.state = {
       firstName: '',
       lastName: '',
-      about_me: ''};
+      about_me: '',
+      curUrl: 'http://moviehall.us-east-2.elasticbeanstalk.com'
+      //"http://localhost:8081"
+    };
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
-//Handles submission of profile data  
+//Handles submission of profile data
   handleSubmit() {
 	 let user_request = window.localStorage.getItem("user_id");
 
 	  if (user_request != null) {
 		    //const { name, email } = this.state;
-		    let URL = "http://localhost:8081/api/user/profile/edit/?";
+		    let URL = this.state.curUrl + "/api/user/profile/edit/?";
 		    let fname = "first_name=" + this.state.firstName + "&";
 		    let lname = "last_name=" + this.state.lastName + "&";
 		    let about_me = "about_me=" + this.state.about_me;
@@ -45,8 +48,8 @@ class EditProfile extends Component {
 	  }
 
   }
-  
-  
+
+
   componentWillMount() {
 // 	 let profileId = this.props.params.id;
 // 	 let user_request = window.localStorage.getItem("user_id");
@@ -55,7 +58,8 @@ class EditProfile extends Component {
  	//let profileId = this.props.match.params.id;
  	//console.log("profileId: " + profileId);
  	//console.log("user_request: " + user_request);
- 	axios.get("http://localhost:8081/api/user/profile/edit/?user_request=" + user_request)
+ 	axios.get(this.state.curUrl
+    + "/api/user/profile/edit/?user_request=" + user_request)
      .then((code) => {
      	console.log("--------------------");
        console.log(code);
