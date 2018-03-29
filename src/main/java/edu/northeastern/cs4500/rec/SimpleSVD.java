@@ -8,6 +8,8 @@ import org.apache.commons.math3.linear.SingularValueDecomposition;
 
 /**
  * Created by t on 3/26/18.
+ * Class INVARIANT: The order of the matrix of user and items will remain the same. Only the rating,
+ *                  will get mutated with predicted rating.
  * The predict based on the given matrix and might over/under predict.
  */
 public class SimpleSVD implements ICFAlgo {
@@ -15,7 +17,8 @@ public class SimpleSVD implements ICFAlgo {
   private double modePercent = .75;
 
   /**
-   *
+   * INVARIANT: The order of the matrix of user and items will remain the same. Only the rating,
+   *             will get mutated with predicted rating.
    * @param userItem the matrix user and item. The rating of each user rated on the items.
    * @param modePercent mode (recommended to  be around .6t for testing or mostly 0 in the matrix
    */
