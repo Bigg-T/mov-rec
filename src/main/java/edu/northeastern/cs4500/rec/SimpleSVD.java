@@ -43,7 +43,7 @@ public class SimpleSVD implements ICFAlgo {
    * @return the predict given some Y (users) predict on X (items)
    */
   private double[][] compute(double modePercent) {
-    if (this.userItem.getColumnDimension() <= 1 || this.userItem.getRowDimension() <= 1) {
+    if (this.userItem.getColumnDimension() <= 1 && this.userItem.getRowDimension() <= 1) {
       return this.userItem.getData();
     }
     SingularValueDecomposition svd = new SingularValueDecomposition(this.userItem);
@@ -71,7 +71,8 @@ public class SimpleSVD implements ICFAlgo {
     int mode;
     for (mode = 0; mode < diagValues.length; mode++) {
       runningSum += diagValues[mode];
-      if ((runningSum/sum) > mp) {
+      int isRunSumGreater = Double.compare(runningSum/sum, mp); //1 mean grreater, 0 mean ==
+      if (isRunSumGreater >= 0) {
         break; // could of return, but final return would never reach
       }
     }

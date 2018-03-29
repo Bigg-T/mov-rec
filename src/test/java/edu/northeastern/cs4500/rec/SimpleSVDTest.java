@@ -65,19 +65,39 @@ public class SimpleSVDTest {
 
   @Test // picking all 100% mode doesn't change score
   public void compute2() throws Exception {
+    double[][] test3 = {{5.0,3.0}, {0.2, 4.5}};//
+    ICFAlgo a = new SimpleSVD(test3, 1.0);
+    double[][] predict = a.compute();
+    assertEquals(5.0,predict[0][0],.1);
+    assertEquals(3.0,predict[0][1],.1);
+    assertEquals(0.2,predict[1][0],.1);
+    assertEquals(4.5,predict[1][1],.1);
+  }
+  @Test //single item edge case, prevent from getting 0 mode
+  public void compute3() throws Exception {
+    double[][] test3 = {{5.0, 4.0, 5.0, 4.0, 5.0, 4.0}};//
+    ICFAlgo a = new SimpleSVD(test3, .60);
+    double[][] predict = a.compute();
+    assertEquals(5.0,predict[0][0],.1);
+    assertEquals(4.0,predict[0][1],.1);
+  }
+
+  @Test //single item edge case, prevent from getting 0 mode
+  public void compute4() throws Exception {
     double[][] test3 = {{5.0}};//
     ICFAlgo a = new SimpleSVD(test3, 1.0);
     double[][] predict = a.compute();
     assertEquals(5.0,predict[0][0],.1);
   }
 
-  @Test //same as being small modes
-  public void compute3() throws Exception {
-    double[][] test3 = {{5.0, 0.0},{0.0, 4.0}};//
+  @Test //single item edge case, prevent from getting 0 mode
+  public void compute5() throws Exception {
+    double[][] test3 = {{5.0}};//
     ICFAlgo a = new SimpleSVD(test3, 0.0);
     double[][] predict = a.compute();
-    assertEquals(0.0,predict[0][1],.1);
+    assertEquals(5.0,predict[0][0],.1);
   }
+
 
 
 }
