@@ -15,7 +15,6 @@ public class Cs4500Spring2018NguyenApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		assertTrue("Yay", true);
 	}
 
 }
