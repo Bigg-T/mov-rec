@@ -47,7 +47,6 @@ public class MovieService {
 		
 		//1) Get the top rated movies in this genre.
 		List<Integer> tmdbApiByRating = movieRatingsRepository.gettmdbIdByGenre(genre);
-		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
 		List<MovieDb> tmdbApiMovies = new ArrayList<MovieDb>();
 			
 		//2) Query tmdbAPI
@@ -55,8 +54,7 @@ public class MovieService {
 		for (int i = 0; i < 10; i++) {
 			Integer tmdbId = tmdbApiByRating.get(i);
 			if (tmdbId != 0) {
-				MovieDb curMovie = movies.getMovie(tmdbId, "en");
-				tmdbApiMovies.add(curMovie);
+				addMovieToList(tmdbId, tmdbApiMovies);
 			}
 		}
 		return tmdbApiMovies;
@@ -88,7 +86,6 @@ public class MovieService {
 		//860 tmdbApi's in here
 		List<Integer> tmdbApiByRating = movieRatingsRepository.gettmdbIdByInteger();
 		
-		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
 		List<MovieDb> tmdbApiMovies = new ArrayList<MovieDb>();
 		
 		int numOfRandoms = num * 5;
@@ -98,8 +95,7 @@ public class MovieService {
 		for (int i = 0; i < num; i++) {
 			Integer tmdbId = tmdbApiByRating.get(chosenIds.get(i));
 			if (tmdbId != 0) {
-				MovieDb curMovie = movies.getMovie(tmdbId, "en");
-				tmdbApiMovies.add(curMovie);
+				addMovieToList(tmdbId, tmdbApiMovies);
 			}
 		}
 		return tmdbApiMovies;
@@ -116,7 +112,6 @@ public class MovieService {
 		String genre = genres[genreIndex];
 		
 		List<Integer> tmdbApiByRating = movieRatingsRepository.gettmdbIdByGenre(genre);
-		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
 		List<MovieDb> tmdbApiMovies = new ArrayList<MovieDb>();
 			
 		//2) Query tmdbAPI
@@ -124,10 +119,28 @@ public class MovieService {
 		for (int i = 0; i < 10; i++) {
 			Integer tmdbId = tmdbApiByRating.get(i);
 			if (tmdbId != 0) {
-				MovieDb curMovie = movies.getMovie(tmdbId, "en");
-				tmdbApiMovies.add(curMovie);
+				addMovieToList(tmdbId, tmdbApiMovies);
 			}
 		}
 		return tmdbApiMovies;
+	}
+	
+	/**
+	 * This method queries the tmdbApi for a film and adds it to the given
+	 * list if it is found.
+	 * @param tmdbId The ID to query the API for.
+	 * @param movies The list of movies to add the supposed movie to.
+	 */
+	private void addMovieToList(int tmdbId, List<MovieDb> moviesList) {
+		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
+		try {
+			MovieDb curMovie = movies.getMovie(tmdbId, "en");
+			moviesList.add(curMovie);
+		} catch (Exception e) {
+			//This is an error:
+			//We were trying to search for a film and we could not find it
+			//In the tmdbAPI.
+			//We should log which film this was.
+		}
 	}
 }
