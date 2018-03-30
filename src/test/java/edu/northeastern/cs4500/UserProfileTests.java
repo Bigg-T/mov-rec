@@ -72,25 +72,30 @@ public class UserProfileTests {
     		UserObject testUser = new UserObject(first_name, last_name, email, password, username);
     		testUser.setAbout_me(about_me);
     		testUser.setProf_pic(prof_pic);
-    		
-    		//testUser.setLogged(true);
-    		userRepo.save(testUser);
-    		userRepo.save(ltestUser);
-    		int test_user_id = testUser.getId();
-    		int ltest_user_id = ltestUser.getId();
-		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response = restTemplate.exchange(
-				createURLWithPort("/api/user/profile/?id=" + test_user_id + "&user_request=" + ltest_user_id),
-				HttpMethod.GET, entity, HashMap.class);
-		HashMap<String, Object> context = response.getBody();
-		Assert.assertEquals(response.getStatusCodeValue(), 200);
-		Assert.assertEquals((String)context.get("last_name"), last_name);
-		Assert.assertEquals((String)context.get("first_name"), first_name);
-		Assert.assertEquals((String)context.get("profile_picture"), prof_pic);
-		Assert.assertEquals((String)context.get("about_me"), about_me);
-		Assert.assertEquals((boolean)context.get("isSuccess"), true);
-		userRepo.delete(testUser);
-		userRepo.delete(ltestUser);
+    		try {
+    	  		//testUser.setLogged(true);
+        		userRepo.save(testUser);
+        		userRepo.save(ltestUser);
+        		int test_user_id = testUser.getId();
+        		int ltest_user_id = ltestUser.getId();
+	    		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+	    		ResponseEntity<HashMap> response = restTemplate.exchange(
+	    				createURLWithPort("/api/user/profile/?id=" + test_user_id + "&user_request=" + ltest_user_id),
+	    				HttpMethod.GET, entity, HashMap.class);
+	    		HashMap<String, Object> context = response.getBody();
+	    		Assert.assertEquals(response.getStatusCodeValue(), 200);
+	    		Assert.assertEquals((String)context.get("last_name"), last_name);
+	    		Assert.assertEquals((String)context.get("first_name"), first_name);
+	    		Assert.assertEquals((String)context.get("profile_picture"), prof_pic);
+	    		Assert.assertEquals((String)context.get("about_me"), about_me);
+	    		Assert.assertEquals((boolean)context.get("isSuccess"), true);
+	    		userRepo.delete(testUser);
+	    		userRepo.delete(ltestUser);
+    		} catch(Exception e) {
+    			userRepo.delete(testUser);
+	    		userRepo.delete(ltestUser);
+    		}
+  
     }
     
     /**
@@ -115,21 +120,26 @@ public class UserProfileTests {
     	
 		UserObject user = new UserObject(first_name, last_name, email, password, username);
 		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
-		
-		userRepo.save(user);
-		userRepo.save(friend);
-		
-		int user_id = user.getId();
-		int friend_id = friend.getId();
-		
-		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response = restTemplate.exchange(
-				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-				HttpMethod.POST, entity, HashMap.class);
-		HashMap<String, Object> context = response.getBody();
-		Assert.assertEquals((boolean)context.get("isSuccess"), true);
-		userRepo.delete(user);
-		userRepo.delete(friend); 
+		try {
+			userRepo.save(user);
+			userRepo.save(friend);
+			
+			int user_id = user.getId();
+			int friend_id = friend.getId();
+			
+			HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response = restTemplate.exchange(
+					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+					HttpMethod.POST, entity, HashMap.class);
+			HashMap<String, Object> context = response.getBody();
+			Assert.assertEquals((boolean)context.get("isSuccess"), true);
+			userRepo.delete(user);
+			userRepo.delete(friend);
+		} catch(Exception e) {
+			userRepo.delete(user);
+			userRepo.delete(friend);
+		}
+ 
     }
     
     /**
@@ -152,31 +162,35 @@ public class UserProfileTests {
     	
 		UserObject user = new UserObject(first_name, last_name, email, password, username);
 		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
-		
-		userRepo.save(user);
-		userRepo.save(friend);
-		
-		int user_id = user.getId();
-		int friend_id = friend.getId();
-		
-		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response = restTemplate.exchange(
-				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-				HttpMethod.POST, entity, HashMap.class);
-		HashMap<String, Object> context = response.getBody();
-		Assert.assertEquals((boolean)context.get("isSuccess"), true);
-		
-		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response2 = restTemplate.exchange(
-				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-				HttpMethod.POST, entity2, HashMap.class);
-		HashMap<String, Object> context2 = response2.getBody();
-		
-		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
-		Assert.assertEquals((String)context2.get("message"), "Already Friends");
+		try {
+			userRepo.save(user);
+			userRepo.save(friend);
+			
+			int user_id = user.getId();
+			int friend_id = friend.getId();
+			
+			HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response = restTemplate.exchange(
+					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+					HttpMethod.POST, entity, HashMap.class);
+			HashMap<String, Object> context = response.getBody();
+			Assert.assertEquals((boolean)context.get("isSuccess"), true);
+			
+			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response2 = restTemplate.exchange(
+					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+					HttpMethod.POST, entity2, HashMap.class);
+			HashMap<String, Object> context2 = response2.getBody();
+			
+			Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+			Assert.assertEquals((String)context2.get("message"), "Already Friends");
 
-		userRepo.delete(user);
-		userRepo.delete(friend); 
+			userRepo.delete(user);
+			userRepo.delete(friend); 
+		} catch(Exception e) {
+			userRepo.delete(user);
+			userRepo.delete(friend); 
+		}
     }
     
     /**
@@ -199,31 +213,33 @@ public class UserProfileTests {
     	
 		UserObject user = new UserObject(first_name, last_name, email, password, username);
 		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
-		
-		userRepo.save(user);
-		userRepo.save(friend);
-		
-		int user_id = user.getId();
-		int friend_id = friend.getId();
-		
-		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response = restTemplate.exchange(
-				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-				HttpMethod.POST, entity, HashMap.class);
-		HashMap<String, Object> context = response.getBody();
-		Assert.assertEquals((boolean)context.get("isSuccess"), true);
-		
-		
-		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response2 = restTemplate.exchange(
-				createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-				HttpMethod.POST, entity2, HashMap.class);
-		HashMap<String, Object> context2 = response2.getBody();
-		Assert.assertEquals((boolean)context2.get("isSuccess"), true);
-    	
-		userRepo.delete(user);
-		userRepo.delete(friend); 
-    	
+		try {
+			userRepo.save(user);
+			userRepo.save(friend);
+			
+			int user_id = user.getId();
+			int friend_id = friend.getId();
+			
+			HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response = restTemplate.exchange(
+					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+					HttpMethod.POST, entity, HashMap.class);
+			HashMap<String, Object> context = response.getBody();
+			Assert.assertEquals((boolean)context.get("isSuccess"), true);
+			
+			
+			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response2 = restTemplate.exchange(
+					createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+					HttpMethod.POST, entity2, HashMap.class);
+			HashMap<String, Object> context2 = response2.getBody();
+			Assert.assertEquals((boolean)context2.get("isSuccess"), true);
+			userRepo.delete(user);
+			userRepo.delete(friend);
+		} catch(Exception e) {
+			userRepo.delete(user);
+			userRepo.delete(friend);
+		}
     }
     
     /**
@@ -246,24 +262,28 @@ public class UserProfileTests {
 	
     	    UserObject user = new UserObject(first_name, last_name, email, password, username);
 		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
-		
-		userRepo.save(user);
-		userRepo.save(friend);
-		
-		int user_id = user.getId();
-		int friend_id = friend.getId();
-		
-		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response2 = restTemplate.exchange(
-				createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-				HttpMethod.POST, entity2, HashMap.class);
-		HashMap<String, Object> context2 = response2.getBody();
-		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
-		Assert.assertEquals((String)context2.get("message"), "User's are not friends");
-		//User's are not friends
-    	
-		userRepo.delete(user);
-		userRepo.delete(friend);
+		try {
+			userRepo.save(user);
+			userRepo.save(friend);
+			
+			int user_id = user.getId();
+			int friend_id = friend.getId();
+			
+			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response2 = restTemplate.exchange(
+					createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+					HttpMethod.POST, entity2, HashMap.class);
+			HashMap<String, Object> context2 = response2.getBody();
+			Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+			Assert.assertEquals((String)context2.get("message"), "User's are not friends");
+			//User's are not friends
+	    	
+			userRepo.delete(user);
+			userRepo.delete(friend);
+		} catch(Exception e) {
+			userRepo.delete(user);
+			userRepo.delete(friend);
+		}
     }
    
     @Test 
@@ -275,49 +295,50 @@ public class UserProfileTests {
         String password = "user3";
         String username = "user3";
 	    UserObject user = new UserObject(first_name, last_name, email, password, username);
+	    try {
+	    	userRepo.save(user);
+			int real_id = user.getId();
+			int fake_id = 0;
+			
+		    //tests for fake friend id
+			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response2 = restTemplate.exchange(
+					createURLWithPort("/api/user/remove_friend/?userId=" + real_id + "&" + "friendId=" + fake_id),
+					HttpMethod.POST, entity2, HashMap.class);
+			HashMap<String, Object> context2 = response2.getBody();
+			Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+			Assert.assertEquals((String)context2.get("message"), "Friend does not exist");
+			
+//			//tests for fake user id
+			HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response3 = restTemplate.exchange(
+					createURLWithPort("/api/user/remove_friend/?userId=" + fake_id + "&" + "friendId=" + real_id),
+					HttpMethod.POST, entity2, HashMap.class);
+			HashMap<String, Object> context3 = response3.getBody();
+			Assert.assertEquals((boolean)context3.get("isSuccess"), false);
+			Assert.assertEquals((String)context3.get("message"), "User does not exist");
+//			
+//		    //tests for fake friend id
+			HttpEntity<String> entity4 = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response4 = restTemplate.exchange(
+					createURLWithPort("/api/user/add_friend/?userId=" + real_id + "&" + "friendId=" + fake_id),
+					HttpMethod.POST, entity4, HashMap.class);
+			HashMap<String, Object> context4 = response4.getBody();
+			Assert.assertEquals((boolean)context4.get("isSuccess"), false);
+			Assert.assertEquals((String)context4.get("message"), "Friend Requested does not exist");
 
-		userRepo.save(user);
-		int real_id = user.getId();
-		int fake_id = 0;
-		
-	    //tests for fake friend id
-		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response2 = restTemplate.exchange(
-				createURLWithPort("/api/user/remove_friend/?userId=" + real_id + "&" + "friendId=" + fake_id),
-				HttpMethod.POST, entity2, HashMap.class);
-		HashMap<String, Object> context2 = response2.getBody();
-		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
-		Assert.assertEquals((String)context2.get("message"), "Friend does not exist");
-
-		
-//		//tests for fake user id
-		HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response3 = restTemplate.exchange(
-				createURLWithPort("/api/user/remove_friend/?userId=" + fake_id + "&" + "friendId=" + real_id),
-				HttpMethod.POST, entity2, HashMap.class);
-		HashMap<String, Object> context3 = response3.getBody();
-		Assert.assertEquals((boolean)context3.get("isSuccess"), false);
-		Assert.assertEquals((String)context3.get("message"), "User does not exist");
-//		
-//	    //tests for fake friend id
-		HttpEntity<String> entity4 = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response4 = restTemplate.exchange(
-				createURLWithPort("/api/user/add_friend/?userId=" + real_id + "&" + "friendId=" + fake_id),
-				HttpMethod.POST, entity4, HashMap.class);
-		HashMap<String, Object> context4 = response4.getBody();
-		Assert.assertEquals((boolean)context4.get("isSuccess"), false);
-		Assert.assertEquals((String)context4.get("message"), "Friend Requested does not exist");
-
-//		//tests for fake user id
-		HttpEntity<String> entity5 = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response5 = restTemplate.exchange(
-				createURLWithPort("/api/user/add_friend/?userId=" + fake_id + "&" + "friendId=" + real_id),
-				HttpMethod.POST, entity5, HashMap.class);
-		HashMap<String, Object> context5 = response5.getBody();
-		Assert.assertEquals((boolean)context5.get("isSuccess"), false);
-		Assert.assertEquals((String)context5.get("message"), "User does not exist");
-		
-		userRepo.delete(user);
+//			//tests for fake user id
+			HttpEntity<String> entity5 = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response5 = restTemplate.exchange(
+					createURLWithPort("/api/user/add_friend/?userId=" + fake_id + "&" + "friendId=" + real_id),
+					HttpMethod.POST, entity5, HashMap.class);
+			HashMap<String, Object> context5 = response5.getBody();
+			Assert.assertEquals((boolean)context5.get("isSuccess"), false);
+			Assert.assertEquals((String)context5.get("message"), "User does not exist");
+			userRepo.delete(user);
+	    } catch (Exception e) {
+			userRepo.delete(user);
+	    }
     }
     
     @Test 
@@ -329,28 +350,31 @@ public class UserProfileTests {
         String username = "user3";
         
         UserObject user = new UserObject(first_name, last_name, email, password, username);
-        userRepo.save(user);
-    	
-		int user_id = user.getId();
-		int friend_id = user.getId();
-		
-		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response2 = restTemplate.exchange(
-				createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-				HttpMethod.POST, entity2, HashMap.class);
-		HashMap<String, Object> context2 = response2.getBody();
-		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
-		Assert.assertEquals((String)context2.get("message"), "User cannot remove itself");
-		
-		HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response3 = restTemplate.exchange(
-				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-				HttpMethod.POST, entity3, HashMap.class);
-		HashMap<String, Object> context3 = response3.getBody();
-		Assert.assertEquals((boolean)context3.get("isSuccess"), false);
-		Assert.assertEquals((String)context3.get("message"), "User cannot add itself");
-		
-		userRepo.delete(user);
+        try {
+	        	userRepo.save(user);
+	        	
+	    		int user_id = user.getId();
+	    		int friend_id = user.getId();
+	    		
+	    		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+	    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+	    				createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+	    				HttpMethod.POST, entity2, HashMap.class);
+	    		HashMap<String, Object> context2 = response2.getBody();
+	    		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+	    		Assert.assertEquals((String)context2.get("message"), "User cannot remove itself");
+	    		
+	    		HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
+	    		ResponseEntity<HashMap> response3 = restTemplate.exchange(
+	    				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+	    				HttpMethod.POST, entity3, HashMap.class);
+	    		HashMap<String, Object> context3 = response3.getBody();
+	    		Assert.assertEquals((boolean)context3.get("isSuccess"), false);
+	    		Assert.assertEquals((String)context3.get("message"), "User cannot add itself");
+	    		userRepo.delete(user);
+        } catch(Exception e) {
+    			userRepo.delete(user);
+        }  
     }
     
 	private String createURLWithPort(String uri) {

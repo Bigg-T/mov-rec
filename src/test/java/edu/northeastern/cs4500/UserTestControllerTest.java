@@ -104,23 +104,27 @@ public class UserTestControllerTest {
 		Assert.assertEquals((boolean)body.get("isSuccess"), false);
 		
 		UserObject testUser = new UserObject("test-fname", "test-lname", "test-email", "test-password", "test-username");
-		userRepo.save(testUser);
-		
-		//Tests for existing User's username and password
-		ResponseEntity<HashMap> response2 = restTemplate.exchange(
-				createURLWithPort("/api/user/validate_login/?username=test-username&pw=test-password"),
-				HttpMethod.GET, entity, HashMap.class);
-		HashMap<String,Object> body2 = response2.getBody();
-		Assert.assertEquals((boolean)body2.get("isSuccess"), true);
-		
-		//Tests for wrong password
-		ResponseEntity<HashMap> response3 = restTemplate.exchange(
-				createURLWithPort("/api/user/validate_login/?username=test-username&pw=wrong-password"),
-				HttpMethod.GET, entity, HashMap.class);
-		HashMap<String,Object> body3 = response3.getBody();
-		Assert.assertEquals((boolean)body3.get("isSuccess"), false);
-		
-		userRepo.delete(testUser);
+		try {
+			userRepo.save(testUser);
+			
+			//Tests for existing User's username and password
+			ResponseEntity<HashMap> response2 = restTemplate.exchange(
+					createURLWithPort("/api/user/validate_login/?username=test-username&pw=test-password"),
+					HttpMethod.GET, entity, HashMap.class);
+			HashMap<String,Object> body2 = response2.getBody();
+			Assert.assertEquals((boolean)body2.get("isSuccess"), true);
+			
+			//Tests for wrong password
+			ResponseEntity<HashMap> response3 = restTemplate.exchange(
+					createURLWithPort("/api/user/validate_login/?username=test-username&pw=wrong-password"),
+					HttpMethod.GET, entity, HashMap.class);
+			HashMap<String,Object> body3 = response3.getBody();
+			Assert.assertEquals((boolean)body3.get("isSuccess"), false);
+			
+			userRepo.delete(testUser);
+		} catch(Exception e) {
+			userRepo.delete(testUser);
+		}
 	}
 	
 	private String createURLWithPort(String uri) {
