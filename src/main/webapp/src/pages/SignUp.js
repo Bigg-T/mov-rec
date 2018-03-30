@@ -40,7 +40,7 @@ class SignUp extends Component {
 
     //should be doing post to backend
     this.setState({ submittedName: name, submittedEmail: email });
-    axios.get(URL2+fname+lname+emailForm+pw+username)
+    axios.get(URL+fname+lname+emailForm+pw+username)
     .then((code) => {
       console.log(code);
       this.setState({isLoggedin : code.data.isSuccess});

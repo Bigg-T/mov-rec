@@ -20,8 +20,8 @@ import '../css/Profile.css';
         isFriend: false,
         friendButton: "",
         myProfile: true,
-        curUrl: "http://moviehall.us-east-2.elasticbeanstalk.com"
-        //"http://localhost:8081"
+        //curUrl: "http://moviehall.us-east-2.elasticbeanstalk.com"
+        curUrl: "http://localhost:8081"
       }
     }
 
