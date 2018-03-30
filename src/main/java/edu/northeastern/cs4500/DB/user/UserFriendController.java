@@ -39,3 +39,4 @@ public class UserFriendController {
 		return userService.removeFriend(userId, friendId);
 	}
 }
+
