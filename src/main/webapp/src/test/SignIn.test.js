@@ -1,4 +1,4 @@
-
+import 'jsdom-global/register'; //at the top of file , even  , before importing react
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import ReactDOM from 'react-dom';
@@ -10,6 +10,9 @@ import SignIn from '../pages/SIGNIN';
 import SignUp from '../pages/SIGNUP';
 import MovieRecPage from '../pages/MovieRecPage';
 import MovieDescription from '../pages/MovieDescription';
+
+import jsdom from 'jsdom'
+
 
 describe('<App />', () => {
 
