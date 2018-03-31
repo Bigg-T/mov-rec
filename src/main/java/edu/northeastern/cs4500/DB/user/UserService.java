@@ -50,6 +50,34 @@ public class UserService {
 	}
 	
 	/**
+	 * Logs out the user
+	 * @param user_request: user id
+	 * @return
+	 */
+	public HashMap<String, Object> validateLogout(Integer user_request) {
+		UserObject user = userRepository.getOne(user_request);
+		HashMap<String, Object> context = new HashMap<String, Object>();
+		try {
+			if (!user.isLogged()) {
+				context.put("isStatus", false);
+				context.put("message", "User not logged in");
+				context.put("status", HttpStatus.BAD_REQUEST);
+
+			} else {
+				user.setLogged(false);
+				userRepository.save(user);
+				context.put("isStatus", true);
+				context.put("status", HttpStatus.BAD_REQUEST);
+			}
+		} catch(Exception e) {
+			context.put("message", "User does not exist");
+			context.put("status", HttpStatus.NOT_FOUND);
+			context.put("isStatus", false);
+		}
+		return context;
+	}
+	
+	/**
 	 * Adds a user to our database if the user doesn't already exist
 	 * @param fname: first name
 	 * @param lname: last name

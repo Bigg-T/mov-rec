@@ -23,7 +23,7 @@ class SignIn extends Component {
     //should be doing post to backend
     // somehow this does not get updated in time before it git axios
     this.setState({ submittedUserName: username, submittedPassword: password });
-    let URL = "http://localhost:8081/api/user/add_User/?";
+    let URL = "http://localhost:8081/api/user/validate_login/?";
     let fname = "fname=bigt2&";
     let lname = "lname=mofo&";
     let email = "email=bigt2@mofo.com&";
@@ -34,7 +34,7 @@ class SignIn extends Component {
     let pass = "pw=" + this.state.password;
     console.log("UserName:");
     console.log(this.state.username);
-    axios.get(URL2+ un+'&'+pass)
+    axios.get(URL+ un+'&'+pass)
     .then((code) => {
       console.log(code);
       this.setState({isLoggedin : code.data.isSuccess});

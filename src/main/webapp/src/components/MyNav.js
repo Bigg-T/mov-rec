@@ -9,13 +9,16 @@ class MyNav extends Component {
 	
   constructor(props) {
 	let userIsLoggedIn = window.localStorage.getItem("isLoggedIn");
-	if (userIsLoggedIn == null) {
+	if (userIsLoggedIn != "true") {
 		userIsLoggedIn = false
 	}
-	console.log("-------------");
-	console.log(userIsLoggedIn);
-	console.log(window.localStorage.getItem("user_id"));
-	console.log("-------------");
+	  console.log("--------LOCAL STORAGE NAV BAR-----------");
+	  console.log(window.localStorage.getItem("isLoggedIn") == "true");
+	  console.log(window.localStorage.getItem("isLoggedIn") == true);
+	  console.log(userIsLoggedIn);
+	  console.log(window.localStorage.getItem("user_id"))
+	  console.log(window.localStorage.getItem("isLoggedIn"));
+	  console.log("--------LOCAL STORAGE NAV BAR-----------");
     super(props);
     this.state = {
       isLoggedIn : userIsLoggedIn,
@@ -23,7 +26,7 @@ class MyNav extends Component {
   }
   render() {
     console.log(this.state.isLoggedIn);
-    if (this.state.isLoggedIn) {
+    if (this.state.isLoggedIn == "true") {
       return <LoggedInNav />;
     } else {
       return <BasicNav />;

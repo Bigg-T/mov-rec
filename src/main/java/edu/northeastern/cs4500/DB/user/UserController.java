@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com")
+//@CrossOrigin(origins = {"http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com",
+//		"http://localhost:3000/"})
+//@CrossOrigin(origins = "loca")
+//@CrossOrigin(origin = http://localhost:3000/)
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UserController {
 
@@ -42,7 +46,17 @@ public class UserController {
 	public HashMap<String,Object> validateLogin(String username, String pw) {
 		return userService.validateLogin(username, pw);
 	}
-
+	
+	/**
+	 * Validates for correct User Id before logout
+	 * @param user_request: The logged in user's request
+	 */
+	@GetMapping("/api/user/validate_logout")
+	@ResponseBody
+	public HashMap<String, Object> validateLogout(Integer user_request) {
+		return userService.validateLogout(user_request);
+	}
+	
 	/**
 	 * Adds a user if non-duplicate username and email are given
 	 */

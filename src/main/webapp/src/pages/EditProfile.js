@@ -13,8 +13,8 @@ class EditProfile extends Component {
       firstName: '',
       lastName: '',
       about_me: '',
-      curUrl: 'http://moviehall.us-east-2.elasticbeanstalk.com'
-      //"http://localhost:8081"
+     // curUrl: 'http://moviehall.us-east-2.elasticbeanstalk.com'
+      curUrl: "http://localhost:8081"
     };
   }
 
