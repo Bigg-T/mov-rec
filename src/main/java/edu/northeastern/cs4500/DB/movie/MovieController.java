@@ -25,13 +25,6 @@ public class MovieController {
 	@Autowired
 	MovieService movieService;
 	
-	@GetMapping("/api/movie/{id}")
-	public @ResponseBody ResponseEntity<String>
-	  getByName(@PathVariable String id) {
-	    return new ResponseEntity<String>("GET Response : "
-	      + id, HttpStatus.OK);
-	}
-	
 	/**
 	 * This method should return a JSON format of tmdbApi objects to the front end
 	 * It receives a genre as a JSON object, queries the back-end for the tmdbAPI 
@@ -56,7 +49,6 @@ public class MovieController {
 	 * @return
 	 */
 	@RequestMapping("/api/movie/popular/")
-	@CrossOrigin("http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com/")
 	public HashMap<String, Object> getMoviePopular(Integer num) {
 		//Need to sanitize input to make sure it is an integer here
 		List<MovieDb> ans = movieService.getMoviePopular(num);
