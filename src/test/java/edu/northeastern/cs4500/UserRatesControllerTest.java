@@ -77,42 +77,6 @@ public class UserRatesControllerTest {
     userRepository.delete(user);
   }
 
-  @Test
-  public void testAddUserRatesNullInput() throws Exception {
-    String first_name = "user1";
-    String last_name = "user1";
-    String email = "user1";
-    String password = "user1";
-    String username = "user1";
-
-    UserObject user = new UserObject(first_name, last_name, email, password, username);
-    user.setLogged(true);
-    userRepository.save(user);
-
-    //we have some random movie_id
-    Integer movie_id = null;
-    Integer rate = null;
-    Integer user_id = null;
-    
-    UserRatesObject uro = new UserRatesObject();
-    uro.setRate(rate);
-    
-    HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-    
-    HttpEntity<HashMap> response = restTemplate.exchange(
-            createURLWithPort("/api/movie/addUserRates/?movie_id=" + movie_id + "&user_id=" + user_id + "&rate=" + rate),
-            HttpMethod.GET, entity, HashMap.class);
-   
-    @SuppressWarnings("unchecked")
-	HashMap<String, Object> body = response.getBody();
-    String message = (String) body.get("message");
-    Assert.assertEquals(true, message.equals("Incorrect Input"));
-    
-    uro.setId( (Integer) body.get("userRatingId"));
-    userRatesRepository.delete(uro);
-    userRepository.delete(user);
-  }
-
   private String createURLWithPort(String uri) {
     return "http://localhost:" + port + uri;
   }
