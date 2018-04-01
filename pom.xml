@@ -87,18 +87,20 @@
 			<artifactId>cors-filter</artifactId>
 			<version>1.3.2</version>
 		</dependency>
+		
+		
 
 	</dependencies>
 	<repositories>
 	    <repository>
 	      <id>jcenter</id>
-	      <url>h<!-- ttps://jcenter.bintray.com/</url>
+	      <url>https://jcenter.bintray.com/</url>
 	    </repository>
 		</repositories>
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframewor -->k.boot</groupId>
+				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
@@ -126,37 +128,6 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
-	</build>
-
-
-</project>
->
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			
-		
-<!-- 			Delete if others dont need
- -->			
-<!--  <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-surefire-plugin</artifactId>
-    <configuration>
-        <argLine>--add-modules java.base</argLine>
-    </configuration>
-</plugin> -->
-
-
-
-
 		</plugins>
 	</build>
 
