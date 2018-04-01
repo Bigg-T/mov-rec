@@ -74,4 +74,22 @@ public class MovieController {
 		ansHash.put("results", ans);
 		return ansHash;
 	}
+	
+	@RequestMapping("/api/movie/getMovie") 
+	public HashMap<String, Object> getMovie(Integer tmdbId) {
+		MovieDb ans = movieService.getMovieById(tmdbId);
+		HashMap<String, Object> ansHash = new HashMap<>();
+		if (ans == null) {
+			ansHash.put("isStatus", false);
+			ansHash.put("message", "No tmdbId found.");
+			ansHash.put("status", HttpStatus.BAD_REQUEST);
+		} else {
+			ansHash.put("page", 1);
+			ansHash.put("total_results", 20055);
+			ansHash.put("total_pages", 1003);
+			ansHash.put("results", ans);
+		}
+		
+		return ansHash;
+	}
 }

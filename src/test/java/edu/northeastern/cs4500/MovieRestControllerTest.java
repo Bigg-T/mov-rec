@@ -1,6 +1,7 @@
 package edu.northeastern.cs4500;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.junit.Assert;
@@ -22,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.northeastern.cs4500.models.MovieRatingsObject;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Cs4500Spring2018NguyenApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MovieRestControllerTest {
@@ -33,6 +36,36 @@ public class MovieRestControllerTest {
 
 	HttpHeaders headers = new HttpHeaders();
     
+	@Test
+	public void testGetSingleMovie() throws Exception {
+		
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+		Integer goodTmdbId = 10862;
+		
+		ResponseEntity<String> response = restTemplate.exchange(
+				createURLWithPort("/api/movie/getMovie/?tmdbId=" + goodTmdbId),
+				HttpMethod.GET, entity, String.class);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		HashMap<String, Object> responseList = mapper.readValue(response.getBody(), new TypeReference<HashMap<String,Object>>() {});
+		@SuppressWarnings("unchecked")
+		LinkedHashMap<String, Object> movieDb = (LinkedHashMap<String, Object>) responseList.get("results");
+		Assert.assertEquals(true, movieDb.get("id").equals(10862));
+	}
+	
+	@Test
+	public void testGetSingleMovieTmdbIdDoesntExist() throws Exception {
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+		Integer badTmdbId = -1;
+		ResponseEntity<HashMap> response = restTemplate.exchange(
+				createURLWithPort("/api/movie/getMovie/?tmdbId=" + badTmdbId),
+				HttpMethod.GET, entity, HashMap.class);
+		HashMap<String, Object> responseHash = response.getBody();
+		MovieDb givenMovie = (MovieDb) responseHash.get("results");
+		Assert.assertEquals(true, givenMovie == null);
+	}
+	
+	
 	@Test
 	public void testGetPopularMovie() throws Exception {
 
@@ -84,11 +117,6 @@ public class MovieRestControllerTest {
 		List<MovieDb> movieDbList = (List<MovieDb>) responseList.get("results");
 		
 		Assert.assertEquals(movieDbList.size(), 10);
-		
-//		for (int i = 0; i < movieDbList.size(); i++) {
-//			List<Genre> genres = movieDbList.get(i).getGenres();
-//			Assert.assertEquals(true, genreContained(genres, genre));
-//		}
 	}
 	
 	@Test
@@ -105,6 +133,21 @@ public class MovieRestControllerTest {
 		List<MovieDb> movieDbList = (List<MovieDb>) responseList.get("results");
 		
 		Assert.assertEquals(movieDbList.size(), 10);
+	}
+	
+	@Test
+	public void testMovieRatingsObj() throws Exception {
+		MovieRatingsObject mobject = new MovieRatingsObject();
+		mobject.setGenre("Comedy");
+		Assert.assertEquals(true, mobject.getGenres().equals("Comedy"));
+		mobject.setmovieId(22222);
+		Assert.assertEquals(true, mobject.getmovieId() == 22222);
+		mobject.setRating(3.5);
+		Assert.assertEquals(true, mobject.getRating() == 3.5);
+		mobject.setTitle("exampleTitle");
+		Assert.assertEquals(true, mobject.getTitle().equals("exampleTitle"));
+		mobject.setTmdbId(4124);
+		Assert.assertEquals(true, mobject.getTmdbId() == 4124);
 	}
 	
 	private String createURLWithPort(String uri) {
