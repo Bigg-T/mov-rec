@@ -1,45 +1,23 @@
 package edu.northeastern.cs4500.DB.movie;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import edu.northeastern.cs4500.JPARepositories.MovieRatingRepository;
-import edu.northeastern.cs4500.models.MovieRatingsObject;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.model.MovieDb;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import edu.northeastern.cs4500.JPARepositories.MovieRatingRepository;
-
 @Component
 public class MovieService {
 
-	@Autowired
-	MovieRepository movieRepository;
-	
 	@Autowired
 	MovieRatingRepository movieRatingsRepository;
 	
@@ -47,7 +25,7 @@ public class MovieService {
 		
 		//1) Get the top rated movies in this genre.
 		List<Integer> tmdbApiByRating = movieRatingsRepository.gettmdbIdByGenre(genre);
-		List<MovieDb> tmdbApiMovies = new ArrayList<MovieDb>();
+		List<MovieDb> tmdbApiMovies = new ArrayList<>();
 			
 		//2) Query tmdbAPI
 		//We'll return the top 10 best movies.
@@ -66,7 +44,7 @@ public class MovieService {
 	 * @param max the largest number in the set.
 	 */
 	private List<Integer> getDistinctRandomNums(Integer max) {
-		List<Integer> ans = new ArrayList<Integer>();
+		List<Integer> ans = new ArrayList<>();
 		for(int i = 0; i < max; i++) {
 			ans.add(i);
 		}
@@ -126,21 +104,32 @@ public class MovieService {
 	}
 	
 	/**
-	 * This method queries the tmdbApi for a film and adds it to the given
-	 * list if it is found.
-	 * @param tmdbId The ID to query the API for.
-	 * @param movies The list of movies to add the supposed movie to.
+	 * Returns a moviedb object given a tmdbId
+	 * @param tmdbId given tmdbId
+	 * @return
 	 */
-	private void addMovieToList(int tmdbId, List<MovieDb> moviesList) {
+	public MovieDb getMovieById(int tmdbId) {
 		TmdbMovies movies = new TmdbApi("492a79d4999e65c2324dc924891cb137").getMovies();
+		MovieDb ans = null;
 		try {
-			MovieDb curMovie = movies.getMovie(tmdbId, "en");
-			moviesList.add(curMovie);
+			ans = movies.getMovie(tmdbId, "en");
+			return ans;
 		} catch (Exception e) {
 			//This is an error:
 			//We were trying to search for a film and we could not find it
 			//In the tmdbAPI.
 			//We should log which film this was.
 		}
+		return null;
+	}
+	
+	/**
+	 * This method queries the tmdbApi for a film and adds it to the given
+	 * list if it is found.
+	 * @param tmdbId The ID to query the API for.
+	 * @param movies The list of movies to add the supposed movie to.
+	 */
+	private void addMovieToList(int tmdbId, List<MovieDb> moviesList) {
+		moviesList.add(getMovieById(tmdbId));
 	}
 }

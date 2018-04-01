@@ -98,6 +98,10 @@ public class SimpleSVDTest {
     assertEquals(5.0,predict[0][0],.1);
   }
 
-
+  @Test
+  public void computeDirect() throws Exception {
+	  DirectRegularization dr = new DirectRegularization();
+	  assertTrue(dr.compute() == null);
+  }
 
 }
