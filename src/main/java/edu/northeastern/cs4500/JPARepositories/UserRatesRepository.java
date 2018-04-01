@@ -16,14 +16,9 @@ import java.util.List;
  */
 @Repository
 public interface UserRatesRepository extends JpaRepository<UserRatesObject, Integer> {
-//  @Query("SELECT * FROM UserRates t WHERE t.user_id = :id")
-//  List<UserRatesObject> findByUserId(@Param("id") int id);
 	
 	@Query(value = "SELECT t.movie_id, t.rate FROM UserRates t WHERE t.user_id = ?1")
 	public List<UserRatesObject> findByUserId(Integer user_id);
-	
-	//@Query(value = "INSERT INTO user_rates (movie_id, rate, user_id) VALUES ( ?2 , ?3 , ?1 )")
-	//public List<UserRatesObject> insertIntoUserRates(Integer user_id, Integer movie_id, Integer rate);
 	
 	@Async
 	@Query("SELECT u FROM user u WHERE u.id = ?1")

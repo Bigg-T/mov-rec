@@ -46,21 +46,13 @@ public class UserRatesController {
       }
       
       if(isLoggedIn) {
-      try{
-        UserRatesObject obj = new UserRatesObject(movie_id, user_id);
-        obj.setRate(rate);
-        userRatesRepository.save(obj);
-        userRatesData.put("isSuccess", true);
-	    userRatesData.put("status", HttpStatus.OK);
-	    userRatesData.put("userRatingId", obj.getId());
-	  	return userRatesData;
-        }
-      catch(Exception e) {
-    	    userRatesData.put("isSuccess", false);
-    	    userRatesData.put("message", e.getMessage());//"Error creating User Rates Object");
-    	    userRatesData.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-    	  	return userRatesData;
-      }
+    	  UserRatesObject obj = new UserRatesObject(movie_id, user_id);
+          obj.setRate(rate);
+          userRatesRepository.save(obj);
+          userRatesData.put("isSuccess", true);
+          userRatesData.put("status", HttpStatus.OK);
+  	      userRatesData.put("userRatingId", obj.getId());
+  	      return userRatesData;
     }
     else {
 		//I should probably redirect to an error page instead 
@@ -72,8 +64,12 @@ public class UserRatesController {
     }
 
     @RequestMapping("/api/movie/getUserRates/")
-    public List<UserRatesObject> getTopMovies(Integer user_id) {
+    public HashMap<String, Object> getTopMovies(Integer user_id) {
+      HashMap<String, Object> userRatesData = new HashMap<String, Object>();
       List<UserRatesObject> userTopMovies = userRatesRepository.findByUserId(user_id);
-      return userTopMovies;
+      userRatesData.put("isSuccess", true);
+      userRatesData.put("status", HttpStatus.OK);
+      userRatesData.put("topMovies", userTopMovies);
+      return userRatesData;
     }
   }
