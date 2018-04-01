@@ -28,6 +28,7 @@ public class UserService {
 	 * @return isSuccess boolean; HTTP status code
 	 */
 	public HashMap<String,Object> validateLogin(String username, String pw) {
+		System.out.println("VALIDATE LOGIN METHOD");
 		List<UserObject> allUsers = userRepository.findAll();
 		HashMap<String, Object> context = new HashMap<String, Object>();
 		for (int i = 0; i < allUsers.size(); i++) {
@@ -38,8 +39,11 @@ public class UserService {
 					context.put("status", HttpStatus.OK);
 					context.put("username", username);
 					context.put("user_id", curUser.getId());
+					//System.out.println(curUser.isLogged());
 					curUser.setLogged(true);
 					userRepository.save(curUser);
+					//System.out.println(curUser.isLogged());
+					//System.out.println("-------------------");
 					return context;
 				} 
 			}
@@ -59,20 +63,21 @@ public class UserService {
 		HashMap<String, Object> context = new HashMap<String, Object>();
 		try {
 			if (!user.isLogged()) {
-				context.put("isStatus", false);
+				context.put("isSuccess", false);
 				context.put("message", "User not logged in");
 				context.put("status", HttpStatus.BAD_REQUEST);
 
 			} else {
 				user.setLogged(false);
 				userRepository.save(user);
-				context.put("isStatus", true);
-				context.put("status", HttpStatus.BAD_REQUEST);
+				context.put("isSuccess", true);
+				context.put("status", HttpStatus.OK);
+				context.put("isLogged", user.isLogged());
 			}
 		} catch(Exception e) {
 			context.put("message", "User does not exist");
 			context.put("status", HttpStatus.NOT_FOUND);
-			context.put("isStatus", false);
+			context.put("isSuccess", false);
 		}
 		return context;
 	}

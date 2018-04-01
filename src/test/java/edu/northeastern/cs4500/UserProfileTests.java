@@ -1,5 +1,7 @@
 package edu.northeastern.cs4500;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +34,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Tests for the User's Controller and any helper methods
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Cs4500Spring2018NguyenApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserProfileTests {
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(classes = Cs4500Spring2018NguyenApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+
+//@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = Cs4500Spring2018NguyenApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)public class UserProfileTests {
 
 	@LocalServerPort
 	private int port;
@@ -45,6 +50,31 @@ public class UserProfileTests {
 	
 	@Autowired
 	UserRepository userRepo;
+	
+	UserObject test_user_1;
+	UserObject test_user_2;
+	
+	
+	@Before
+	public void setUp() {
+	    String l_first_name = "34grdgeg34";
+	    String l_last_name = "35gr4gweg4e";
+	    String l_email = "g4eg4egh5ehe5he";
+	    String l_password = "ehe5heh4ehd4";
+	    String l_username = "e5ge4hd43g";
+	    test_user_1 = new UserObject(l_first_name, l_last_name, l_email, l_password, l_username);
+		test_user_1.setLogged(true);
+		userRepo.save(test_user_1);
+		
+		test_user_2 = new UserObject(l_first_name + "_2", l_last_name + "_2", l_email + "_2", l_password + "_2", l_username +"_2");
+		userRepo.save(test_user_2);
+	}
+	
+	@After
+	public void un_setUp() {
+		userRepo.delete(test_user_1);
+		userRepo.delete(test_user_2);
+	}
 	
     /**
      * Test that the User Profile pages gets all the data it needs from the REST API for the specific user
@@ -300,6 +330,9 @@ public class UserProfileTests {
 			int real_id = user.getId();
 			int fake_id = 0;
 			
+			Integer null_id = null;
+			Integer user_request_null = null;
+			
 		    //tests for fake friend id
 			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
 			ResponseEntity<HashMap> response2 = restTemplate.exchange(
@@ -335,6 +368,27 @@ public class UserProfileTests {
 			HashMap<String, Object> context5 = response5.getBody();
 			Assert.assertEquals((boolean)context5.get("isSuccess"), false);
 			Assert.assertEquals((String)context5.get("message"), "User does not exist");
+			
+			
+//			//tests for null inputs
+			HttpEntity<String> entity6 = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response6 = restTemplate.exchange(
+					createURLWithPort("/api/user/add_friend/?userId=" + null_id + "&" + "friendId=" + user_request_null),
+					HttpMethod.POST, entity6, HashMap.class);
+			HashMap<String, Object> context6 = response6.getBody();
+			Assert.assertEquals((boolean)context6.get("isSuccess"), false);
+			Assert.assertEquals((String)context6.get("message"), "Incorrect Input");
+			
+			
+//			tests for logged out user
+			HttpEntity<String> entity7 = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response7 = restTemplate.exchange(
+					createURLWithPort("/api/user/add_friend/?userId=" + real_id + "&" + "friendId=" + real_id),
+					HttpMethod.POST, entity7, HashMap.class);
+			HashMap<String, Object> context7 = response7.getBody();
+			Assert.assertEquals((boolean)context7.get("isSuccess"), false);
+			Assert.assertEquals((String)context7.get("message"), "User Not Logged In");
+			
 			userRepo.delete(user);
 	    } catch (Exception e) {
 			userRepo.delete(user);
@@ -377,9 +431,165 @@ public class UserProfileTests {
         }  
     }
     
-	private String createURLWithPort(String uri) {
-		return "http://localhost:" + port + uri;
-	}
+    
+    	@Test
+    	public void testFriendsProfile() {
+    		
+    		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+    				createURLWithPort("/api/user/profile/?id=" + test_user_2.getId() + "&user_request=" + test_user_1.getId()),
+    				HttpMethod.GET, entity2, HashMap.class);
+    		HashMap<String, Object> context2 = response2.getBody();
+    		Assert.assertEquals((boolean)context2.get("isSuccess"), true);
+    		Assert.assertEquals((boolean)context2.get("isFriend"), false);
+    		userRepo.delete(test_user_1);
+    		userRepo.delete(test_user_2);
+    	}
+    	
+    	@Test
+    	public void testNotLoggedInProfile() {
+    		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+    				createURLWithPort("/api/user/profile/?id=" + test_user_1.getId() + "&user_request=" + test_user_2.getId()),
+    				HttpMethod.GET, entity2, HashMap.class);
+    		HashMap<String, Object> context2 = response2.getBody();
+    		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+    		Assert.assertEquals((String)context2.get("message"), "User Not Logged In");
+    	}
+    	
+
+    	@Test
+    	public void testEditProfile() {
+    		//profile edit input: 
+    		//Integer user_request, String about_me, String first_name, String last_name
+    		Integer user_request = test_user_1.getId();
+    		String about_me = "testing about me";
+    		String first_name = "edit first namee";
+    		String last_name = "edit last name";
+       	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+    				createURLWithPort("/api/user/profile/edit/?user_request=" + user_request + "&about_me=" + about_me
+    						+ "&first_name=" + first_name + "&last_name=" + last_name),
+    				HttpMethod.POST, entity2, HashMap.class);
+    		HashMap<String, Object> context2 = response2.getBody();
+    		Assert.assertEquals((boolean)context2.get("isSuccess"), true);
+    		Assert.assertEquals((String)context2.get("message"), "Succesfully Updated Profile");
+    	}
+    	
+    	@Test
+    	public void testEditProfileNotLoggedIn() {
+    		Integer user_request = test_user_2.getId();
+    		String about_me = "testing about me";
+    		String first_name = "edit first namee";
+    		String last_name = "edit last name";
+       	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+    				createURLWithPort("/api/user/profile/edit/?user_request=" + user_request + "&about_me=" + about_me
+    						+ "&first_name=" + first_name + "&last_name=" + last_name),
+    				HttpMethod.POST, entity2, HashMap.class);
+    		HashMap<String, Object> context2 = response2.getBody();
+    		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+    		Assert.assertEquals((String)context2.get("message"), "User Not Logged In");
+    	}
+    	
+    	@Test
+    	public void testEditProfileUserDoesNotExist() {
+    		Integer user_request = 0;
+    		String about_me = "testing about me";
+    		String first_name = "edit first namee";
+    		String last_name = "edit last name";
+       	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+    				createURLWithPort("/api/user/profile/edit/?user_request=" + user_request + "&about_me=" + about_me
+    						+ "&first_name=" + first_name + "&last_name=" + last_name),
+    				HttpMethod.POST, entity2, HashMap.class);
+    		HashMap<String, Object> context2 = response2.getBody();
+    		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+    		Assert.assertEquals((String)context2.get("message"), "User Does Not Exist");
+    	}
+    	
+    	@Test
+    	public void testGetUserEditData() {
+    		test_user_1.setAbout_me("Test About Me");
+    		userRepo.save(test_user_1);
+    		Integer user_request = test_user_1.getId();
+       	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+    				createURLWithPort("/api/user/profile/edit/?user_request=" + user_request),
+    				HttpMethod.GET, entity2, HashMap.class);
+    		HashMap<String, Object> context2 = response2.getBody();
+    		Assert.assertEquals((boolean)context2.get("isSuccess"), true);
+    		Assert.assertEquals((String)context2.get("about_me"), test_user_1.getAbout_me());
+    		Assert.assertEquals((String)context2.get("first_name"), test_user_1.getFirst_name());
+    		Assert.assertEquals((String)context2.get("last_name"), test_user_1.getLast_name());
+    	}
+    	
+    	@Test
+    	public void testGetUserEditNotLoggedIn() {
+    		Integer user_request = test_user_2.getId();
+       	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+    				createURLWithPort("/api/user/profile/edit/?user_request=" + user_request),
+    				HttpMethod.GET, entity2, HashMap.class);
+    		HashMap<String, Object> context2 = response2.getBody();
+    		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+    		Assert.assertEquals((String)context2.get("message"), "User Not Logged In");
+    	}
+    	
+    	@Test
+    	public void testGetUserEditUserDoesNotExist() {
+    		Integer user_request = 0;
+           	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+        		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+        				createURLWithPort("/api/user/profile/edit/?user_request=" + user_request),
+        				HttpMethod.GET, entity2, HashMap.class);
+        		HashMap<String, Object> context2 = response2.getBody();
+        		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+        		Assert.assertEquals((String)context2.get("message"), "User Does Not Exist");
+    	}
+    	
+    	@Test
+    	public void testLogOut() {
+    		Integer user_request = test_user_1.getId();
+       	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+    				createURLWithPort("/api/user/validate_logout/?user_request=" + user_request),
+    				HttpMethod.GET, entity2, HashMap.class);
+    		HashMap<String, Object> context2 = response2.getBody();
+    		
+    		Assert.assertEquals((boolean)context2.get("isSuccess"), true);
+    		Assert.assertEquals((boolean)context2.get("isLogged"), false);
+    	}
+    	
+    	
+    	@Test
+    	public void testLogOutNotLoggedIn() {
+    		Integer user_request = test_user_2.getId();
+           	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+        		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+        				createURLWithPort("/api/user/validate_logout/?user_request=" + user_request),
+        				HttpMethod.GET, entity2, HashMap.class);
+        		HashMap<String, Object> context2 = response2.getBody();
+        		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+        		Assert.assertEquals((String)context2.get("message"), "User not logged in");
+    	}
+    	
+    	@Test
+    	public void testLogOutUserNotExist() {
+		Integer user_request = 0;
+       	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+    				createURLWithPort("/api/user/validate_logout/?user_request=" + user_request),
+    				HttpMethod.GET, entity2, HashMap.class);
+    		HashMap<String, Object> context2 = response2.getBody();
+    		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+    		Assert.assertEquals((String)context2.get("message"), "User does not exist");
+    	}
+    	
+    	
+    	private String createURLWithPort(String uri) {
+    		return "http://localhost:" + port + uri;
+    	}
 }
 	
 
