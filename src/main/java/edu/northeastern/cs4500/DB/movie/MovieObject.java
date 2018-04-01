@@ -29,7 +29,6 @@ public class MovieObject {
 	
 	@NotNull
 	private String title;
-	
 	private String overview; //description
 	private int populatiry;
 	private String poster_path;

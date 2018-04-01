@@ -80,7 +80,7 @@ public class UserProfileTests {
     		int ltest_user_id = ltestUser.getId();
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
-				createURLWithPort("/api/user/profile/?id=" + test_user_id + "&user_request=" + ltest_user_id),
+				createURLWithPort("/api/user/profile/?id=" + test_user_id + "&user_request=" + test_user_id),
 				HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> context = response.getBody();
 		Assert.assertEquals(response.getStatusCodeValue(), 200);

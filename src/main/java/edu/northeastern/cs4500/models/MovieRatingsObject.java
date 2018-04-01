@@ -1,6 +1,5 @@
 package edu.northeastern.cs4500.models;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,9 +22,15 @@ public class MovieRatingsObject {
 	private Double rating;
 	
 	private int tmdb_id;
+	//MOVIE HALL RATING
+	private double vote_average;
+	private int vote_count;
+	//MOVIE HALL RATING
 	
 	//Empty constructor
 	public MovieRatingsObject() {
+		this.vote_count = 0;
+		this.vote_average = 0;
 		
 	}
 	
@@ -64,5 +69,14 @@ public class MovieRatingsObject {
 	
 	public void setTmdbId(Integer t) {
 		this.tmdb_id = t;
+	}
+	
+	/**
+	 * recalculates the average vote average for this movie
+	 * @param vote 
+	 */
+	public void recalculateVoteAverage(double vote) {
+		this.vote_count++;
+		this.vote_average = (this.vote_average + vote) / this.vote_count;
 	}
 }

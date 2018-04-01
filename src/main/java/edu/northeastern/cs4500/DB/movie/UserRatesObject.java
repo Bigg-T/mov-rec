@@ -4,7 +4,6 @@
 
 package edu.northeastern.cs4500.DB.movie;
 
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -15,17 +14,21 @@ public class UserRatesObject {
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int id;
 
-  @NotNull
+  @OneToMany(cascade= CascadeType.ALL)
+  @JoinColumn(name = "movie_id")
   private int movie_id;
+  
   @NotNull
   private int user_id;
+  
+  @NotNull
   private int rate;
 
   UserRatesObject() {
 
   }
 
-  UserRatesObject(int movie_id, int user_id) {
+  public UserRatesObject(int movie_id, int user_id) {
     this.user_id = user_id;
     this.movie_id = movie_id;
   }
@@ -64,4 +67,5 @@ public class UserRatesObject {
   public int setRate(int rate) {
     return this.rate = rate;
   }
+	
 }
