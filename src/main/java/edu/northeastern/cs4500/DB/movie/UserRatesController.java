@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import edu.northeastern.cs4500.DB.movie.UserRatesObject;
-import edu.northeastern.cs4500.DB.movie.UserRatesRepository;
 import edu.northeastern.cs4500.DB.user.UserObject;
-import edu.northeastern.cs4500.DB.user.UserRepository;
+import edu.northeastern.cs4500.JPARepositories.UserRatesRepository;
+import edu.northeastern.cs4500.JPARepositories.UserRepository;
 
 @RestController
 public class UserRatesController {
@@ -20,6 +20,7 @@ public class UserRatesController {
     @Autowired
     UserRatesRepository userRatesRepository;
     
+    @Autowired
     UserRepository userRepository; 
 
     @GetMapping("/api/movie/addUserRates/")
@@ -50,14 +51,13 @@ public class UserRatesController {
         obj.setRate(rate);
         userRatesRepository.save(obj);
         userRatesData.put("isSuccess", true);
-	    userRatesData.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+	    userRatesData.put("status", HttpStatus.OK);
+	    userRatesData.put("userRatingId", obj.getId());
 	  	return userRatesData;
         }
-      catch(Exception e){
-    	  	//userRatesData.put(key, value)
-        //return new HashMap<String, Object>("False", HttpStatus.NOT_ACCEPTABLE);
+      catch(Exception e) {
     	    userRatesData.put("isSuccess", false);
-    	    userRatesData.put("message", "Error creating User Rates Object");
+    	    userRatesData.put("message", e.getMessage());//"Error creating User Rates Object");
     	    userRatesData.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
     	  	return userRatesData;
       }
@@ -77,4 +77,3 @@ public class UserRatesController {
       return userTopMovies;
     }
   }
-

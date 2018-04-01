@@ -17,9 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import edu.northeastern.cs4500.DB.movie.UserRatesObject;
-import edu.northeastern.cs4500.DB.movie.UserRatesRepository;
 import edu.northeastern.cs4500.DB.user.UserObject;
-import edu.northeastern.cs4500.DB.user.UserRepository;
+import edu.northeastern.cs4500.JPARepositories.UserRatesRepository;
+import edu.northeastern.cs4500.JPARepositories.UserRepository;
 
 /**
  * Tests for the User's Controller and any helper methods
@@ -39,16 +39,11 @@ public class UserRatesControllerTest {
   @Autowired
   UserRatesRepository userRatesRepository;
 
+  @Autowired
   UserRepository userRepository; 
-  
-  
   
   @Test
   public void testAddUserRates() throws Exception {
-	
-	List<UserRatesObject> intiallist = userRatesRepository.findAll();
-    Integer initialSize = intiallist.size();
-    
     String first_name = "user1";
     String last_name = "user1";
     String email = "user1";
@@ -56,38 +51,66 @@ public class UserRatesControllerTest {
     String username = "user1";
 
     UserObject user = new UserObject(first_name, last_name, email, password, username);
-
+    user.setLogged(true);
     userRepository.save(user);
 
     //we have some random movie_id
     Integer movie_id = 3;
-    Integer rate = 5;
+    Integer rate = 3;
     Integer user_id = user.getId();
     
+    UserRatesObject uro = new UserRatesObject(movie_id, user_id);
+    uro.setRate(rate);
+    
     HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+    
     HttpEntity<HashMap> response = restTemplate.exchange(
-            createURLWithPort("/api/movie/addUserRates/?movie_id=" + movie_id + "&user_id=" + user.getId() + "&rate=" + rate),
+            createURLWithPort("/api/movie/addUserRates/?movie_id=" + movie_id + "&user_id=" + user_id + "&rate=" + rate),
             HttpMethod.GET, entity, HashMap.class);
-    HashMap<String, Object> body = response.getBody();
-    boolean statusOK = (boolean) body.get("True");
-    Assert.assertEquals((boolean)body.get("True"), HttpStatus.OK);
-
+   
+    @SuppressWarnings("unchecked")
+	HashMap<String, Object> body = response.getBody();
+    String statusOK = (String) body.get("status");
+    Assert.assertEquals(true, statusOK.equals("OK"));
+    uro.setId( (Integer) body.get("userRatingId"));
+    userRatesRepository.delete(uro);
     userRepository.delete(user);
   }
 
   @Test
-  public void testGetUserRates() throws Exception {
+  public void testAddUserRatesNullInput() throws Exception {
+    String first_name = "user1";
+    String last_name = "user1";
+    String email = "user1";
+    String password = "user1";
+    String username = "user1";
 
-    List<UserRatesObject> responseList = new ArrayList<UserRatesObject>();
+    UserObject user = new UserObject(first_name, last_name, email, password, username);
+    user.setLogged(true);
+    userRepository.save(user);
 
-    HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-    ResponseEntity<HashMap> response = restTemplate.exchange(
-            createURLWithPort("/api/movie/getUserRates/"),
-            HttpMethod.GET, entity, HashMap.class);
-    HashMap<String, Object> context = response.getBody();
+    //we have some random movie_id
+    Integer movie_id = null;
+    Integer rate = null;
+    Integer user_id = null;
     
+    UserRatesObject uro = new UserRatesObject();
+    uro.setRate(rate);
+    
+    HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+    
+    HttpEntity<HashMap> response = restTemplate.exchange(
+            createURLWithPort("/api/movie/addUserRates/?movie_id=" + movie_id + "&user_id=" + user_id + "&rate=" + rate),
+            HttpMethod.GET, entity, HashMap.class);
+   
     @SuppressWarnings("unchecked")
-    List<UserRatesObject> userRatesRepository = (List<UserRatesObject>) context.get("UserRates");
+	HashMap<String, Object> body = response.getBody();
+    String message = (String) body.get("message");
+    Assert.assertEquals(true, message.equals("Incorrect Input"));
+    
+    uro.setId( (Integer) body.get("userRatingId"));
+    userRatesRepository.delete(uro);
+    userRepository.delete(user);
   }
 
   private String createURLWithPort(String uri) {

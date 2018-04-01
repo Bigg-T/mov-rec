@@ -25,8 +25,8 @@ import org.springframework.test.web.servlet.result.JsonPathResultMatchers;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import edu.northeastern.cs4500.DB.user.UserObject;
-import edu.northeastern.cs4500.DB.user.UserRepository;
 import edu.northeastern.cs4500.DB.user.UserService;
+import edu.northeastern.cs4500.JPARepositories.UserRepository;
 
 /**
  * Tests for the User's Controller and any helper methods

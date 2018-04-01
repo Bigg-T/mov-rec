@@ -1,8 +1,10 @@
-package edu.northeastern.cs4500.DB.movie;
+package edu.northeastern.cs4500.JPARepositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import edu.northeastern.cs4500.DB.movie.TopMoviesObject;
 
 import java.util.List;
 

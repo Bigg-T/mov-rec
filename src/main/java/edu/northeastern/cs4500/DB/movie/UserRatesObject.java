@@ -14,8 +14,7 @@ public class UserRatesObject {
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int id;
 
-  @OneToMany(cascade= CascadeType.ALL)
-  @JoinColumn(name = "movie_id")
+  @NotNull
   private int movie_id;
   
   @NotNull
@@ -24,7 +23,7 @@ public class UserRatesObject {
   @NotNull
   private int rate;
 
-  UserRatesObject() {
+  public UserRatesObject() {
 
   }
 

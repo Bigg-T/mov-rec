@@ -4,7 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+
+import edu.northeastern.cs4500.DB.movie.UserRatesObject;
 
 @Entity(name="movie_ratings")
 public class MovieRatingsObject {

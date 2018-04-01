@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 
+import edu.northeastern.cs4500.DB.movie.UserRatesObject;
+
 import javax.persistence.*;
 
 
@@ -14,14 +16,10 @@ import javax.persistence.*;
 @Entity(name="user")
 public class UserObject {
 	
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  public int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public int id;
 
-  @OneToMany(cascade= CascadeType.ALL)
-  @JoinColumn(name = "movie_id")
-  private int movie_id;
-	
 	@NotNull
 	private String first_name;
 	@NotNull

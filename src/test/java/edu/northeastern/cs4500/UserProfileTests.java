@@ -18,8 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import edu.northeastern.cs4500.DB.user.UserObject;
 import edu.northeastern.cs4500.DB.user.UserProfile;
-import edu.northeastern.cs4500.DB.user.UserRepository;
 import edu.northeastern.cs4500.DB.user.UserService;
+import edu.northeastern.cs4500.JPARepositories.UserRepository;
 
 import java.util.Arrays;
 import java.util.HashMap;

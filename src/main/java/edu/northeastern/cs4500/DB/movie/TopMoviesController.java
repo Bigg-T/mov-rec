@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 
 import edu.northeastern.cs4500.DB.movie.TopMoviesObject;
-import edu.northeastern.cs4500.DB.movie.TopMoviesRepository;
+import edu.northeastern.cs4500.JPARepositories.TopMoviesRepository;
 
 @RestController
 public class TopMoviesController {
@@ -28,7 +28,7 @@ public class TopMoviesController {
   TopMoviesRepository topMoviesRepository;
 
 
-  @GetMapping("/api/movie/addTopMovie/{movie_id}/{user_id}/{rank}/{description")
+  @GetMapping("/api/movie/addTopMovie/")
   public ResponseEntity<String> addTopMovies(Integer movie_id, Integer user_id, Integer rank, String description){
     try{
     TopMoviesObject obj = new TopMoviesObject(movie_id, user_id);
@@ -41,7 +41,7 @@ public class TopMoviesController {
     return new ResponseEntity<String>("True", HttpStatus.OK);
   }
 
-  @RequestMapping("/api/movie/getTopMovies/{use_id}/{limit}")
+  @RequestMapping("/api/movie/getTopMovies/")
   public List<TopMoviesObject> selectAllHelloObjects(Integer user_id, Integer limit) {
     List<TopMoviesObject> userTopMovies = topMoviesRepository.findByUserId(user_id);
     return topMoviesRepository.findAll();
