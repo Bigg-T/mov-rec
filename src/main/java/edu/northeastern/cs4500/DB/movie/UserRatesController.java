@@ -68,7 +68,7 @@ public class UserRatesController {
 		userRatesData.put("message", "User Not Logged In");
 		userRatesData.put("status", HttpStatus.BAD_REQUEST);
 			return userRatesData;
-		}
+		} 
     }
 
     @RequestMapping("/api/movie/getUserRates/")
