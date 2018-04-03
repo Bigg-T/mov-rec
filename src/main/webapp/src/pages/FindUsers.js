@@ -5,7 +5,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import * as constant from '../config';
-import {Container, List,Icon, Button} from 'semantic-ui-react';
+import {NavLink} from 'react-router-dom';
+import {NavLink, Container, List,Icon, Button} from 'semantic-ui-react';
 
 
 class FindUsers extends Component {
