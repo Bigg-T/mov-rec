@@ -85,9 +85,13 @@ class FindUsers extends Component {
                   window.localStorage['user_id'], u.id, u.first_name)} key={u.id}>
                 Delete Friend
               </Button>
-              <List.Content href={this.BASE_URL+'profile/'+u.id}>
-                <List.Header as='a'>
-                  {u.first_name + ' ' + u.last_name}
+              <List.Content>
+                <List.Header >
+                  <NavLink to={'/profile/'+u.id}>
+                    <h4>
+                      {u.first_name + ' ' + u.last_name}
+                    </h4>
+                  </NavLink>
                 </List.Header>
                 <List.Description>
                   {u.about_me}
@@ -106,9 +110,13 @@ class FindUsers extends Component {
                   window.localStorage['user_id'], u.id, u.first_name)} key={u.id}>
                 Delete Friend
               </Button>
-              <List.Content href={this.BASE_URL+'profile/'+u.id}>
-                <List.Header as='a'>
-                  {u.first_name + ' ' + u.last_name}
+              <List.Content >
+                <List.Header >
+                  <NavLink to={'/profile/'+u.id}>
+                    <h4>
+                      {u.first_name + ' ' + u.last_name}
+                    </h4>
+                  </NavLink>
                 </List.Header>
                 <List.Description>
                   {u.about_me}
