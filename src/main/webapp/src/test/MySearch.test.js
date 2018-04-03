@@ -1,20 +1,16 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import ReactDOM from 'react-dom';
-import App from '../APP';
-import MyNav from '../components/MyNav';
+import App from '../App';
 import MySearch from '../components/MySearch';
-import Footer from '../components/Footer';
-import SignIn from '../pages/SIGNIN';
-import SignUp from '../pages/SIGNUP';
-import MovieRecPage from '../pages/MovieRecPage';
-import MovieDescription from '../pages/MovieDescription';
+
+
 
 describe('<App />', () => {
 
 //MovieRecPage
 it('renders 1 <MySearch /> component', () => {
-  const component = shallow(<MovieRecPage name="mysearch" />);
+  const component = shallow(<MySearch name="mysearch" />);
   console.log(component);
   expect(component).toHaveLength(1);
 });

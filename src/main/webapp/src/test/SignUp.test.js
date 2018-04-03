@@ -1,14 +1,9 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import ReactDOM from 'react-dom';
-import App from '../APP';
-import MyNav from '../components/MyNav';
-import MyRoute from '../components/MyRoute';
-import Footer from '../components/Footer';
-import SignIn from '../pages/SIGNIN';
-import SignUp from '../pages/SIGNUP';
-import MovieRecPage from '../pages/MovieRecPage';
-import MovieDescription from '../pages/MovieDescription';
+import App from '../App';
+import SignUp from '../pages/SignUp';
+
 
 describe('<App />', () => {
 
