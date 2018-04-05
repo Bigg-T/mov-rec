@@ -8,6 +8,7 @@
 //
 ///**
 // * Created by t on 4/4/18.
+// * Credit to Rajeev Singh tutorial for adding log4j2.
 // */
 //@SpringBootApplication
 //public class Log4jDemo implements ApplicationRunner{
