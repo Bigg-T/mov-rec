@@ -59,43 +59,43 @@ public class UserProfileTests {
 	    String l_username = "test-username-2";
 	    String l_about_me = "Test About me";
 	    String l_prof_pic = "Profile Picture";
-    		UserObject ltestUser = new UserObject(l_first_name, l_last_name, l_email, l_password, l_username);
+		UserObject ltestUser = new UserObject(l_first_name, l_last_name, l_email, l_password, l_username);
 		ltestUser.setLogged(true);
 		
-    	    String first_name = "test-first";
-    	    String last_name = "test-last";
-    	    String email = "test-email-3";
-    	    String password = "test-password";
-    	    String username = "test-username-3";
-    	    String about_me = "Test About me";
-    	    String prof_pic = "Profile Picture";
-    		UserObject testUser = new UserObject(first_name, last_name, email, password, username);
-    		testUser.setAbout_me(about_me);
-    		testUser.setProf_pic(prof_pic);
-    		try {
-    	  		//testUser.setLogged(true);
-        		userRepo.save(testUser);
-        		userRepo.save(ltestUser);
-        		int test_user_id = testUser.getId();
-        		int ltest_user_id = ltestUser.getId();
-	    		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-	    		ResponseEntity<HashMap> response = restTemplate.exchange(
-	    				createURLWithPort("/api/user/profile/?id=" + test_user_id + "&user_request=" + ltest_user_id),
-	    				HttpMethod.GET, entity, HashMap.class);
-	    		HashMap<String, Object> context = response.getBody();
-	    		Assert.assertEquals(response.getStatusCodeValue(), 200);
-	    		Assert.assertEquals((String)context.get("last_name"), last_name);
-	    		Assert.assertEquals((String)context.get("first_name"), first_name);
-	    		Assert.assertEquals((String)context.get("profile_picture"), prof_pic);
-	    		Assert.assertEquals((String)context.get("about_me"), about_me);
-	    		Assert.assertEquals((boolean)context.get("isSuccess"), true);
-	    		userRepo.delete(testUser);
-	    		userRepo.delete(ltestUser);
-    		} catch(Exception e) {
-    			userRepo.delete(testUser);
-	    		userRepo.delete(ltestUser);
-    		}
-  
+	    String first_name = "test-first";
+	    String last_name = "test-last";
+	    String email = "test-email-3";
+	    String password = "test-password";
+	    String username = "test-username-3";
+	    String about_me = "Test About me";
+	    String prof_pic = "Profile Picture";
+	    UserObject testUser;
+		testUser = new UserObject(first_name, last_name, email, password, username);
+		testUser.setAbout_me(about_me);
+		testUser.setProf_pic(prof_pic);
+	    try {
+	  		testUser.setLogged(true);
+    		userRepo.save(testUser);
+    		userRepo.save(ltestUser);
+    		int test_user_id = testUser.getId();
+    		int ltest_user_id = ltestUser.getId();
+    		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+    		ResponseEntity<HashMap> response = restTemplate.exchange(
+    				createURLWithPort("/api/user/profile/?id=" + test_user_id + "&user_request=" + ltest_user_id),
+    				HttpMethod.GET, entity, HashMap.class);
+    		HashMap<String, Object> context = response.getBody();
+    		Assert.assertEquals(response.getStatusCodeValue(), 200);
+    		Assert.assertEquals((String)context.get("last_name"), last_name);
+    		Assert.assertEquals((String)context.get("first_name"), first_name);
+    		Assert.assertEquals((String)context.get("profile_picture"), prof_pic);
+    		Assert.assertEquals((String)context.get("about_me"), about_me);
+    		Assert.assertEquals((boolean)context.get("isSuccess"), true);
+    		userRepo.delete(testUser);
+    		userRepo.delete(ltestUser);
+		} catch(Exception e) {
+			userRepo.delete(testUser);
+    		userRepo.delete(ltestUser);
+		} 
     }
     
     /**
