@@ -98,284 +98,284 @@ public class UserProfileTests {
   
     }
     
-    /**
-     * Tests that a User can add another user
-     * @throws Exception
-     */
-    @Test
-    public void testAddNewFriend() throws Exception {
-	    
-        String first_name = "user3";
-        String last_name = "user3";
-        String email = "user3";
-        String password = "user3";
-        String username = "user3";
-        
-        String first_name_2 = "friend3";
-        String last_name_2 = "friend3";
-        String email_2 = "friend3";
-        String password_2 = "friend3";
-        String username_2 = "friend3";
-    	
-    	
-		UserObject user = new UserObject(first_name, last_name, email, password, username);
-		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
-		try {
-			userRepo.save(user);
-			userRepo.save(friend);
-			
-			int user_id = user.getId();
-			int friend_id = friend.getId();
-			
-			HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-			ResponseEntity<HashMap> response = restTemplate.exchange(
-					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-					HttpMethod.POST, entity, HashMap.class);
-			HashMap<String, Object> context = response.getBody();
-			Assert.assertEquals((boolean)context.get("isSuccess"), true);
-			userRepo.delete(user);
-			userRepo.delete(friend);
-		} catch(Exception e) {
-			userRepo.delete(user);
-			userRepo.delete(friend);
-		}
- 
-    }
-    
-    /**
-     * Tests that a User cannot add a friend that they already had
-     * @throws Exception
-     */
-    @Test
-    public void testAddExisitingFriend() throws Exception {
-        String first_name = "user3";
-        String last_name = "user3";
-        String email = "user3";
-        String password = "user3";
-        String username = "user3";
-        
-        String first_name_2 = "friend3";
-        String last_name_2 = "friend3";
-        String email_2 = "friend3";
-        String password_2 = "friend3";
-        String username_2 = "friend3";    
-    	
-		UserObject user = new UserObject(first_name, last_name, email, password, username);
-		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
-		try {
-			userRepo.save(user);
-			userRepo.save(friend);
-			
-			int user_id = user.getId();
-			int friend_id = friend.getId();
-			
-			HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-			ResponseEntity<HashMap> response = restTemplate.exchange(
-					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-					HttpMethod.POST, entity, HashMap.class);
-			HashMap<String, Object> context = response.getBody();
-			Assert.assertEquals((boolean)context.get("isSuccess"), true);
-			
-			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
-			ResponseEntity<HashMap> response2 = restTemplate.exchange(
-					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-					HttpMethod.POST, entity2, HashMap.class);
-			HashMap<String, Object> context2 = response2.getBody();
-			
-			Assert.assertEquals((boolean)context2.get("isSuccess"), false);
-			Assert.assertEquals((String)context2.get("message"), "Already Friends");
-
-			userRepo.delete(user);
-			userRepo.delete(friend); 
-		} catch(Exception e) {
-			userRepo.delete(user);
-			userRepo.delete(friend); 
-		}
-    }
-    
-    /**
-     * Tests that a User can remove a friend
-     * @throws Exception
-     */
-    @Test
-    public void testRemoveFriend() throws Exception {
-        String first_name = "user3";
-        String last_name = "user3";
-        String email = "user3";
-        String password = "user3";
-        String username = "user3";
-        
-        String first_name_2 = "friend3";
-        String last_name_2 = "friend3";
-        String email_2 = "friend3";
-        String password_2 = "friend3";
-        String username_2 = "friend3";   
-    	
-		UserObject user = new UserObject(first_name, last_name, email, password, username);
-		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
-		try {
-			userRepo.save(user);
-			userRepo.save(friend);
-			
-			int user_id = user.getId();
-			int friend_id = friend.getId();
-			
-			HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-			ResponseEntity<HashMap> response = restTemplate.exchange(
-					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-					HttpMethod.POST, entity, HashMap.class);
-			HashMap<String, Object> context = response.getBody();
-			Assert.assertEquals((boolean)context.get("isSuccess"), true);
-			
-			
-			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
-			ResponseEntity<HashMap> response2 = restTemplate.exchange(
-					createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-					HttpMethod.POST, entity2, HashMap.class);
-			HashMap<String, Object> context2 = response2.getBody();
-			Assert.assertEquals((boolean)context2.get("isSuccess"), true);
-			userRepo.delete(user);
-			userRepo.delete(friend);
-		} catch(Exception e) {
-			userRepo.delete(user);
-			userRepo.delete(friend);
-		}
-    }
-    
-    /**
-     * Tests that a User can't remove a friend that it's not friends with
-     * @throws Exception
-     */
-    @Test
-    public void testRemoveWrongFriend() throws Exception {
-        String first_name = "user3";
-        String last_name = "user3";
-        String email = "user3";
-        String password = "user3";
-        String username = "user3";
-        
-        String first_name_2 = "friend3";
-        String last_name_2 = "friend3";
-        String email_2 = "friend3";
-        String password_2 = "friend3";
-        String username_2 = "friend3";
-	
-    	    UserObject user = new UserObject(first_name, last_name, email, password, username);
-		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
-		try {
-			userRepo.save(user);
-			userRepo.save(friend);
-			
-			int user_id = user.getId();
-			int friend_id = friend.getId();
-			
-			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
-			ResponseEntity<HashMap> response2 = restTemplate.exchange(
-					createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-					HttpMethod.POST, entity2, HashMap.class);
-			HashMap<String, Object> context2 = response2.getBody();
-			Assert.assertEquals((boolean)context2.get("isSuccess"), false);
-			Assert.assertEquals((String)context2.get("message"), "User's are not friends");
-			//User's are not friends
-	    	
-			userRepo.delete(user);
-			userRepo.delete(friend);
-		} catch(Exception e) {
-			userRepo.delete(user);
-			userRepo.delete(friend);
-		}
-    }
-   
-    @Test 
-    public void testBadUsers() throws Exception{
-    	
-        String first_name = "user3";
-        String last_name = "user3";
-        String email = "user3";
-        String password = "user3";
-        String username = "user3";
-	    UserObject user = new UserObject(first_name, last_name, email, password, username);
-	    try {
-	    	userRepo.save(user);
-			int real_id = user.getId();
-			int fake_id = 0;
-			
-		    //tests for fake friend id
-			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
-			ResponseEntity<HashMap> response2 = restTemplate.exchange(
-					createURLWithPort("/api/user/remove_friend/?userId=" + real_id + "&" + "friendId=" + fake_id),
-					HttpMethod.POST, entity2, HashMap.class);
-			HashMap<String, Object> context2 = response2.getBody();
-			Assert.assertEquals((boolean)context2.get("isSuccess"), false);
-			Assert.assertEquals((String)context2.get("message"), "Friend does not exist");
-			
-//			//tests for fake user id
-			HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
-			ResponseEntity<HashMap> response3 = restTemplate.exchange(
-					createURLWithPort("/api/user/remove_friend/?userId=" + fake_id + "&" + "friendId=" + real_id),
-					HttpMethod.POST, entity2, HashMap.class);
-			HashMap<String, Object> context3 = response3.getBody();
-			Assert.assertEquals((boolean)context3.get("isSuccess"), false);
-			Assert.assertEquals((String)context3.get("message"), "User does not exist");
+//    /**
+//     * Tests that a User can add another user
+//     * @throws Exception
+//     */
+//    @Test
+//    public void testAddNewFriend() throws Exception {
+//	    
+//        String first_name = "user3";
+//        String last_name = "user3";
+//        String email = "user3";
+//        String password = "user3";
+//        String username = "user3";
+//        
+//        String first_name_2 = "friend3";
+//        String last_name_2 = "friend3";
+//        String email_2 = "friend3";
+//        String password_2 = "friend3";
+//        String username_2 = "friend3";
+//    	
+//    	
+//		UserObject user = new UserObject(first_name, last_name, email, password, username);
+//		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
+//		try {
+//			userRepo.save(user);
+//			userRepo.save(friend);
+//			
+//			int user_id = user.getId();
+//			int friend_id = friend.getId();
+//			
+//			HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+//			ResponseEntity<HashMap> response = restTemplate.exchange(
+//					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+//					HttpMethod.POST, entity, HashMap.class);
+//			HashMap<String, Object> context = response.getBody();
+//			Assert.assertEquals((boolean)context.get("isSuccess"), true);
+//			userRepo.delete(user);
+//			userRepo.delete(friend);
+//		} catch(Exception e) {
+//			userRepo.delete(user);
+//			userRepo.delete(friend);
+//		}
+// 
+//    }
+//    
+//    /**
+//     * Tests that a User cannot add a friend that they already had
+//     * @throws Exception
+//     */
+//    @Test
+//    public void testAddExisitingFriend() throws Exception {
+//        String first_name = "user3";
+//        String last_name = "user3";
+//        String email = "user3";
+//        String password = "user3";
+//        String username = "user3";
+//        
+//        String first_name_2 = "friend3";
+//        String last_name_2 = "friend3";
+//        String email_2 = "friend3";
+//        String password_2 = "friend3";
+//        String username_2 = "friend3";    
+//    	
+//		UserObject user = new UserObject(first_name, last_name, email, password, username);
+//		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
+//		try {
+//			userRepo.save(user);
+//			userRepo.save(friend);
+//			
+//			int user_id = user.getId();
+//			int friend_id = friend.getId();
+//			
+//			HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+//			ResponseEntity<HashMap> response = restTemplate.exchange(
+//					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+//					HttpMethod.POST, entity, HashMap.class);
+//			HashMap<String, Object> context = response.getBody();
+//			Assert.assertEquals((boolean)context.get("isSuccess"), true);
+//			
+//			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+//			ResponseEntity<HashMap> response2 = restTemplate.exchange(
+//					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+//					HttpMethod.POST, entity2, HashMap.class);
+//			HashMap<String, Object> context2 = response2.getBody();
+//			
+//			Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+//			Assert.assertEquals((String)context2.get("message"), "Already Friends");
+//
+//			userRepo.delete(user);
+//			userRepo.delete(friend); 
+//		} catch(Exception e) {
+//			userRepo.delete(user);
+//			userRepo.delete(friend); 
+//		}
+//    }
+//    
+//    /**
+//     * Tests that a User can remove a friend
+//     * @throws Exception
+//     */
+//    @Test
+//    public void testRemoveFriend() throws Exception {
+//        String first_name = "user3";
+//        String last_name = "user3";
+//        String email = "user3";
+//        String password = "user3";
+//        String username = "user3";
+//        
+//        String first_name_2 = "friend3";
+//        String last_name_2 = "friend3";
+//        String email_2 = "friend3";
+//        String password_2 = "friend3";
+//        String username_2 = "friend3";   
+//    	
+//		UserObject user = new UserObject(first_name, last_name, email, password, username);
+//		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
+//		try {
+//			userRepo.save(user);
+//			userRepo.save(friend);
+//			
+//			int user_id = user.getId();
+//			int friend_id = friend.getId();
+//			
+//			HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+//			ResponseEntity<HashMap> response = restTemplate.exchange(
+//					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+//					HttpMethod.POST, entity, HashMap.class);
+//			HashMap<String, Object> context = response.getBody();
+//			Assert.assertEquals((boolean)context.get("isSuccess"), true);
+//			
+//			
+//			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+//			ResponseEntity<HashMap> response2 = restTemplate.exchange(
+//					createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+//					HttpMethod.POST, entity2, HashMap.class);
+//			HashMap<String, Object> context2 = response2.getBody();
+//			Assert.assertEquals((boolean)context2.get("isSuccess"), true);
+//			userRepo.delete(user);
+//			userRepo.delete(friend);
+//		} catch(Exception e) {
+//			userRepo.delete(user);
+//			userRepo.delete(friend);
+//		}
+//    }
+//    
+//    /**
+//     * Tests that a User can't remove a friend that it's not friends with
+//     * @throws Exception
+//     */
+//    @Test
+//    public void testRemoveWrongFriend() throws Exception {
+//        String first_name = "user3";
+//        String last_name = "user3";
+//        String email = "user3";
+//        String password = "user3";
+//        String username = "user3";
+//        
+//        String first_name_2 = "friend3";
+//        String last_name_2 = "friend3";
+//        String email_2 = "friend3";
+//        String password_2 = "friend3";
+//        String username_2 = "friend3";
+//	
+//    	    UserObject user = new UserObject(first_name, last_name, email, password, username);
+//		UserObject friend = new UserObject(first_name_2, last_name_2, email_2, password_2, username_2);
+//		try {
+//			userRepo.save(user);
+//			userRepo.save(friend);
+//			
+//			int user_id = user.getId();
+//			int friend_id = friend.getId();
+//			
+//			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+//			ResponseEntity<HashMap> response2 = restTemplate.exchange(
+//					createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+//					HttpMethod.POST, entity2, HashMap.class);
+//			HashMap<String, Object> context2 = response2.getBody();
+//			Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+//			Assert.assertEquals((String)context2.get("message"), "User's are not friends");
+//			//User's are not friends
+//	    	
+//			userRepo.delete(user);
+//			userRepo.delete(friend);
+//		} catch(Exception e) {
+//			userRepo.delete(user);
+//			userRepo.delete(friend);
+//		}
+//    }
+//   
+//    @Test 
+//    public void testBadUsers() throws Exception{
+//    	
+//        String first_name = "user3";
+//        String last_name = "user3";
+//        String email = "user3";
+//        String password = "user3";
+//        String username = "user3";
+//	    UserObject user = new UserObject(first_name, last_name, email, password, username);
+//	    try {
+//	    	userRepo.save(user);
+//			int real_id = user.getId();
+//			int fake_id = 0;
 //			
 //		    //tests for fake friend id
-			HttpEntity<String> entity4 = new HttpEntity<String>(null, headers);
-			ResponseEntity<HashMap> response4 = restTemplate.exchange(
-					createURLWithPort("/api/user/add_friend/?userId=" + real_id + "&" + "friendId=" + fake_id),
-					HttpMethod.POST, entity4, HashMap.class);
-			HashMap<String, Object> context4 = response4.getBody();
-			Assert.assertEquals((boolean)context4.get("isSuccess"), false);
-			Assert.assertEquals((String)context4.get("message"), "Friend Requested does not exist");
-
-//			//tests for fake user id
-			HttpEntity<String> entity5 = new HttpEntity<String>(null, headers);
-			ResponseEntity<HashMap> response5 = restTemplate.exchange(
-					createURLWithPort("/api/user/add_friend/?userId=" + fake_id + "&" + "friendId=" + real_id),
-					HttpMethod.POST, entity5, HashMap.class);
-			HashMap<String, Object> context5 = response5.getBody();
-			Assert.assertEquals((boolean)context5.get("isSuccess"), false);
-			Assert.assertEquals((String)context5.get("message"), "User does not exist");
-			userRepo.delete(user);
-	    } catch (Exception e) {
-			userRepo.delete(user);
-	    }
-    }
-    
-    @Test 
-    public void testSameUser() throws Exception{
-        String first_name = "user3";
-        String last_name = "user3";
-        String email = "user3";
-        String password = "user3";
-        String username = "user3";
-        
-        UserObject user = new UserObject(first_name, last_name, email, password, username);
-        try {
-	        	userRepo.save(user);
-	        	
-	    		int user_id = user.getId();
-	    		int friend_id = user.getId();
-	    		
-	    		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
-	    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
-	    				createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-	    				HttpMethod.POST, entity2, HashMap.class);
-	    		HashMap<String, Object> context2 = response2.getBody();
-	    		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
-	    		Assert.assertEquals((String)context2.get("message"), "User cannot remove itself");
-	    		
-	    		HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
-	    		ResponseEntity<HashMap> response3 = restTemplate.exchange(
-	    				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
-	    				HttpMethod.POST, entity3, HashMap.class);
-	    		HashMap<String, Object> context3 = response3.getBody();
-	    		Assert.assertEquals((boolean)context3.get("isSuccess"), false);
-	    		Assert.assertEquals((String)context3.get("message"), "User cannot add itself");
-	    		userRepo.delete(user);
-        } catch(Exception e) {
-    			userRepo.delete(user);
-        }  
-    }
+//			HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+//			ResponseEntity<HashMap> response2 = restTemplate.exchange(
+//					createURLWithPort("/api/user/remove_friend/?userId=" + real_id + "&" + "friendId=" + fake_id),
+//					HttpMethod.POST, entity2, HashMap.class);
+//			HashMap<String, Object> context2 = response2.getBody();
+//			Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+//			Assert.assertEquals((String)context2.get("message"), "Friend does not exist");
+//			
+////			//tests for fake user id
+//			HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
+//			ResponseEntity<HashMap> response3 = restTemplate.exchange(
+//					createURLWithPort("/api/user/remove_friend/?userId=" + fake_id + "&" + "friendId=" + real_id),
+//					HttpMethod.POST, entity2, HashMap.class);
+//			HashMap<String, Object> context3 = response3.getBody();
+//			Assert.assertEquals((boolean)context3.get("isSuccess"), false);
+//			Assert.assertEquals((String)context3.get("message"), "User does not exist");
+////			
+////		    //tests for fake friend id
+//			HttpEntity<String> entity4 = new HttpEntity<String>(null, headers);
+//			ResponseEntity<HashMap> response4 = restTemplate.exchange(
+//					createURLWithPort("/api/user/add_friend/?userId=" + real_id + "&" + "friendId=" + fake_id),
+//					HttpMethod.POST, entity4, HashMap.class);
+//			HashMap<String, Object> context4 = response4.getBody();
+//			Assert.assertEquals((boolean)context4.get("isSuccess"), false);
+//			Assert.assertEquals((String)context4.get("message"), "Friend Requested does not exist");
+//
+////			//tests for fake user id
+//			HttpEntity<String> entity5 = new HttpEntity<String>(null, headers);
+//			ResponseEntity<HashMap> response5 = restTemplate.exchange(
+//					createURLWithPort("/api/user/add_friend/?userId=" + fake_id + "&" + "friendId=" + real_id),
+//					HttpMethod.POST, entity5, HashMap.class);
+//			HashMap<String, Object> context5 = response5.getBody();
+//			Assert.assertEquals((boolean)context5.get("isSuccess"), false);
+//			Assert.assertEquals((String)context5.get("message"), "User does not exist");
+//			userRepo.delete(user);
+//	    } catch (Exception e) {
+//			userRepo.delete(user);
+//	    }
+//    }
+//    
+//    @Test 
+//    public void testSameUser() throws Exception{
+//        String first_name = "user3";
+//        String last_name = "user3";
+//        String email = "user3";
+//        String password = "user3";
+//        String username = "user3";
+//        
+//        UserObject user = new UserObject(first_name, last_name, email, password, username);
+//        try {
+//	        	userRepo.save(user);
+//	        	
+//	    		int user_id = user.getId();
+//	    		int friend_id = user.getId();
+//	    		
+//	    		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
+//	    		ResponseEntity<HashMap> response2 = restTemplate.exchange(
+//	    				createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+//	    				HttpMethod.POST, entity2, HashMap.class);
+//	    		HashMap<String, Object> context2 = response2.getBody();
+//	    		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
+//	    		Assert.assertEquals((String)context2.get("message"), "User cannot remove itself");
+//	    		
+//	    		HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
+//	    		ResponseEntity<HashMap> response3 = restTemplate.exchange(
+//	    				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
+//	    				HttpMethod.POST, entity3, HashMap.class);
+//	    		HashMap<String, Object> context3 = response3.getBody();
+//	    		Assert.assertEquals((boolean)context3.get("isSuccess"), false);
+//	    		Assert.assertEquals((String)context3.get("message"), "User cannot add itself");
+//	    		userRepo.delete(user);
+//        } catch(Exception e) {
+//    			userRepo.delete(user);
+//        }  
+//    }
     
 	private String createURLWithPort(String uri) {
 		return "http://localhost:" + port + uri;

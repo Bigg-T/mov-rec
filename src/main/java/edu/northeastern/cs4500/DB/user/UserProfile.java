@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.stereotype.Controller;
 
-//@CrossOrigin(origins = "http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com")
+//@CrossOrigin(origins = "http://localhost:3000")
 @Controller
 public class UserProfile {
 

@@ -23,7 +23,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build_prod": "cp ./src/config.js ./src/config.bak.js && cp ./src/config-prod.js ./src/config.js && npm build && mv ./src/config.bak.js ./src/config.js",
+    "build_prod": "cp ./src/config.js ./src/config.bak.js && cp ./src/config-prod.js ./src/config.js && yarn build && mv ./src/config.bak.js ./src/config.js",
     "deploy": "aws s3 cp --recursive ./build s3://movi3hall.cs4500.com2",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
