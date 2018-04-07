@@ -20,7 +20,6 @@ public class UserFriendController {
 	
 	@Autowired
 	UserService userService;
-	
 
 	/**
 	 * Adds a friend to a user

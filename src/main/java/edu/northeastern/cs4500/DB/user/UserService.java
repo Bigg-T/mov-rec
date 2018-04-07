@@ -190,6 +190,12 @@ public class UserService {
 		UserObject user = userRepository.getOne(userId);
 		UserObject requestedFriend = userRepository.getOne(friendRequestedId);
 		
+		if (user.isLogged() != true) {
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.BAD_REQUEST);
+			context.put("message", "User Not Logged In");
+			return context;
+		}
 		Collection<UserObject> userFriends = user.getFriends();
 		boolean alreadyFriends = userFriends.contains(requestedFriend);
 

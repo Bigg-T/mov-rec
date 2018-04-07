@@ -38,9 +38,6 @@ import edu.northeastern.cs4500.JPARepositories.MovieRatingRepository;
 public class MovieService {
 
 	@Autowired
-	MovieRepository movieRepository;
-	
-	@Autowired
 	MovieRatingRepository movieRatingsRepository;
 	
 	public List<MovieDb> getMovieGenre(String genre) {
