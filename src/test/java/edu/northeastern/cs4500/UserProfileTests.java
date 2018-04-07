@@ -495,6 +495,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     		Assert.assertEquals((String)context2.get("message"), "User does not exist");
     	}
     	
+    	@Test
+    	public void testUserProfileDoesNotExist() {
+//			//tests for fake user id
+		HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
+		ResponseEntity<HashMap> response3 = restTemplate.exchange(
+				createURLWithPort("/api/user/profile/?id=1&user_request=0"),
+				HttpMethod.GET, entity3, HashMap.class);
+		HashMap<String, Object> context3 = response3.getBody();
+		Assert.assertEquals((boolean)context3.get("isSuccess"), false);
+		Assert.assertEquals((String)context3.get("message"), "User Does Not Exist");
+    	}
     	
     	private String createURLWithPort(String uri) {
     		return "http://localhost:" + port + uri;

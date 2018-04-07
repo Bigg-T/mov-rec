@@ -100,9 +100,9 @@ public class UserObjectTest {
 	
 	@Test
 	public void TestIs_active() throws Exception{
-		Assert.assertEquals(test_user_1.isIs_admin(), false);
-        test_user_1.setIs_admin(true);
-		Assert.assertEquals(test_user_1.isIs_admin(), true);
+		Assert.assertEquals(test_user_1.isIs_active(), false);
+        test_user_1.setIs_active(true);
+		Assert.assertEquals(test_user_1.isIs_active(), true);
 	}
 	
 	@Test

@@ -42,14 +42,6 @@ public class UserProfile {
 		List<UserObject> result = userRepository.getUserProfileData(id);
 		HashMap<String, Object> userData = new HashMap<String, Object>();
 		Boolean isLogged = false;
-		if (id == null || user_request == null) {
-			
-			//System.out.println("ID IS NULL AND USER_ID IS NULL????");
-			userData.put(IS_SUCCESS_KEY, false);
-			userData.put(MESSAGE_KEY, "Incorrect Input");
-			userData.put(STATUS_KEY, HttpStatus.BAD_REQUEST);
-			return userData;
-		}
 		UserObject userLogged;
 		try {
 			userLogged = userRepository.getOne(user_request);

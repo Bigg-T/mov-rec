@@ -174,6 +174,4 @@ public class UserObject {
 	public void setLogged(boolean logged) {
 		this.logged = logged;
 	}
-	
-	
 }

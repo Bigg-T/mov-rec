@@ -113,9 +113,9 @@ public class UserService {
 				}
 			}
 		}
-		context.put("id", null);
-		context.put("status", HttpStatus.BAD_REQUEST);
-		context.put("isSuccess", false);
+//		context.put("id", null);
+//		context.put("status", HttpStatus.BAD_REQUEST);
+//		context.put("isSuccess", false);
 		return context;
 	}
 	
@@ -205,18 +205,12 @@ public class UserService {
 			context.put("message", "Already Friends");
 			return context;
 		}
-		try {
-			userFriends.add(requestedFriend);
-			userRepository.save(user);
-			context.put("isSuccess", true);
-			context.put("status", HttpStatus.OK);
-			return context;
-		} catch (Exception e) {
-			context.put("isSuccess", false);
-			context.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-			context.put("message", "Something went wrong, please try again");
-			return context;
-		}
+
+		userFriends.add(requestedFriend);
+		userRepository.save(user);
+		context.put("isSuccess", true);
+		context.put("status", HttpStatus.OK);
+		return context;
 	}
 	
 	/**
@@ -267,24 +261,19 @@ public class UserService {
 		UserObject user = userRepository.getOne(userId);
 		UserObject removedFriend = userRepository.getOne(friendId);
 				
-		try {
-			Collection<UserObject> userFriends = user.getFriends();
-			if (!userFriends.contains(removedFriend)) {
-				context.put("isSuccess", false);
-				context.put("status", HttpStatus.BAD_REQUEST);
-				context.put("message", "User's are not friends");
-				return context;
-			} else {
-				userFriends.remove(removedFriend);
-				userRepository.save(user);
-				context.put("isSuccess", true);
-				context.put("status", HttpStatus.OK);
-				return context;
-			}
-		} catch (Exception e) {
+		Collection<UserObject> userFriends = user.getFriends();
+		if (!userFriends.contains(removedFriend)) {
 			context.put("isSuccess", false);
-			context.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+			context.put("status", HttpStatus.BAD_REQUEST);
+			context.put("message", "User's are not friends");
+			return context;
+		} else {
+			userFriends.remove(removedFriend);
+			userRepository.save(user);
+			context.put("isSuccess", true);
+			context.put("status", HttpStatus.OK);
 			return context;
 		}
+
 	}
 }

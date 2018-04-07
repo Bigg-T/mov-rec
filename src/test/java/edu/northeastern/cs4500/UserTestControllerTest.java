@@ -138,7 +138,6 @@ public class UserTestControllerTest {
 					HttpMethod.GET, entity, HashMap.class);
 			HashMap<String,Object> body3 = response3.getBody();
 			Assert.assertEquals((boolean)body3.get("isSuccess"), false);
-			
 	}
 	
 	private String createURLWithPort(String uri) {
