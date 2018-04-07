@@ -87,6 +87,8 @@
 			<artifactId>cors-filter</artifactId>
 			<version>1.3.2</version>
 		</dependency>
+		
+		
 
 	</dependencies>
 	<repositories>

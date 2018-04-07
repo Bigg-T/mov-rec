@@ -12,9 +12,9 @@ public interface UserRepository extends JpaRepository<UserObject, Integer>{
 
 	@Async
 	@Query("SELECT u FROM user u WHERE u.id = ?1")
-	public List<UserObject> getUserProfileData(Integer userId);
+	public List<UserObject> getUserProfileData(Integer userId);	
 	
 	@Async
 	@Query("SELECT u FROM user u WHERE u.username = ?1")
-	public List<UserObject> getUserByUsername(String userName);
+	public List<UserObject> getUserByUsername(String username);
 }

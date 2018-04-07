@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 //		"http://localhost:3000/"})
 //@CrossOrigin(origins = "loca")
 //@CrossOrigin(origin = http://localhost:3000/)
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 public class UserController {
 

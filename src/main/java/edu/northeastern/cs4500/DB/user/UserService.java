@@ -28,6 +28,7 @@ public class UserService {
 	 * @return isSuccess boolean; HTTP status code
 	 */
 	public HashMap<String,Object> validateLogin(String username, String pw) {
+		System.out.println("VALIDATE LOGIN METHOD");
 		List<UserObject> allUsers = userRepository.findAll();
 		HashMap<String, Object> context = new HashMap<String, Object>();
 		for (int i = 0; i < allUsers.size(); i++) {
@@ -38,8 +39,11 @@ public class UserService {
 					context.put("status", HttpStatus.OK);
 					context.put("username", username);
 					context.put("user_id", curUser.getId());
+					//System.out.println(curUser.isLogged());
 					curUser.setLogged(true);
 					userRepository.save(curUser);
+					//System.out.println(curUser.isLogged());
+					//System.out.println("-------------------");
 					return context;
 				} 
 			}
@@ -59,20 +63,21 @@ public class UserService {
 		HashMap<String, Object> context = new HashMap<String, Object>();
 		try {
 			if (!user.isLogged()) {
-				context.put("isStatus", false);
+				context.put("isSuccess", false);
 				context.put("message", "User not logged in");
 				context.put("status", HttpStatus.BAD_REQUEST);
 
 			} else {
 				user.setLogged(false);
 				userRepository.save(user);
-				context.put("isStatus", true);
-				context.put("status", HttpStatus.BAD_REQUEST);
+				context.put("isSuccess", true);
+				context.put("status", HttpStatus.OK);
+				context.put("isLogged", user.isLogged());
 			}
 		} catch(Exception e) {
 			context.put("message", "User does not exist");
 			context.put("status", HttpStatus.NOT_FOUND);
-			context.put("isStatus", false);
+			context.put("isSuccess", false);
 		}
 		return context;
 	}
@@ -108,9 +113,9 @@ public class UserService {
 				}
 			}
 		}
-		context.put("id", null);
-		context.put("status", HttpStatus.BAD_REQUEST);
-		context.put("isSuccess", false);
+//		context.put("id", null);
+//		context.put("status", HttpStatus.BAD_REQUEST);
+//		context.put("isSuccess", false);
 		return context;
 	}
 	
@@ -185,6 +190,12 @@ public class UserService {
 		UserObject user = userRepository.getOne(userId);
 		UserObject requestedFriend = userRepository.getOne(friendRequestedId);
 		
+		if (user.isLogged() != true) {
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.BAD_REQUEST);
+			context.put("message", "User Not Logged In");
+			return context;
+		}
 		Collection<UserObject> userFriends = user.getFriends();
 		boolean alreadyFriends = userFriends.contains(requestedFriend);
 
@@ -194,18 +205,12 @@ public class UserService {
 			context.put("message", "Already Friends");
 			return context;
 		}
-		try {
-			userFriends.add(requestedFriend);
-			userRepository.save(user);
-			context.put("isSuccess", true);
-			context.put("status", HttpStatus.OK);
-			return context;
-		} catch (Exception e) {
-			context.put("isSuccess", false);
-			context.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-			context.put("message", "Something went wrong, please try again");
-			return context;
-		}
+
+		userFriends.add(requestedFriend);
+		userRepository.save(user);
+		context.put("isSuccess", true);
+		context.put("status", HttpStatus.OK);
+		return context;
 	}
 	
 	/**
@@ -256,24 +261,19 @@ public class UserService {
 		UserObject user = userRepository.getOne(userId);
 		UserObject removedFriend = userRepository.getOne(friendId);
 				
-		try {
-			Collection<UserObject> userFriends = user.getFriends();
-			if (!userFriends.contains(removedFriend)) {
-				context.put("isSuccess", false);
-				context.put("status", HttpStatus.BAD_REQUEST);
-				context.put("message", "User's are not friends");
-				return context;
-			} else {
-				userFriends.remove(removedFriend);
-				userRepository.save(user);
-				context.put("isSuccess", true);
-				context.put("status", HttpStatus.OK);
-				return context;
-			}
-		} catch (Exception e) {
+		Collection<UserObject> userFriends = user.getFriends();
+		if (!userFriends.contains(removedFriend)) {
 			context.put("isSuccess", false);
-			context.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+			context.put("status", HttpStatus.BAD_REQUEST);
+			context.put("message", "User's are not friends");
+			return context;
+		} else {
+			userFriends.remove(removedFriend);
+			userRepository.save(user);
+			context.put("isSuccess", true);
+			context.put("status", HttpStatus.OK);
 			return context;
 		}
+
 	}
 }
