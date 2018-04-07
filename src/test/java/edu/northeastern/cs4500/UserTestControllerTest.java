@@ -88,7 +88,7 @@ public class UserTestControllerTest {
 	public void testAddUserSuccess() throws Exception {
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
-				createURLWithPort("/api/user/add_User/?fname=Jeanpaul&lname=Torre&email=torre.j+100@husky.neu.edu&pw=password&username=jeanpaulrt100"),
+				createURLWithPort("/api/user/add_User/?fname=afafsdg&lname=sdgsdgsdg&email=sdgsdgbsr&pw=password&username=fdbr4bre"),
 				HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body = response.getBody();
 		boolean isSuccess = (boolean) body.get("isSuccess");

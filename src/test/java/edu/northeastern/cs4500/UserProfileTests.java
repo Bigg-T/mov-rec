@@ -134,7 +134,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
      */
     @Test
     public void testGetUserProfileData() throws Exception {
-    	    System.out.println("GET USER PROFILE!!!!!");
     		int test_user_1_id = test_user_1.getId();
     		int test_user_2_id = test_user_2.getId();
     		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
