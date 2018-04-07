@@ -70,33 +70,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	    String username = "test-username-3";
 	    String about_me = "Test About me";
 	    String prof_pic = "Profile Picture";
-	    System.out.println("SET UP!!!!!!!!");
-	   // userRepo.getUserByUsername(username+"_2").size();
 	    if (userRepo.getUserByUsername(username).size() > 0) {
 			UserObject user_exists = userRepo.getUserByUsername(username).get(0);
-			//if (user_exists != null) {
-		    	System.out.println("USER 1 EXISTS!!!!!!!!!");
 	    		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 	    		if (user_exists.getFriends().size() > 0) {
 	    			ResponseEntity<HashMap> response = restTemplate.exchange(
 							createURLWithPort("/api/user/remove_friend/?userId=" + user_exists.getId() + "&" + "friendId=" + userRepo.getUserByUsername(username + "_2").get(0).getId()),
 							HttpMethod.POST, entity, HashMap.class);
-					System.out.println("ANY REMAINING FREINDS");
-					System.out.println(user_exists.getFriends());
 	    		}
 				try {
 					userRepo.delete(user_exists.getId());
 				} catch(Exception e) {
-					System.out.println("GO TO USER 2");
 				}
 	    }
 		
-		System.out.println("-------------END OF TEST USER 1-----------------");
-		System.out.println(userRepo.getUserByUsername(username + "_2").size());
 		if (userRepo.getUserByUsername(username + "_2").size() > 0) {
 			UserObject user_exists_2 = userRepo.getUserByUsername(username + "_2").get(0);
-		    //if (user_exists_2 != null) {
-		    	System.out.println("USER 2 EXISTS!!!!!!!!!");
 		    	HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 				ResponseEntity<HashMap> response = restTemplate.exchange(
 						createURLWithPort("/api/user/remove_friend/?userId=" + user_exists_2.getId() + "&" + "friendId=" + userRepo.getUserByUsername(username).get(0).getId()),
@@ -104,9 +93,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		    	try {
 					userRepo.delete(user_exists_2);
 		    	} catch(Exception e) {
-		    		System.out.println("IDK DUDE!!!");
 		    	}
-		    //}
 		}
 		
 		test_user_1 = new UserObject(first_name, last_name, email, password, username);
@@ -130,7 +117,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		try {
 			userRepo.delete(test_user_1);
 		} catch (Exception e) {
-			System.out.println("MOVE ALONG");
 		}
 		
     	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
@@ -140,7 +126,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		try {
 			userRepo.delete(test_user_2);
 		} catch(Exception e) {
-			System.out.println("IM NOT SURE :(");
 		}
 	}
 	

@@ -3,6 +3,7 @@ package edu.northeastern.cs4500;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -49,7 +50,7 @@ public class UserObjectTest {
 	UserRepository userRepo;
 	
 	UserObject test_user_1;
-
+	UserObject test_user_2;
 	
 	@Before
 	public void setUp() {
@@ -59,12 +60,14 @@ public class UserObjectTest {
 	    String password = "test-password";
 	    String username = "test-username-3";
 		test_user_1 = new UserObject(first_name, last_name, email, password, username);
+		test_user_2 = new UserObject(first_name + "_2", last_name, email + "_2", password, username);
 		userRepo.save(test_user_1);
 	}
 	
 	@After
 	public void destroy() {
-			userRepo.delete(test_user_1);
+		test_user_1.setFriends(null);
+		userRepo.delete(test_user_1);
 	}
 
 	@Test
@@ -76,14 +79,14 @@ public class UserObjectTest {
 	
 	@Test
 	public void tesGetAbout_me() throws Exception{
-		Assert.assertEquals(test_user_1.getAbout_me(), "");
+		Assert.assertEquals(test_user_1.getAbout_me(), null);
         test_user_1.setAbout_me("about me");
 		Assert.assertEquals(test_user_1.getAbout_me(), "about me");
 	}
 	
 	@Test
 	public void testGetProf_Pic() throws Exception {
-		Assert.assertEquals(test_user_1.getProf_pic(), "");
+		Assert.assertEquals(test_user_1.getProf_pic(), null);
         test_user_1.setProf_pic("Prof Pic");
 		Assert.assertEquals(test_user_1.getProf_pic(), "Prof Pic");
 	}
@@ -104,9 +107,9 @@ public class UserObjectTest {
 	
 	@Test
 	public void TestGetGender() throws Exception{
-		Assert.assertEquals(test_user_1.getGender(), "");
+		Assert.assertEquals(test_user_1.getGender(), null);
         test_user_1.setGender("M");;
-		Assert.assertEquals(test_user_1.isIs_admin(), "M");
+		Assert.assertEquals(test_user_1.getGender(), "M");
 	}
 
 	@Test
@@ -119,14 +122,14 @@ public class UserObjectTest {
 	
 	@Test
 	public void testGetState() throws Exception {
-		Assert.assertEquals(test_user_1.getState(), "");
+		Assert.assertEquals(test_user_1.getState(), null);
 		test_user_1.setState("MA");
 		Assert.assertEquals(test_user_1.getState(), "MA");
 	}
 	
 	@Test
 	public void TestGetCountry() throws Exception {
-		Assert.assertEquals(test_user_1.getCountry(), "");
+		Assert.assertEquals(test_user_1.getCountry(), null);
 		test_user_1.setCountry("USA");
 		Assert.assertEquals(test_user_1.getCountry(), "USA");
 	}
@@ -141,33 +144,47 @@ public class UserObjectTest {
 
 	
 	@Test
-	public void getPassword() {
+	public void testGetPassword() {
 		Assert.assertEquals(test_user_1.getPassword(), "test-password");
+		test_user_1.setPassword("shouldProbablyHash");
+		Assert.assertEquals(test_user_1.getPassword(), "shouldProbablyHash");
 	}
 
 	@Test
-	public void getEmail() {
-		return email;
+	public void testGetEmail() {
+		Assert.assertEquals(test_user_1.getEmail(), "test-email-3");
+		test_user_1.setEmail("hello@jeanapul.com");
+		Assert.assertEquals(test_user_1.getEmail(), "hello@jeanapul.com");
 	}
 
-	
-	public String getLast_name() {
-		return last_name;
+	@Test
+	public void testGetLast_name() {
+		Assert.assertEquals(test_user_1.getLast_name(), "test-last");
+		test_user_1.setLast_name("another fake name lmao");
+		Assert.assertEquals(test_user_1.getLast_name(), "another fake name lmao");
 	}
 
-	
-	public String getFirst_name() {
-		return first_name;
+	@Test
+	public void testGetFirstName() {
+		Assert.assertEquals(test_user_1.getFirst_name(), "test-first");
+		test_user_1.setFirst_name("another fake name lmao");
+		Assert.assertEquals(test_user_1.getFirst_name(), "another fake name lmao");	
 	}
 
-	
-
-	public Collection<UserObject> getFriends() {
-		return friends;
+    @Test
+	public void testGetFriends() {
+		Assert.assertEquals(test_user_1.getFriends(), null);
+		Collection<UserObject> friends = new ArrayList<UserObject>();
+		friends.add(test_user_2);
+		test_user_1.setFriends(friends);
+		Assert.assertEquals(test_user_1.getFriends().size(), 1);
 	}
 
-	public boolean isLogged() {
-		return logged;
+    @Test
+    public void testIsLogged() {
+		Assert.assertEquals(test_user_1.isLogged(), false);
+		test_user_1.setLogged(true);
+		Assert.assertEquals(test_user_1.isLogged(), true);		
 	}
 
 	private String createURLWithPort(String uri) {
