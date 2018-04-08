@@ -28,7 +28,7 @@ public interface UserRatesRepository extends JpaRepository<UserRatesObject, Inte
 
 	@Async //for developer getting all rating
 	@Query(value = "SELECT AVG(t.rate) from user_rates t WHERE t.movie_id=?1")
-	public Integer getRatingWithMovieId(Integer movie_id);
+	public Double getRatingWithMovieId(Integer movie_id);
 
 	@Async // for developer, all users ratings what they watched
 	@Query(value = "SELECT u from user_rates u where u.is_watched = 1")
