@@ -8,7 +8,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -45,6 +47,34 @@ public class UserTestControllerTest {
 	@Autowired
 	UserRepository userRepo;
 	
+	UserObject test_user_1;
+	UserObject test_user_2;
+	Integer api_created_user;
+	
+	@Before
+	public void setUp() {
+		String first_name = "test-first";
+	    String last_name = "test-last";
+	    String email = "test-email-3";
+	    String password = "test-password";
+	    String username = "test-username-3";
+		test_user_1 = new UserObject(first_name, last_name, email, password, username);
+		test_user_2 = new UserObject(first_name + "_2", last_name, email + "_2", password, username);
+		userRepo.save(test_user_1);
+		api_created_user = 0;
+	}
+	
+	@After
+	public void destroy() {
+		test_user_1.setFriends(null);
+		userRepo.delete(test_user_1);
+		if (api_created_user != 0) {
+			userRepo.delete(api_created_user);
+		}
+	}
+
+	
+	
 	@Test
 	public void testAllUsers() throws Exception {
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
@@ -58,7 +88,7 @@ public class UserTestControllerTest {
 	public void testAddUserSuccess() throws Exception {
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
-				createURLWithPort("/api/user/add_User/?fname=Jeanpaul&lname=Torre&email=torre.j+100@husky.neu.edu&pw=password&username=jeanpaulrt100"),
+				createURLWithPort("/api/user/add_User/?fname=afafsdg&lname=sdgsdgsdg&email=sdgsdgbsr&pw=password&username=fdbr4bre"),
 				HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body = response.getBody();
 		boolean isSuccess = (boolean) body.get("isSuccess");
@@ -66,30 +96,22 @@ public class UserTestControllerTest {
 		Assert.assertEquals((boolean)body.get("isSuccess"), true);
 		
 		if (isSuccess) {
-			userRepo.delete((Integer)body.get("id"));
+			api_created_user = (Integer)body.get("id");
 		}
 	}
 	
 	@Test
 	public void testAddExitingUser() throws Exception {
-		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-		ResponseEntity<HashMap> response = restTemplate.exchange(
-				createURLWithPort("/api/user/add_User/?fname=Jeanpaul&lname=Torre&email=torre.j+100@husky.neu.edu&pw=password&username=jeanpaulrt100"),
-				HttpMethod.GET, entity, HashMap.class);
-		HashMap<String, Object> body = response.getBody();
-		boolean isSuccess = (boolean) body.get("isSuccess");
-		Assert.assertEquals(response.getStatusCodeValue(), 200);
-		Assert.assertEquals((boolean)body.get("isSuccess"), true);
-		
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);		
 		ResponseEntity<HashMap> response2 = restTemplate.exchange(
-				createURLWithPort("/api/user/add_User/?fname=Jeanpaul&lname=Torre&email=torre.j+100@husky.neu.edu&pw=password&username=jeanpaulrt100"),
+				createURLWithPort("/api/user/add_User/?fname="+test_user_1.getFirst_name() +
+						"&lname="+ test_user_1.getLast_name() +
+						"&email="+test_user_1.getEmail() +
+						"&pw="+test_user_1.getPassword() +
+						"&username=" + test_user_1.getUsername()),
 				HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body2 = response2.getBody();
 		Assert.assertEquals((boolean)body2.get("isSuccess"), false);
-		
-		if (isSuccess) {
-			userRepo.delete((Integer)body.get("id"));
-		}
 	}
 	
 	@Test
@@ -102,29 +124,20 @@ public class UserTestControllerTest {
 				HttpMethod.GET, entity, HashMap.class);
 		HashMap<String,Object> body = response.getBody();
 		Assert.assertEquals((boolean)body.get("isSuccess"), false);
-		
-		UserObject testUser = new UserObject("test-fname", "test-lname", "test-email", "test-password", "test-username");
-		try {
-			userRepo.save(testUser);
 			
 			//Tests for existing User's username and password
 			ResponseEntity<HashMap> response2 = restTemplate.exchange(
-					createURLWithPort("/api/user/validate_login/?username=test-username&pw=test-password"),
+					createURLWithPort("/api/user/validate_login/?username=test-username-3&pw=test-password"),
 					HttpMethod.GET, entity, HashMap.class);
 			HashMap<String,Object> body2 = response2.getBody();
 			Assert.assertEquals((boolean)body2.get("isSuccess"), true);
 			
 			//Tests for wrong password
 			ResponseEntity<HashMap> response3 = restTemplate.exchange(
-					createURLWithPort("/api/user/validate_login/?username=test-username&pw=wrong-password"),
+					createURLWithPort("/api/user/validate_login/?username=test-username-3&pw=wrong-password"),
 					HttpMethod.GET, entity, HashMap.class);
 			HashMap<String,Object> body3 = response3.getBody();
 			Assert.assertEquals((boolean)body3.get("isSuccess"), false);
-			
-			userRepo.delete(testUser);
-		} catch(Exception e) {
-			userRepo.delete(testUser);
-		}
 	}
 	
 	private String createURLWithPort(String uri) {

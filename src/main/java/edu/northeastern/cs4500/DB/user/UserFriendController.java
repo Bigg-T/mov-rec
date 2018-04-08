@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@CrossOrigin(origins = "http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com")
+//@CrossOrigin(origins = "http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @Controller
 public class UserFriendController {
 	
@@ -19,7 +20,6 @@ public class UserFriendController {
 	
 	@Autowired
 	UserService userService;
-	
 
 	/**
 	 * Adds a friend to a user
