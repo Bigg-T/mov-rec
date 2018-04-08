@@ -21,10 +21,10 @@ class MovieRecPage extends Component {
 
   componentDidMount() {
     const UM = "https://api.themoviedb.org/3/movie/201/lists?api_key=492a79d4999e65c2324dc924891cb137&language=en-US&page=1";
-    const UM2 = 'https://api.themoviedb.org/3/movie/popular?api_key=492a79d4999e65c2324dc924891cb137&language=en-US&page=1';
-    const MDB_API_KEY = '492a79d4999e65c2324dc924891cb137';
+    const UM2 = 'http://localhost:8081/api/movie/popular/?num=6';
+    //const MDB_API_KEY = '492a79d4999e65c2324dc924891cb137';
     const BASE_MDB_URL = 'https://api.themoviedb.org/3/';
-    let URL = BASE_MDB_URL+'movie/popular?api_key='+MDB_API_KEY + '&language=en-US&page=1';
+    //let URL = BASE_MDB_URL+'movie/popular?api_key='+MDB_API_KEY + '&language=en-US&page=1';
 
     axios.get(genPopularList())
     .then(res => {

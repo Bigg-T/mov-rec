@@ -6,10 +6,10 @@ import _ from 'lodash';
 export const filterGenre = (jsonList, genreId) => {
   return jsonList.filter(mov => {
     let isContain = false;
-    for(let i = 0; i < mov.genre_ids.length; i++) {
+    for(let i = 0; i < mov.genres.length; i++) {
       console.log("movie IIIIDDD");
-      if (mov.genre_ids[i] == genreId) {
-        console.log(mov.genre_ids[i]);
+      if (mov.genres[i].id == genreId) {
+        //console.log(mov.genre_ids[i]);
         isContain = true;
         break;
       }

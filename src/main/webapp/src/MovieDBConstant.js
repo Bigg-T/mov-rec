@@ -17,7 +17,9 @@ export const genImageURL3 = (poster_path) => {
 };
 
 export const genPopularList = () => {
-  return (MDB_BASE_URL + 'movie/popular?api_key='+ MDB_API_KEY +'&language=en-US&page=1');
+  return (//'http://localhost:8081/api/movie/popular/?num=20');
+    'http://moviehall.us-east-2.elasticbeanstalk.com/api/movie/popular/?num=20');
+  //(MDB_BASE_URL + 'movie/popular?api_key='+ MDB_API_KEY +'&language=en-US&page=1');
 };
 
 export const genGenreID = (id) => {

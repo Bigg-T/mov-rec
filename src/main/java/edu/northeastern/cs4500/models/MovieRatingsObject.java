@@ -7,12 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-@Entity(name="MovieRatings")
+@Entity(name="movie_ratings")
 public class MovieRatingsObject {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int movieId;
+	private int movie_id;
 	
 	@NotNull
 	private String title;
@@ -22,7 +22,7 @@ public class MovieRatingsObject {
 	
 	private Double rating;
 	
-	private int tmdbId;
+	private int tmdb_id;
 	
 	//Empty constructor
 	public MovieRatingsObject() {
@@ -30,7 +30,7 @@ public class MovieRatingsObject {
 	}
 	
 	public int getmovieId() {
-		return this.movieId;
+		return this.movie_id;
 	}
 	
 	public String getTitle() {
@@ -43,11 +43,11 @@ public class MovieRatingsObject {
 		return this.rating;
 	}
 	public int getTmdbId() {
-		return this.tmdbId;
+		return this.tmdb_id;
 	}
 	
 	public void setmovieId(int m) {
-		this.movieId = m;
+		this.movie_id = m;
 	}
 	
 	public void setTitle(String t) {
@@ -63,6 +63,6 @@ public class MovieRatingsObject {
 	}
 	
 	public void setTmdbId(Integer t) {
-		this.tmdbId = t;
+		this.tmdb_id = t;
 	}
 }

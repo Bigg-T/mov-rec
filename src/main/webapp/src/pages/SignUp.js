@@ -30,6 +30,8 @@ class SignUp extends Component {
   handleSubmit() {
     const { name, email } = this.state;
     let URL = "http://localhost:8081/api/user/add_User/?";
+    let URL2 = "http://moviehall.us-east-2.elasticbeanstalk.com"
+              + "/api/user/add_User/?";
     let fname = "fname=" + this.state.firstName + "&";
     let lname = "lname=" + this.state.lastName + "&";
     let emailForm = "email=" + this.state.email + "&";
@@ -45,8 +47,10 @@ class SignUp extends Component {
       // console.log("Status of account logged in:" + code.data.isSuccess);
       let isSucess = code.data.isSuccess;
       if (isSucess) {
-        window.location.href = '/';// change the history path, to reroute (hack)
-        window.localStorage['isLoggedIn'] = true;
+          window.localStorage['isLoggedIn'] = true;
+          window.localStorage['user_id'] = code.data.user_id;
+          window.location.href = '/';// change the history path, to reroute (hack)
+
       } else {
         this.setState({errorMsg : "User with the same email is already created"})
       }
