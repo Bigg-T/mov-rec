@@ -3,17 +3,43 @@
 ### Add Ratings
 
 ```$xslt
-GET /api/movie/addUserRates/
+GET /api/movie/addUserRates/   
 Example: /api/movie/addUserRates/?movie_id=3&user_id=17&rate=5
 ```
-#### If success:
+<table>
+  <tbody>
+    <tr>
+      <th>Params</th>
+      <th>Type</th>
+      <th>IsRequire</th>
+    </tr>
+    <tr>
+      <td align="center">movie_id</td>
+      <td align="center">Int</td>
+      <td align="center">Y</td>
+    </tr>
+    <tr>
+      <td align="center">user_id</td>
+      <td align="center">Int</td>
+      <td align="center">Y</td>
+    </tr>
+    <tr>
+      <td align="center">rate</td>
+      <td align="center">Int</td>
+      <td align="center">Y</td>
+    </tr>
+  </tbody>
+</table>
+
+
+##### If success:
 ```json
 {
  "userRatingId":134,
  "isSuccess":true,"status":"OK"
 }
 ```
-#### Error case:
+##### Error case:
 ```json
 {
  "message":"User Not Logged In",
@@ -24,8 +50,24 @@ Example: /api/movie/addUserRates/?movie_id=3&user_id=17&rate=5
 ---------
 ### Get RATING FROM A USER
 ```$xslt
-GET /api/movie/getUserRates/
+GET /api/movie/getRecommendedMovies/
+Example: /api/movie/getRecommendedMovies/?user_id=14
 ```
+<table>
+  <tbody>
+    <tr>
+      <th>Params</th>
+      <th>Type</th>
+      <th>IsRequire</th>
+    </tr>
+    <tr>
+      <td align="center">user_id</td>
+      <td align="center">Int</td>
+      <td align="center">Y</td>
+    </tr>
+  </tbody>
+</table>
+
 ```json
 { 
  "isSuccess":true,
