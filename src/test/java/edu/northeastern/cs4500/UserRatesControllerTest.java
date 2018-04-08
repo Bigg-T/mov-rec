@@ -59,6 +59,7 @@ public class UserRatesControllerTest {
   Integer user_id;
 
   UserRatesObject uro;
+  UserRatesObject recUserRate;
 
   @Before
   public void setUp() throws Exception {
@@ -78,13 +79,16 @@ public class UserRatesControllerTest {
     rate = 3;
     user_id = user.getId();
     uro = new UserRatesObject(movie_id, user_id, rate);
+    recUserRate = new UserRatesObject(movie_id, user_id, rate+1, false);
     userRatesRepository.save(uro);
+    userRatesRepository.save(recUserRate);
   }
 
   @After
   public void tearDown() throws Exception {
     userRepository.delete(user);
     userRatesRepository.delete(uro);
+    userRatesRepository.delete(recUserRate);
   }
 
   @Test //adding user rating
@@ -149,27 +153,29 @@ public class UserRatesControllerTest {
 
     @SuppressWarnings("unchecked")
     HashMap<String, Object> body = response.getBody();
-    String statusOK = (String) body.get("status");
-    Assert.assertEquals(true, statusOK.equals("OK"));
-    uro.setId((Integer) body.get("userRatingId"));
+    recUserRate.setId((Integer) body.get("userRatingId"));
 
     HttpEntity<HashMap> responseTopMovies = restTemplate.exchange(
-        createURLWithPort("/api/movie/getUserRates/?user_id=" + user_id),
+        createURLWithPort("/api/movie/getRecommendedMovies/?user_id=" + user_id),
         HttpMethod.GET, entity, HashMap.class);
 
     @SuppressWarnings("unchecked")
     HashMap<String, Object> responseBody = responseTopMovies.getBody();
-    System.out.println("TOPMOVE: " + responseBody.get("status").toString());
+
+//    System.out.println("TOPMOVE: " + responseBody.get("status").toString());
     @SuppressWarnings("unchecked")
-    Object URO = responseBody.get("topMovies");
-    System.out.println("KEY" + responseBody.keySet().toString());
+    List<Map<String, Object>> URO = (List<Map<String, Object>>)responseBody.get("topMovies");
+//    System.out.println("KEY:" + responseBody.keySet().toString());
 //    System.out.println("TOPMOVE: " +URO.toString());
-//    List<Integer> firstObj = URO.get(0);
+    Map<String, Object> rateObject = URO.get(0);
 //    System.out.println(firstObj);
-//    Assert.assertEquals(true, firstObj.get(0) == movie_id);
-//    Assert.assertEquals(true, firstObj.get(1) == rate);
+    Assert.assertEquals(movie_id, rateObject.get("movie_id"));
+    Assert.assertEquals(4, rateObject.get("rate"));
+    Assert.assertEquals("OK", responseBody.get("status").toString());
+    Assert.assertEquals("true", responseBody.get("isSuccess").toString());
 
     userRatesRepository.delete(uro);
+    userRatesRepository.delete(recUserRate);
     userRepository.delete(user);
   }
 

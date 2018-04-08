@@ -28,18 +28,18 @@ public class UserRatesController {
 
     @GetMapping("/api/test/rate")
     public List<UserRatesObject> getAllUserRates() {
-//      return getOnlyUserWatchedRate();
-      return userRatesRepository.getAllUserRating();
+      return userRatesRepository.getOnlyUserWatchedRate();
+//      return userRatesRepository.getAllUserRating();
     }
-    @GetMapping("/api/test/avg/")
-    public Integer getMovieAvgRate(int movie_id) {
-      return userRatesRepository.getRatingWithMovieId(movie_id);
-    }
+//    @GetMapping("/api/test/avg/") // dev testing
+//    public Double getMovieAvgRate(int movie_id) {
+//      return userRatesRepository.getRatingWithMovieId(movie_id);
+//    }
 //
-    @GetMapping("/api/rate/ids/")
-    public List<UserRatesObject> getUserRates(int user_id) {
-      return userRatesRepository.getReccomendedMovieforUser(user_id);
-    }
+//    @GetMapping("/api/rate/ids/")
+//    public List<UserRatesObject> getUserRates(int user_id) {
+//      return userRatesRepository.getReccomendedMovieforUser(user_id);
+//    }
 
     @GetMapping("/api/movie/addUserRates/")
     public Map<String, Object> addUserRates(Integer movie_id, Integer user_id, Integer rate) {
@@ -71,10 +71,10 @@ public class UserRatesController {
       }
     }
 
-    @RequestMapping("/api/movie/getUserRates/")
+    @RequestMapping("/api/movie/getRecommendedMovies/")
     public HashMap<String, Object> getTopMovies(Integer user_id) {
       HashMap<String, Object> userRatesData = new HashMap<String, Object>();
-      List<UserRatesObject> userTopMovies = userRatesRepository.findByUserId(user_id);
+      List<UserRatesObject> userTopMovies = userRatesRepository.getReccomendedMovieforUser(user_id);
       userRatesData.put("isSuccess", true);
       userRatesData.put("status", HttpStatus.OK);
       userRatesData.put("topMovies", userTopMovies);
