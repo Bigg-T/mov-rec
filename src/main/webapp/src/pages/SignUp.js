@@ -4,6 +4,7 @@ import axios from 'axios';
 import {NavLink} from 'react-router-dom';
 import Footer from '../components/Footer';
 import '../css/Footer.css';
+import * as constant from '../config';
 
 const options = [
   { key: 'm', text: 'Male', value: 'male' },
@@ -30,8 +31,7 @@ class SignUp extends Component {
   handleSubmit() {
     const { name, email } = this.state;
     let URL = "http://localhost:8081/api/user/add_User/?";
-    let URL2 = "http://moviehall.us-east-2.elasticbeanstalk.com"
-              + "/api/user/add_User/?";
+    let URL2 = constant.MOVI3HALL_BASE_API + "api/user/add_User/?";
     let fname = "fname=" + this.state.firstName + "&";
     let lname = "lname=" + this.state.lastName + "&";
     let emailForm = "email=" + this.state.email + "&";

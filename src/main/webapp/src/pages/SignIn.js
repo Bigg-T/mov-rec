@@ -3,6 +3,7 @@ import {Container, Form, Header } from 'semantic-ui-react';
 import axios from 'axios';
 import Footer from '../components/Footer';
 import '../css/Footer.css';
+import * as constant from '../config';
 
 class SignIn extends Component {
   constructor(props) {
@@ -28,13 +29,13 @@ class SignIn extends Component {
     let lname = "lname=mofo&";
     let email = "email=bigt2@mofo.com&";
     let pw = "pw=mypass&username=bigtmofo2";
-    let URL2 = "http://moviehall.us-east-2.elasticbeanstalk.com/api/user/validate_login/?";
+    let URL2 = constant.MOVI3HALL_BASE_API + "api/user/validate_login/?";
     //"http://localhost:8081/api/user/validate_login/?";
     let un = "username=" + this.state.username;
     let pass = "pw=" + this.state.password;
     console.log("UserName:");
     console.log(this.state.username);
-    axios.get(URL+ un+'&'+pass)
+    axios.get(URL2+ un+'&'+pass)
     .then((code) => {
       console.log(code);
       this.setState({isLoggedin : code.data.isSuccess});
