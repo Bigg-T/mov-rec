@@ -1,60 +1,68 @@
 package edu.northeastern.cs4500.DB.user;
 
-import java.net.URI;
+
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+//@CrossOrigin(origins = {"http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com",
+//		"http://localhost:3000/"})
+//@CrossOrigin(origins = "loca")
+//@CrossOrigin(origin = http://localhost:3000/)
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 public class UserController {
-	
+
 	//Constructor for testing purposes
 	public UserController() {
-		
+
 	}
-	
+
 	@Autowired
 	UserService userService;
-	
+
+	@Autowired
+	UserRepository userRepo;
+
 	/**
-	 * I guess we can currently send through URL, but we should really be sending
-	 * get requests
-	 * @return
+	 * Returns every user in the Database
 	 */
-	
-	@RequestMapping("/api/user/create")
-	public UserObject createUser() {
-		//UserObject obj = new UserObject("Jean Paul", "Torre", "torre.j@husky.neu.edu", "123456789", "jeanpaulrt");
-		//UserRepository.save(obj);
-		//return obj;
-		return new UserObject();
-	}
-	
-	@RequestMapping("/api/user/all_users")
+	@GetMapping("/api/user/all_users")
+	@ResponseBody
 	public List<UserObject> selectAllUserObjects() {
 		return userService.selectAllUserObjects();
 	}
-	
-	@RequestMapping("/api/user/validate_login")
-	public Map<String,Boolean> validateLogin(String username, String pw) {
+
+	/**
+	 * Validates for correct username and password for a User
+	 */
+	@GetMapping("/api/user/validate_login")
+	@ResponseBody
+	public HashMap<String,Object> validateLogin(String username, String pw) {
 		return userService.validateLogin(username, pw);
 	}
-
-	//NOTE: This should not me a GET mapping it should be a POST mapping
-	//Returns true or false depending on whether or not the user was added
-	@GetMapping("/api/user/add_User/")
-	public Map<String,Boolean> addUser(String fname, String lname, String email, String pw, String username) {
-		return userService.addUser(fname, lname, email, pw, username);
+	
+	/**
+	 * Validates for correct User Id before logout
+	 * @param user_request: The logged in user's request
+	 */
+	@GetMapping("/api/user/validate_logout")
+	@ResponseBody
+	public HashMap<String, Object> validateLogout(Integer user_request) {
+		return userService.validateLogout(user_request);
 	}
 	
+	/**
+	 * Adds a user if non-duplicate username and email are given
+	 */
+	@GetMapping("/api/user/add_User/")
+	@ResponseBody
+	public HashMap<String,Object> addUser(String fname, String lname, String email, String pw, String username) {
+		return userService.addUser(fname, lname, email, pw, username);
+	}
 }
