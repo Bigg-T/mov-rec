@@ -6,8 +6,7 @@ package edu.northeastern.cs4500.DB.movie;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
-@Entity(name="UserRates")
+@Entity(name="user_rates")
 public class UserRatesObject {
 
   @Id
@@ -23,13 +22,25 @@ public class UserRatesObject {
   @NotNull
   private int rate;
 
+  @NotNull //true mean already watched
+  private boolean is_watched;
+
   public UserRatesObject() {
 
   }
 
-  public UserRatesObject(int movie_id, int user_id) {
+  public UserRatesObject(int movie_id, int user_id, int rate) {
     this.user_id = user_id;
     this.movie_id = movie_id;
+    this.rate = rate;
+    this.is_watched =true;
+  }
+
+  public UserRatesObject(int movie_id, int user_id, int rate, boolean is_watched) {
+    this.user_id = user_id;
+    this.movie_id = movie_id;
+    this.rate = rate;
+    this.is_watched = is_watched;
   }
 
 
@@ -65,6 +76,13 @@ public class UserRatesObject {
 
   public int setRate(int rate) {
     return this.rate = rate;
+  }
+
+  public void setIs_watched(boolean is_watched) {
+    this.is_watched = is_watched;
+  }
+  public boolean getIs_watched() {
+    return this.is_watched;
   }
 	
 }
