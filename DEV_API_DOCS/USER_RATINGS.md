@@ -48,7 +48,7 @@ Example: /api/movie/addUserRates/?movie_id=3&user_id=17&rate=5
 }
 ```
 ---------
-### Get RATING FROM A USER
+##### Get RATING FROM A USER
 ```$xslt
 GET /api/movie/getRecommendedMovies/
 Example: /api/movie/getRecommendedMovies/?user_id=14
@@ -73,5 +73,33 @@ Example: /api/movie/getRecommendedMovies/?user_id=14
  "isSuccess":true,
  "status":"OK",
  "topMovies":[[1,3],[3,5]]
+}
+```
+#### Update all user rating predictions
+```$xslt
+GET /api/movie/calculateRec/
+No params needed
+```
+<table>
+   <tbody>
+     <tr>
+       <th>Params</th>
+       <th>Type</th>
+       <th>IsRequire</th>
+     </tr>
+     <tr>
+       <td align="center">N/A</td>
+       <td align="center">N/A</td>
+       <td align="center">N/A</td>
+     </tr>
+   </tbody>
+</table>
+
+```json
+{
+  "movies": "...<List of movie ids>...",
+  "rates": "...<2D Arrays of Double>...",
+  "user": "..<List of id>..",
+  "isSuccess": true
 }
 ```
