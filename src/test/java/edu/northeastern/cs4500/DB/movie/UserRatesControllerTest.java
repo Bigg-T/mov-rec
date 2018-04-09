@@ -76,7 +76,7 @@ public class UserRatesControllerTest {
 
     //setup movie
     //we have some random movie_id
-    movie_id = 3;
+    movie_id = 189;
     rate = 3;
     user_id = user.getId();
     uro = new UserRatesObject(movie_id, user_id, rate);
@@ -180,7 +180,7 @@ public class UserRatesControllerTest {
     userRatesRepository.delete(recUserRate);
     userRepository.delete(user);
   }
-
+  @Test
   public void testGetCalculated() throws Exception {
     HttpEntity<String> entity = new HttpEntity<String>(null, headers);
     HttpEntity<HashMap> response =
@@ -190,12 +190,14 @@ public class UserRatesControllerTest {
                     "/api/movie/addUserRates/?movie_id="
                         + movie_id + "&user_id=" + user_id + "&rate=" + rate),
                 HttpMethod.GET, entity, HashMap.class);
-
-    HttpEntity<String> entity2 = new HttpEntity<>(null, headers);
+    System.out.println("ADD: " + response.getBody());
+//    HttpEntity<String> entity2 = new HttpEntity<>(null, headers);
     HttpEntity<HashMap> resCalculated =
         restTemplate.exchange(
             createURLWithPort("/api/movie/calculateRec/"),
-            HttpMethod.GET, entity2, HashMap.class);
+            HttpMethod.GET, entity, HashMap.class);
+    HashMap<String, Object> objectHashMap = resCalculated.getBody();
+    System.out.println("TTT"+ objectHashMap);
     Assert.assertEquals("true",resCalculated.getBody().get("isSuccess").toString());
   }
 

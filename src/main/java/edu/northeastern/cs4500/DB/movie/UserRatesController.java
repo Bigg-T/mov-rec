@@ -145,7 +145,6 @@ public class UserRatesController {
       List<Integer> tmdbMovieID = movieRepoTN.getAllMovies();
       List<UserRatesObject> userWatchedRateObjectList = userRatesRepository.getOnlyUserWatchedRate();
       List<Integer> userIDList = userRepoTN.getAllIDUser();
-
       //UserItem
       double[][] userItem = new double[userIDList.size()][tmdbMovieID.size()];
       RealMatrix realMatrix = new Array2DRowRealMatrix(userItem);
@@ -166,15 +165,18 @@ public class UserRatesController {
         UserRatesObject rateObject = userWatchedRateObjectList.get(i);
         int movieId = rateObject.getMovie_id();
         int userId = rateObject.getUser_id();
-        int row = userId2Pos.get(userId);
-        int col = movieId2Pos.get(movieId);
-        userItem[row][col] = rateObject.getRate();
-        if (watchedMovieIds.containsKey(userId)) {
-          watchedMovieIds.get(userId).add(movieId);
-        } else {
-          Set<Integer> mids = new TreeSet<>();
-          mids.add(movieId);
-          watchedMovieIds.put(userId,mids);
+        if(userId2Pos.containsKey(userId)
+            && movieId2Pos.containsKey(movieId)) {
+          int row = userId2Pos.get(userId);
+          int col = movieId2Pos.get(movieId);
+          userItem[row][col] = rateObject.getRate();
+          if (watchedMovieIds.containsKey(userId)) {
+            watchedMovieIds.get(userId).add(movieId);
+          } else {
+            Set<Integer> mids = new TreeSet<>();
+            mids.add(movieId);
+            watchedMovieIds.put(userId,mids);
+          }
         }
       }
 
