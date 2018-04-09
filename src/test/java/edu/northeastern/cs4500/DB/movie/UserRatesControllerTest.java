@@ -1,5 +1,6 @@
-package edu.northeastern.cs4500;
+package edu.northeastern.cs4500.DB.movie;
 
+import edu.northeastern.cs4500.Cs4500Spring2018NguyenApplication;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -141,7 +142,7 @@ public class UserRatesControllerTest {
     Assert.assertEquals(true, badreq.equals("User Does Not Exist"));
   }
 
-  @Test
+  @Test // user does, rate will not benefit from the system
   public void testGetTopMovies() throws Exception {
     HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
@@ -167,16 +168,35 @@ public class UserRatesControllerTest {
     List<Map<String, Object>> URO = (List<Map<String, Object>>)responseBody.get("topMovies");
 //    System.out.println("KEY:" + responseBody.keySet().toString());
 //    System.out.println("TOPMOVE: " +URO.toString());
-    Map<String, Object> rateObject = URO.get(0);
 //    System.out.println(firstObj);
-    Assert.assertEquals(movie_id, rateObject.get("movie_id"));
-    Assert.assertEquals(4, rateObject.get("rate"));
+//    Map<String, Object> rateObject = URO.get(0); // because this user never rate, no benifit
+//    Assert.assertEquals(movie_id, rateObject.get("movie_id"));
+//    Assert.assertEquals(4, rateObject.get("rate"));
+    Assert.assertEquals(0, URO.size());
     Assert.assertEquals("OK", responseBody.get("status").toString());
     Assert.assertEquals("true", responseBody.get("isSuccess").toString());
 
     userRatesRepository.delete(uro);
     userRatesRepository.delete(recUserRate);
     userRepository.delete(user);
+  }
+
+  public void testGetCalculated() throws Exception {
+    HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+    HttpEntity<HashMap> response =
+        restTemplate
+            .exchange(
+                createURLWithPort(
+                    "/api/movie/addUserRates/?movie_id="
+                        + movie_id + "&user_id=" + user_id + "&rate=" + rate),
+                HttpMethod.GET, entity, HashMap.class);
+
+    HttpEntity<String> entity2 = new HttpEntity<>(null, headers);
+    HttpEntity<HashMap> resCalculated =
+        restTemplate.exchange(
+            createURLWithPort("/api/movie/calculateRec/"),
+            HttpMethod.GET, entity2, HashMap.class);
+    Assert.assertEquals("true",resCalculated.getBody().get("isSuccess").toString());
   }
 
   private String createURLWithPort(String uri) {

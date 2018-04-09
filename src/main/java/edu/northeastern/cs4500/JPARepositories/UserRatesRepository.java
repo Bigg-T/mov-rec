@@ -1,10 +1,8 @@
 package edu.northeastern.cs4500.JPARepositories;
 
-import javax.jws.soap.SOAPBinding.Use;
-import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +10,7 @@ import edu.northeastern.cs4500.DB.movie.UserRatesObject;
 import edu.northeastern.cs4500.DB.user.UserObject;
 
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * UserRatesRepository for UserRatesObject
@@ -35,8 +34,20 @@ public interface UserRatesRepository extends JpaRepository<UserRatesObject, Inte
 	public List<UserRatesObject> getOnlyUserWatchedRate();
 
 	@Async //movies user have not watched with highest rating to low
-	@Query(value = "SELECT t from user_rates t WHERE t.is_watched = 0 AND t.user_id = ?1 ORDER BY t.rate")
+	@Query(value = "SELECT t from user_rates t WHERE"
+			+ " t.is_watched = 0 AND t.user_id = ?1 ORDER BY t.rate")
 	public List<UserRatesObject> getReccomendedMovieforUser(Integer user_id);
+
+	@Async //dev delete
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM user_rates t WHERE t.is_watched = 0")
+	public void deleteAllRec();
+
+	@Async //get a list of movies with certain user id and movie id
+	@Query(value = "SELECT t from user_rates t WHERE "
+			+ "t.user_id = ?1 AND t.movie_id = ?2 AND t.is_watched = ?3")
+	public List<UserRatesObject> getRateByUserIdMoiveId(Integer user_id, Integer movie_id, Boolean is_watched);
 
 	@Async
 	@Query("SELECT u FROM user u WHERE u.id = ?1")

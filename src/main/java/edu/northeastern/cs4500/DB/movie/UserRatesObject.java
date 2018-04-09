@@ -20,7 +20,7 @@ public class UserRatesObject {
   private int user_id;
   
   @NotNull
-  private int rate;
+  private double rate;
 
   @NotNull //true mean already watched
   private boolean is_watched;
@@ -29,14 +29,14 @@ public class UserRatesObject {
 
   }
 
-  public UserRatesObject(int movie_id, int user_id, int rate) {
+  public UserRatesObject(int movie_id, int user_id, double rate) {
     this.user_id = user_id;
     this.movie_id = movie_id;
     this.rate = rate;
     this.is_watched =true;
   }
 
-  public UserRatesObject(int movie_id, int user_id, int rate, boolean is_watched) {
+  public UserRatesObject(int movie_id, int user_id, double rate, boolean is_watched) {
     this.user_id = user_id;
     this.movie_id = movie_id;
     this.rate = rate;
@@ -70,11 +70,11 @@ public class UserRatesObject {
     this.user_id = user_id;
   }
 
-  public int getRate() {
+  public double getRate() {
     return rate;
   }
 
-  public int setRate(int rate) {
+  public double setRate(double rate) {
     return this.rate = rate;
   }
 
