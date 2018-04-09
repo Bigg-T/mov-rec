@@ -75,6 +75,8 @@ Example: /api/movie/getRecommendedMovies/?user_id=14
  "topMovies":[[1,3],[3,5]]
 }
 ```
+----
+
 #### Update all user rating predictions
 ```$xslt
 GET /api/movie/calculateRec/
