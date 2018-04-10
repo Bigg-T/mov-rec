@@ -43,13 +43,6 @@ public class UserRatesObject {
     this.is_watched = is_watched;
   }
 
-
-  public UserRatesObject(Integer movie_id2, Integer user_id2, Integer rate2) {
-	  this.user_id = user_id2;
-	  this.movie_id = movie_id2;
-	  this.rate = rate2;
-}
-
 @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int getId() {
@@ -81,7 +74,8 @@ public class UserRatesObject {
   }
 
   public double setRate(double rate) {
-    return this.rate = rate;
+    this.rate = rate;
+    return this.rate;
   }
 
   public void setIs_watched(boolean is_watched) {

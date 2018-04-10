@@ -89,6 +89,9 @@ class LoggedInNav extends Component {
               <Navbar.Brand eventKey={4} >
                 <NavLink to={`/`}><h4>Movie News</h4></NavLink>
               </Navbar.Brand>
+              <Navbar.Brand eventKey={4} >
+                <NavLink to={`/find_friends`}><h4>Find Friends</h4></NavLink>
+              </Navbar.Brand>
             </Nav>
             <Nav pullRight>
                <Navbar.Brand eventKey={1} >

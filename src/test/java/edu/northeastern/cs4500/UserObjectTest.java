@@ -1,33 +1,20 @@
 package edu.northeastern.cs4500;
 
-import static org.junit.Assert.assertTrue;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.result.JsonPathResultMatchers;
-import org.springframework.web.bind.annotation.GetMapping;
-
 import edu.northeastern.cs4500.DB.user.UserObject;
 import edu.northeastern.cs4500.JPARepositories.UserRepository;
 import edu.northeastern.cs4500.DB.user.UserService;
@@ -45,7 +32,17 @@ public class UserObjectTest {
 	TestRestTemplate restTemplate = new TestRestTemplate();
 
 	HttpHeaders headers = new HttpHeaders();
-	
+	String first_name;
+	String last_name;
+	String email;
+	String password;
+	String username;
+	UserObject user;
+
+	//we have some random movie_id
+	Integer movie_id;
+	Integer rate;
+	Integer user_id;
 	@Autowired
 	UserRepository userRepo;
 	
@@ -54,13 +51,19 @@ public class UserObjectTest {
 	
 	@Before
 	public void setUp() {
-		String first_name = "test-first";
-	    String last_name = "test-last";
-	    String email = "test-email-3";
-	    String password = "test-password";
-	    String username = "test-username-3";
-		test_user_1 = new UserObject(first_name, last_name, email, password, username);
-		test_user_2 = new UserObject(first_name + "_2", last_name, email + "_2", password, username);
+		String rand = RandomStringUtils.randomAlphanumeric(20);
+		first_name = "test-first" + rand;
+	    last_name = "test-last" + rand;
+	    email = "test-email-3" + rand;
+	    password = "test-password" + rand;
+	    username = "test-username-3" + rand;
+	    String t_first_name = first_name + RandomStringUtils.randomAlphanumeric(5);
+	    String t_last_name = last_name + RandomStringUtils.randomAlphanumeric(5);
+		String t_email = email + RandomStringUtils.randomAlphanumeric(5);
+		String t_password = password + RandomStringUtils.randomAlphanumeric(5);
+		String t_username = username + RandomStringUtils.randomAlphanumeric(5);
+	    test_user_1 = new UserObject(first_name, last_name, email, password, username);
+		test_user_2 = new UserObject(t_first_name, t_last_name, t_email, t_password, t_username);
 		userRepo.save(test_user_1);
 	}
 	
@@ -134,39 +137,37 @@ public class UserObjectTest {
 		Assert.assertEquals(test_user_1.getCountry(), "USA");
 	}
 	
-	
 	@Test
 	public void TestGetUsername() throws Exception {
-		Assert.assertEquals(test_user_1.getUsername(), "test-username-3");
+		Assert.assertEquals(test_user_1.getUsername(), username);
 		test_user_1.setUsername("blahblahblah");
 		Assert.assertEquals(test_user_1.getUsername(), "blahblahblah");
 	}
 
-	
 	@Test
 	public void testGetPassword() {
-		Assert.assertEquals(test_user_1.getPassword(), "test-password");
+		Assert.assertEquals(test_user_1.getPassword(), password);
 		test_user_1.setPassword("shouldProbablyHash");
 		Assert.assertEquals(test_user_1.getPassword(), "shouldProbablyHash");
 	}
 
 	@Test
 	public void testGetEmail() {
-		Assert.assertEquals(test_user_1.getEmail(), "test-email-3");
+		Assert.assertEquals(test_user_1.getEmail(), email);
 		test_user_1.setEmail("hello@jeanapul.com");
 		Assert.assertEquals(test_user_1.getEmail(), "hello@jeanapul.com");
 	}
 
 	@Test
 	public void testGetLast_name() {
-		Assert.assertEquals(test_user_1.getLast_name(), "test-last");
+		Assert.assertEquals(test_user_1.getLast_name(), last_name);
 		test_user_1.setLast_name("another fake name lmao");
 		Assert.assertEquals(test_user_1.getLast_name(), "another fake name lmao");
 	}
 
 	@Test
 	public void testGetFirstName() {
-		Assert.assertEquals(test_user_1.getFirst_name(), "test-first");
+		Assert.assertEquals(test_user_1.getFirst_name(), first_name);
 		test_user_1.setFirst_name("another fake name lmao");
 		Assert.assertEquals(test_user_1.getFirst_name(), "another fake name lmao");	
 	}
@@ -186,9 +187,4 @@ public class UserObjectTest {
 		test_user_1.setLogged(true);
 		Assert.assertEquals(test_user_1.isLogged(), true);		
 	}
-
-	private String createURLWithPort(String uri) {
-		return "http://localhost:" + port + uri;
-	}
-
 }

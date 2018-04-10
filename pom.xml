@@ -24,18 +24,6 @@
 		<java.version>1.8</java.version>
 		<sonar.sources>src/main/java</sonar.sources>
 		<sonar.exclusions>
-			src/main/java/edu/northeastern/cs4500/models/MovieRatingsObject.java,
-			src/main/java/edu/northeastern/cs4500/DB/movie/TopMoviesController.java,
-			src/main/java/edu/northeastern/cs4500/DB/movie/TopMoviesObject.java,
-			src/main/java/edu/northeastern/cs4500/DB/user/UserProfile.java,
-			src/main/java/edu/northeastern/cs4500/models/MovieRatingsObject.java,
-			src/main/java/edu/northeastern/cs4500/DB/movie/MovieService.java,
-			src/main/java/edu/northeastern/cs4500/DB/movie/UtilsTN.java,
-			src/main/java/edu/northeastern/cs4500/Cs4500Spring2018NguyenApplication.java,
-			src/main/java/edu/northeastern/cs4500/ServletInitializer.java,
-			src/main/java/edu/northeastern/cs4500/DB/movie/UserRatesController.java,
-			src/main/java/edu/northeastern/cs4500/rec/SimpleSVD.java,
-			src/main/java/edu/northeastern/cs4500/DB/user/UserService.java
 		</sonar.exclusions>
 	</properties>
 
@@ -55,6 +43,18 @@
 			<version>1.0.3</version>
 		</dependency>
 
+		<!-- Add Log4j2 Dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+		<!-- Needed for Async Logging with Log4j 2 -->
+		<dependency>
+			<groupId>com.lmax</groupId>
+			<artifactId>disruptor</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+
 		<dependency>
     			<groupId>info.movito</groupId>
 		    <artifactId>themoviedbapi</artifactId>
@@ -63,6 +63,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
