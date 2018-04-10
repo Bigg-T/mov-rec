@@ -7,27 +7,29 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import edu.northeastern.cs4500.JPARepositories.UserRepository;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import edu.northeastern.cs4500.JPARepositories.UserRepository;
 
+//@CrossOrigin(origins = {"http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com",
+//		"http://localhost:3000/"})
+//@CrossOrigin(origins = "loca")
+//@CrossOrigin(origin = http://localhost:3000/)
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-@Controller
+@RestController
 public class UserController {
-	
+
 	//Constructor for testing purposes
 	public UserController() {
-		
+
 	}
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	UserRepository userRepo;
-	
+
 	/**
 	 * Returns every user in the Database
 	 */
@@ -36,7 +38,7 @@ public class UserController {
 	public List<UserObject> selectAllUserObjects() {
 		return userService.selectAllUserObjects();
 	}
-	
+
 	/**
 	 * Validates for correct username and password for a User
 	 */
@@ -44,6 +46,16 @@ public class UserController {
 	@ResponseBody
 	public HashMap<String,Object> validateLogin(String username, String pw) {
 		return userService.validateLogin(username, pw);
+	}
+
+	/**
+	 * Validates for correct User Id before logout
+	 * @param user_request: The logged in user's request
+	 */
+	@GetMapping("/api/user/validate_logout")
+	@ResponseBody
+	public HashMap<String, Object> validateLogout(Integer user_request) {
+		return userService.validateLogout(user_request);
 	}
 
 	/**

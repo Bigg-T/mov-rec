@@ -17,20 +17,14 @@ import org.springframework.http.ResponseEntity;
 
 import info.movito.themoviedbapi.model.MovieDb;
 
-@CrossOrigin(origins = {"http://localhost:3000", 
-		"http://movi3hall.cs4500.com2.s3-website.us-east-2.amazonaws.com/"}, maxAge = 3600)
+//@CrossOrigin(origins = "http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com")//{//"http://localhost:3000", 
+		//"http://movi3hall.cs4500.com2.s3-website.us-east-2.amazonaws.com/"}, maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 public class MovieController {
 
 	@Autowired
 	MovieService movieService;
-	
-	@GetMapping("/api/movie/{id}")
-	public @ResponseBody ResponseEntity<String>
-	  getByName(@PathVariable String id) {
-	    return new ResponseEntity<String>("GET Response : "
-	      + id, HttpStatus.OK);
-	}
 	
 	/**
 	 * This method should return a JSON format of tmdbApi objects to the front end
@@ -78,6 +72,24 @@ public class MovieController {
 		ansHash.put("total_results", 20055);
 		ansHash.put("total_pages", 1003);
 		ansHash.put("results", ans);
+		return ansHash;
+	}
+	
+	@RequestMapping("/api/movie/getMovie") 
+	public HashMap<String, Object> getMovie(Integer tmdbId) {
+		MovieDb ans = movieService.getMovieById(tmdbId);
+		HashMap<String, Object> ansHash = new HashMap<>();
+		if (ans == null) {
+			ansHash.put("isStatus", false);
+			ansHash.put("message", "No tmdbId found.");
+			ansHash.put("status", HttpStatus.BAD_REQUEST);
+		} else {
+			ansHash.put("page", 1);
+			ansHash.put("total_results", 20055);
+			ansHash.put("total_pages", 1003);
+			ansHash.put("results", ans);
+		}
+		
 		return ansHash;
 	}
 }

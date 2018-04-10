@@ -19,9 +19,12 @@ import '../css/Profile.css';
         profPic: "",
         isFriend: false,
         friendButton: "",
+        myProfile: true,
+        //curUrl: "http://moviehall.us-east-2.elasticbeanstalk.com"
+        curUrl: "http://localhost:8081"
       }
     }
-    
+
     /**
      * Logic for Adding a friend
      */
@@ -29,9 +32,10 @@ import '../css/Profile.css';
     	    let user_request = window.localStorage.getItem("user_id");
     		if (user_request != null) {
     			let profileId = this.props.match.params.id;
-    			axios.post("http://localhost:8081/api/user/add_friend/?userId=" + user_request + "&friendId=" + profileId)
+    			axios.post(this.state.curUrl + "/api/user/add_friend/?userId="
+          + user_request + "&friendId=" + profileId)
     			.then(function (response) {
-    				
+
     				let isSuccess = response.data.isSuccess;
     				if (isSuccess) {
     					window.alert("Successfully Added Friend");
@@ -46,10 +50,10 @@ import '../css/Profile.css';
     			})
     			.catch(function (e) {
     				window.alert("There was an error :( ");
-    			});	
+    			});
     		}
     }
-        
+
         /**
          * Logic for Removing a friend
          */
@@ -57,7 +61,8 @@ import '../css/Profile.css';
         	let user_request = window.localStorage.getItem("user_id");
         	if (user_request != null) {
         		let profileId = this.props.match.params.id;
-        		axios.post("http://localhost:8081/api/user/remove_friend/?userId=" + user_request + "&friendId=" + profileId)
+        		axios.post(this.state.curUrl +
+              "/api/user/remove_friend/?userId=" + user_request + "&friendId=" + profileId)
         		.then(function (response) {
         			let isSuccess = response.data.isSuccess;
         			if (isSuccess) {
@@ -82,7 +87,10 @@ import '../css/Profile.css';
     	let user_request = window.localStorage.getItem("user_id");
     	if (user_request != null) {
     	let profileId = this.props.match.params.id;
-    	axios.get("http://localhost:8081/api/user/profile/?id=" + profileId + "&user_request="+ user_request)
+    	console.log("profileId: " + profileId);
+    	console.log("user_request: " + user_request);
+    	axios.get(this.state.curUrl +
+        "/api/user/profile/?id=" + profileId + "&user_request="+ user_request)
         .then((code) => {
         	console.log("--------------------");
         	  console.log(window.localStorage.getItem("user_id"));
@@ -90,7 +98,7 @@ import '../css/Profile.css';
           let isSuccess = code.data.isSuccess;
           if (isSuccess) {
         	  	this.setState({firstName : code.data.first_name, lastName : code.data.last_name,
-        	  		isFriend: code.data.isFriend})
+        	  		isFriend: code.data.isFriend, myProfile: code.data.myProfile})
         	  	if (code.data.about_me == null) {
         	  		this.setState({aboutMe: "Empty"})
         	  	} else {
@@ -100,14 +108,20 @@ import '../css/Profile.css';
         });
     }
     }
-  
-    
+
+
     render() {
-    	
+
     	if (this.state.isFriend) {
-    		this.friendButton = <a href="#" onClick={() => this.handleDeleteFriend()}> Delete Friend </a>;
+    		this.state.friendButton = <a href="#" onClick={() => this.handleDeleteFriend()}> Delete Friend </a>;
     	} else {
-    		this.friendButton = <a href="#" onClick={() => this.handleAddFriend()}> Add Friend </a>;
+    		if (this.state.myProfile) {
+    			//console.log(this.myProfile);
+    			this.state.friendButton = <a href="/profile_edit"> Edit Profile </a>;
+    		} else {
+        		this.state.friendButton = <a href="#" onClick={() => this.handleAddFriend()}> Add Friend </a>;
+
+    		}
     	}
       return (
 <Container>
@@ -117,7 +131,7 @@ import '../css/Profile.css';
 				<h3>{this.state.firstName} {this.state.lastName}</h3>
 			</Grid.Row>
 			<Grid.Row>
-			{this.friendButton}
+			{this.state.friendButton}
 			</Grid.Row>
 			<Grid.Row width={1}>
 				<Image src={"http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"} />
@@ -137,7 +151,7 @@ import '../css/Profile.css';
 		</div>
 		</div>
 		</Grid.Row>
-		
+
 		</Grid.Column>
 	</Grid>
           </Container>
