@@ -33,7 +33,13 @@ public class UserRatesObject {
   }
 
 
-  @Id
+  public UserRatesObject(Integer movie_id2, Integer user_id2, Integer rate2) {
+	  this.user_id = user_id2;
+	  this.movie_id = movie_id2;
+	  this.rate = rate2;
+}
+
+@Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int getId() {
     return id;

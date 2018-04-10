@@ -30,6 +30,8 @@ class SignUp extends Component {
   handleSubmit() {
     const { name, email } = this.state;
     let URL = "http://localhost:8081/api/user/add_User/?";
+    let URL2 = "http://moviehall.us-east-2.elasticbeanstalk.com"
+              + "/api/user/add_User/?";
     let fname = "fname=" + this.state.firstName + "&";
     let lname = "lname=" + this.state.lastName + "&";
     let emailForm = "email=" + this.state.email + "&";

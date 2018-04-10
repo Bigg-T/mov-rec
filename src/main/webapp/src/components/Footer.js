@@ -31,7 +31,7 @@ render(){
         <div className="text-center small copyright">
           © TJASA 2018
         </div>
-        <div class="footer navbar-fixed-bottom">
+        <div className="footer navbar-fixed-bottom">
         </div>
       </Grid>
     </footer>
