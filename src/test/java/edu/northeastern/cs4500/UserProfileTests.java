@@ -1,4 +1,5 @@
 package edu.northeastern.cs4500;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -56,6 +57,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	
 	@Autowired
 	UserRepository userRepo;
+	String first_name;
+	String last_name;
+	String email;
+	String password;
+	String username;
+
+	String t_first_name;
+	String t_last_name;
+	String t_email;
+	String t_password;
+	String t_username;
+	
+	UserObject user;
 	
 	UserObject test_user_1;
 	UserObject test_user_2;
@@ -63,13 +77,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	
 	@Before
 	public void setUp() {
-		String first_name = "test-first";
-	    String last_name = "test-last";
-	    String email = "test-email-3";
-	    String password = "test-password";
-	    String username = "test-username-3";
-	    String about_me = "Test About me";
-	    String prof_pic = "Profile Picture";
+		String rand = RandomStringUtils.randomAlphanumeric(20);
+		
+		String first_name = "test-first" + rand;
+	    String last_name = "test-last" + rand;
+	    String email = "test-email-3" + rand;
+	    String password = "test-password" + rand;
+	    String username = "test-username-3" + rand;
+	    String about_me = "Test About me" + rand;
+	    String prof_pic = "Profile Picture" + rand;
+	    
 	    if (userRepo.getUserByUsername(username).size() > 0) {
 			UserObject user_exists = userRepo.getUserByUsername(username).get(0);
 	    		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
