@@ -17,9 +17,11 @@ import org.springframework.http.ResponseEntity;
 
 import info.movito.themoviedbapi.model.MovieDb;
 
-//@CrossOrigin(origins = "http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com")//{//"http://localhost:3000", 
+//{//"http://localhost:3000", 
 		//"http://movi3hall.cs4500.com2.s3-website.us-east-2.amazonaws.com/"}, maxAge = 3600)
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+
+@CrossOrigin(origins = {"http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com",
+"http://localhost:3000/"})
 @RestController
 public class MovieController {
 

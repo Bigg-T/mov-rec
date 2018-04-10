@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,19 +48,42 @@ public class UserTestControllerTest {
 	@Autowired
 	UserRepository userRepo;
 	
+    String first_name;
+	String last_name;
+	String email;
+	String password;
+	String username;
+
+	String t_first_name;
+	String t_last_name;
+	String t_email;
+	String t_password;
+	String t_username;
+	
+	UserObject user;
+	
 	UserObject test_user_1;
 	UserObject test_user_2;
 	Integer api_created_user;
 	
 	@Before
 	public void setUp() {
-		String first_name = "test-first";
-	    String last_name = "test-last";
-	    String email = "test-email-3";
-	    String password = "test-password";
-	    String username = "test-username-3";
-		test_user_1 = new UserObject(first_name, last_name, email, password, username);
-		test_user_2 = new UserObject(first_name + "_2", last_name, email + "_2", password, username);
+		String rand = RandomStringUtils.randomAlphanumeric(20);
+		first_name = "test-first" +  rand;
+	    last_name = "test-last" +  rand;
+	    email = "test-email-3" +  rand;
+	    password = "test-password" +  rand;
+	    username = "test-username-3" +  rand;
+	    
+	    String rand2 = RandomStringUtils.randomAlphanumeric(20);
+	    t_first_name = "test-first" +  rand2;
+	    t_last_name = "test-last" +  rand2;
+	    t_email = "test-email-3" +  rand2;
+	    t_password = "test-password" +  rand2;
+	    t_username = "test-username-3" +  rand2;
+		
+	    test_user_1 = new UserObject(first_name, last_name, email, password, username);
+		test_user_2 = new UserObject(t_first_name, t_last_name, t_email, t_password, t_username);
 		userRepo.save(test_user_1);
 		api_created_user = 0;
 	}
@@ -127,14 +151,14 @@ public class UserTestControllerTest {
 			
 			//Tests for existing User's username and password
 			ResponseEntity<HashMap> response2 = restTemplate.exchange(
-					createURLWithPort("/api/user/validate_login/?username=test-username-3&pw=test-password"),
+					createURLWithPort("/api/user/validate_login/?username=" + username + "&pw=" + password),
 					HttpMethod.GET, entity, HashMap.class);
 			HashMap<String,Object> body2 = response2.getBody();
 			Assert.assertEquals((boolean)body2.get("isSuccess"), true);
 			
 			//Tests for wrong password
 			ResponseEntity<HashMap> response3 = restTemplate.exchange(
-					createURLWithPort("/api/user/validate_login/?username=test-username-3&pw=wrong-password"),
+					createURLWithPort("/api/user/validate_login/?username=" + username + "&pw=wrong-password"),
 					HttpMethod.GET, entity, HashMap.class);
 			HashMap<String,Object> body3 = response3.getBody();
 			Assert.assertEquals((boolean)body3.get("isSuccess"), false);

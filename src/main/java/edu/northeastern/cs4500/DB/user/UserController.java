@@ -11,11 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import edu.northeastern.cs4500.JPARepositories.UserRepository;
 
-//@CrossOrigin(origins = {"http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com",
-//		"http://localhost:3000/"})
 //@CrossOrigin(origins = "loca")
 //@CrossOrigin(origin = http://localhost:3000/)
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com",
+"http://localhost:3000/"})
 @RestController
 public class UserController {
 

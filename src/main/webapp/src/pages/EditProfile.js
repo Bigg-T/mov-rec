@@ -4,6 +4,7 @@ import axios from 'axios';
 import {NavLink} from 'react-router-dom';
 import Footer from '../components/Footer';
 import '../css/Footer.css';
+import * as constant from '../config';
 
 
 class EditProfile extends Component {
@@ -26,7 +27,7 @@ class EditProfile extends Component {
 
 	  if (user_request != null) {
 		    //const { name, email } = this.state;
-		    let URL = this.state.curUrl + "/api/user/profile/edit/?";
+		    let URL = constant.MOVI3HALL_BASE_API + "api/user/profile/edit/?";
 		    let fname = "first_name=" + this.state.firstName + "&";
 		    let lname = "last_name=" + this.state.lastName + "&";
 		    let about_me = "about_me=" + this.state.about_me;
@@ -58,8 +59,8 @@ class EditProfile extends Component {
  	//let profileId = this.props.match.params.id;
  	//console.log("profileId: " + profileId);
  	//console.log("user_request: " + user_request);
- 	axios.get(this.state.curUrl
-    + "/api/user/profile/edit/?user_request=" + user_request)
+ 	axios.get(constant.MOVI3HALL_BASE_API + 
+     "api/user/profile/edit/?user_request=" + user_request)
      .then((code) => {
      	console.log("--------------------");
        console.log(code);
