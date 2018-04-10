@@ -1,6 +1,5 @@
 package edu.northeastern.cs4500.JPARepositories;
 
-import edu.northeastern.cs4500.DB.movie.MovieObject;
 import edu.northeastern.cs4500.models.MovieRatingsObject;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
