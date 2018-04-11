@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.northeastern.cs4500.JPARepositories.UserRepository;
+
 import org.springframework.stereotype.Controller;
 
 @CrossOrigin(origins = "http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com")

@@ -16,7 +16,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
 import edu.northeastern.cs4500.DB.user.UserObject;
-import edu.northeastern.cs4500.DB.user.UserRepository;
+import edu.northeastern.cs4500.JPARepositories.UserRepository;
+import edu.northeastern.cs4500.DB.user.UserService;
 
 /**
  * Tests for the User's Controller and any helper methods

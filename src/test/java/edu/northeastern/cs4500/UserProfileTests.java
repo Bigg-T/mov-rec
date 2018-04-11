@@ -22,8 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import edu.northeastern.cs4500.DB.user.UserObject;
 import edu.northeastern.cs4500.DB.user.UserProfile;
-import edu.northeastern.cs4500.DB.user.UserRepository;
 import edu.northeastern.cs4500.DB.user.UserService;
+import edu.northeastern.cs4500.JPARepositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,11 +50,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 	@LocalServerPort
 	private int port;
-	
+
 	TestRestTemplate restTemplate = new TestRestTemplate();
 
 	HttpHeaders headers = new HttpHeaders();
-	
+
 	@Autowired
 	UserRepository userRepo;
 	String first_name;
@@ -70,22 +70,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	String t_username;
 	
 	UserObject user;
-	
+
 	UserObject test_user_1;
 	UserObject test_user_2;
-	
-	
+
+
 	@Before
 	public void setUp() {
 		String rand = RandomStringUtils.randomAlphanumeric(20);
 		
-		String first_name = "test-first" + rand;
-	    String last_name = "test-last" + rand;
-	    String email = "test-email-3" + rand;
-	    String password = "test-password" + rand;
-	    String username = "test-username-3" + rand;
-	    String about_me = "Test About me" + rand;
-	    String prof_pic = "Profile Picture" + rand;
+		first_name = "test-first" + rand;
+		last_name = "test-last" + rand;
+		email = "test-email-3" + rand;
+		password = "test-password" + rand;
+		username = "test-username-3" + rand;
+		String about_me = "Test About me" + rand;
+		String prof_pic = "Profile Picture" + rand;
 	    
 	    if (userRepo.getUserByUsername(username).size() > 0) {
 			UserObject user_exists = userRepo.getUserByUsername(username).get(0);
@@ -100,7 +100,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 				} catch(Exception e) {
 				}
 	    }
-		
+
 		if (userRepo.getUserByUsername(username + "_2").size() > 0) {
 			UserObject user_exists_2 = userRepo.getUserByUsername(username + "_2").get(0);
 		    	HttpEntity<String> entity = new HttpEntity<String>(null, headers);
@@ -112,19 +112,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		    	} catch(Exception e) {
 		    	}
 		}
-		
+
 		test_user_1 = new UserObject(first_name, last_name, email, password, username);
 		test_user_1.setAbout_me(about_me);
 		test_user_1.setProf_pic(prof_pic);
 		test_user_1.setLogged(true);
-		
-		test_user_2 = new UserObject(first_name + "_2", last_name + "_2", email + "_2", password + "_2", username +"_2");		
+
+		test_user_2 = new UserObject(first_name + "_2", last_name + "_2", email + "_2", password + "_2", username +"_2");
 		test_user_2.setAbout_me(about_me + "_2");
 		test_user_2.setProf_pic(prof_pic + "_2");
-		userRepo.save(test_user_1);		
+		userRepo.save(test_user_1);
 		userRepo.save(test_user_2);
 	}
-	
+
 	@After
 	public void un_setUp() {
     	HttpEntity<String> entity = new HttpEntity<String>(null, headers);
@@ -135,7 +135,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 			userRepo.delete(test_user_1);
 		} catch (Exception e) {
 		}
-		
+
     	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response2 = restTemplate.exchange(
 				createURLWithPort("/api/user/remove_friend/?userId=" + test_user_2.getId() + "&" + "friendId=" + test_user_1.getId()),
@@ -145,7 +145,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		} catch(Exception e) {
 		}
 	}
-	
+
     /**
      * Test that the User Profile pages gets all the data it needs from the REST API for the specific user
      */
@@ -165,23 +165,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     		Assert.assertEquals((String)context.get("about_me"), test_user_2.getAbout_me());
     		Assert.assertEquals((boolean)context.get("isSuccess"), true);
     }
-    
+
     /**
      * Tests that a User can add another user
      * @throws Exception
      */
     @Test
     public void testAddNewFriend() throws Exception {
-    	
-    	
+
+
 		UserObject user = test_user_1;
 		UserObject friend = test_user_2;
 			userRepo.save(user);
 			userRepo.save(friend);
-			
+
 			int user_id = user.getId();
 			int friend_id = friend.getId();
-			
+
 			HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 			ResponseEntity<HashMap> response = restTemplate.exchange(
 					createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
@@ -189,7 +189,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 			HashMap<String, Object> context = response.getBody();
 			Assert.assertEquals((boolean)context.get("isSuccess"), true);
     }
-    
+
     /**
      * Tests that a User cannot add a friend that they already had
      * @throws Exception
@@ -200,50 +200,50 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		UserObject friend = test_user_2;
 		userRepo.save(user);
 		userRepo.save(friend);
-		
+
 		int user_id = user.getId();
 		int friend_id = friend.getId();
-		
+
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
 				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
 				HttpMethod.POST, entity, HashMap.class);
 		HashMap<String, Object> context = response.getBody();
 		Assert.assertEquals((boolean)context.get("isSuccess"), true);
-		
+
 		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response2 = restTemplate.exchange(
 				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
 				HttpMethod.POST, entity2, HashMap.class);
 		HashMap<String, Object> context2 = response2.getBody();
-		
+
 		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
 		Assert.assertEquals((String)context2.get("message"), "Already Friends");
     }
-    
+
     /**
      * Tests that a User can remove a friend
      * @throws Exception
      */
     @Test
-    public void testRemoveFriend() throws Exception {   
-    	
+    public void testRemoveFriend() throws Exception {
+
 		UserObject user = test_user_1;
 		UserObject friend = test_user_2;
 		userRepo.save(user);
 		userRepo.save(friend);
-		
+
 		int user_id = user.getId();
 		int friend_id = friend.getId();
-		
+
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
 				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
 				HttpMethod.POST, entity, HashMap.class);
 		HashMap<String, Object> context = response.getBody();
 		Assert.assertEquals((boolean)context.get("isSuccess"), true);
-		
-		
+
+
 		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response2 = restTemplate.exchange(
 				createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
@@ -251,7 +251,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HashMap<String, Object> context2 = response2.getBody();
 		Assert.assertEquals((boolean)context2.get("isSuccess"), true);
     }
-    
+
     /**
      * Tests that a User can't remove a friend that it's not friends with
      * @throws Exception
@@ -262,10 +262,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		UserObject friend = test_user_2;
 		userRepo.save(user);
 		userRepo.save(friend);
-		
-		int user_id = user.getId(); 
+
+		int user_id = user.getId();
 		int friend_id = friend.getId();
-		
+
 		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response2 = restTemplate.exchange(
 				createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
@@ -274,10 +274,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
 		Assert.assertEquals((String)context2.get("message"), "User's are not friends");
     }
-   
-    @Test 
+
+    @Test
     public void testBadUsers() throws Exception{
-    	
+
 	    UserObject user = test_user_1;
 	    UserObject user_2 = test_user_2;
 	    user_2.setLogged(false);
@@ -286,10 +286,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		int real_id = user.getId();
 		int real_id_2 = user_2.getId();
 		int fake_id = 0;
-		
+
 		Integer null_id = null;
 		Integer user_request_null = null;
-		
+
 	    //tests for fake friend id
 		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response2 = restTemplate.exchange(
@@ -298,7 +298,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HashMap<String, Object> context2 = response2.getBody();
 		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
 		Assert.assertEquals((String)context2.get("message"), "Friend does not exist");
-		
+
 //			//tests for fake user id
 		HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response3 = restTemplate.exchange(
@@ -307,7 +307,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HashMap<String, Object> context3 = response3.getBody();
 		Assert.assertEquals((boolean)context3.get("isSuccess"), false);
 		Assert.assertEquals((String)context3.get("message"), "User does not exist");
-////			
+////
 ////		    //tests for fake friend id
 		HttpEntity<String> entity4 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response4 = restTemplate.exchange(
@@ -325,7 +325,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HashMap<String, Object> context5 = response5.getBody();
 		Assert.assertEquals((boolean)context5.get("isSuccess"), false);
 		Assert.assertEquals((String)context5.get("message"), "User does not exist");
-		
+
 //			tests for logged out user
 		HttpEntity<String> entity7 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response7 = restTemplate.exchange(
@@ -335,13 +335,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		Assert.assertEquals((boolean)context7.get("isSuccess"), false);
 		Assert.assertEquals((String)context7.get("message"), "User Not Logged In");
     }
-    
-    @Test 
+
+    @Test
     public void testSameUser() throws Exception{
-// 
+//
 		int user_id = test_user_1.getId();
 		int friend_id = test_user_1.getId();
-		
+
 		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response2 = restTemplate.exchange(
 				createURLWithPort("/api/user/remove_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
@@ -349,20 +349,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HashMap<String, Object> context2 = response2.getBody();
 		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
 		Assert.assertEquals((String)context2.get("message"), "User cannot remove itself");
-		
+
 		HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response3 = restTemplate.exchange(
 				createURLWithPort("/api/user/add_friend/?userId=" + user_id + "&" + "friendId=" + friend_id),
 				HttpMethod.POST, entity3, HashMap.class);
 		HashMap<String, Object> context3 = response3.getBody();
 		Assert.assertEquals((boolean)context3.get("isSuccess"), false);
-		Assert.assertEquals((String)context3.get("message"), "User cannot add itself"); 
+		Assert.assertEquals((String)context3.get("message"), "User cannot add itself");
     }
-//    
-//    
+//
+//
     	@Test
     	public void testFriendsProfile() {
-    		
+
     		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
     		ResponseEntity<HashMap> response2 = restTemplate.exchange(
     				createURLWithPort("/api/user/profile/?id=" + test_user_2.getId() + "&user_request=" + test_user_1.getId()),
@@ -373,7 +373,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     		userRepo.delete(test_user_1);
     		userRepo.delete(test_user_2);
     	}
-//    	
+//
     	@Test
     	public void testNotLoggedInProfile() {
     		HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
@@ -387,7 +387,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     	@Test
     	public void testEditProfile() {
-    		//profile edit input: 
+    		//profile edit input:
     		//Integer user_request, String about_me, String first_name, String last_name
     		Integer user_request = test_user_1.getId();
     		String about_me = "testing about me";
@@ -483,7 +483,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     				createURLWithPort("/api/user/validate_logout/?user_request=" + user_request),
     				HttpMethod.GET, entity2, HashMap.class);
     		HashMap<String, Object> context2 = response2.getBody();
-    		
+
     		Assert.assertEquals((boolean)context2.get("isSuccess"), true);
     		Assert.assertEquals((boolean)context2.get("isLogged"), false);
     	}
@@ -499,7 +499,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
         		Assert.assertEquals((String)context2.get("message"), "User not logged in");
     	}
-    	
+
     	@Test
     	public void testLogOutUserNotExist() {
 		Integer user_request = 0;
@@ -511,7 +511,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     		Assert.assertEquals((boolean)context2.get("isSuccess"), false);
     		Assert.assertEquals((String)context2.get("message"), "User does not exist");
     	}
-    	
+
     	@Test
     	public void testUserProfileDoesNotExist() {
 //			//tests for fake user id
@@ -523,10 +523,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		Assert.assertEquals((boolean)context3.get("isSuccess"), false);
 		Assert.assertEquals((String)context3.get("message"), "User Does Not Exist");
     	}
-    	
+
     	private String createURLWithPort(String uri) {
     		return "http://localhost:" + port + uri;
     	}
 }
-	
-

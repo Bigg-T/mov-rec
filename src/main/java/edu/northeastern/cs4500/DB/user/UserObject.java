@@ -2,13 +2,10 @@ package edu.northeastern.cs4500.DB.user;
 
 import java.util.Collection;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+
+import edu.northeastern.cs4500.DB.movie.UserRatesObject;
+
 import javax.persistence.*;
 
 
@@ -18,10 +15,11 @@ import javax.persistence.*;
  */
 @Entity(name="user")
 public class UserObject {
+	
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public int id;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
 	@NotNull
 	private String first_name;
 	@NotNull

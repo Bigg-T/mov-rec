@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import edu.northeastern.cs4500.JPARepositories.UserRepository;
+
 /**
  * Methods used by User controller
  */

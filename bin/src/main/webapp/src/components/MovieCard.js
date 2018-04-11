@@ -26,6 +26,7 @@ class MovieCard extends Component {
                         <Redirect to={{
                           pathname: '/movie/'+this.props.id,
                           state: { referrer: this.props.movieJSON }
+                         // state: { referrer: this.state.myData }
                         }}/>
                     ) : (
                         ""

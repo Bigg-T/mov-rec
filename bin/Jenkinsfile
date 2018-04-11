@@ -5,8 +5,6 @@ pipeline {
            args '-v /root/.m2:/root/.m2'
        }
    }
-
-
     stages {
         stage('Build') {
             steps {
@@ -14,7 +12,6 @@ pipeline {
                 sh 'mvn compile'
                 sh 'mvn package'
 
-              
             }
         }
 
@@ -23,9 +20,12 @@ pipeline {
             steps {
                 echo "Testing"
                 sh 'mvn test'
+<<<<<<< HEAD
+=======
 
             }
 }
+>>>>>>> origin/TEAM31-100
 
 stage('SonarQube') {
             steps {
@@ -34,6 +34,8 @@ stage('SonarQube') {
                         sh 'mvn sonar:sonar'
                 }
             }
+<<<<<<< HEAD
+=======
         }
             
         stage('Quality') {
@@ -52,4 +54,8 @@ stage('SonarQube') {
     }
   }
 }
+>>>>>>> origin/TEAM31-100
 }
+                   }
+}
+

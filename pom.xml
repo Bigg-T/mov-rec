@@ -23,6 +23,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<sonar.sources>src/main/java</sonar.sources>
+		<sonar.exclusions>
+		</sonar.exclusions>
 	</properties>
 
 	<dependencies>
@@ -105,8 +107,8 @@
 			<artifactId>cors-filter</artifactId>
 			<version>1.3.2</version>
 		</dependency>
-		
-		
+
+
 
 	</dependencies>
 	<repositories>
