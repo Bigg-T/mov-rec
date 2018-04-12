@@ -35,7 +35,8 @@ import edu.northeastern.cs4500.DB.user.UserObject;
 import edu.northeastern.cs4500.JPARepositories.UserRatesRepository;
 import edu.northeastern.cs4500.JPARepositories.UserRepository;
 
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = {"http://m0vi3h4ll.s3-website.us-east-2.amazonaws.com",
+    "http://localhost:3000"})
 @RestController
 public class UserRatesController {
 
