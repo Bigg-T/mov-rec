@@ -30,6 +30,11 @@ export const genPopular = (num) => {
   return '';
 };
 
+export const genTMDBMovie = (movieId) => {
+  // https://api.themoviedb.org/3/movie/157336?api_key={api_key}
+  return MDB_BASE_URL + 'movie/'+movieId+'?api_key='+MDB_API_KEY;
+};
+
 export const genMovieVid = (movieID) => {
   //https://api.themoviedb.org/3/movie/211672/videos?api_key=492a79d4999e65c2324dc924891cb137
   return MDB_BASE_URL + 'movie/'+ movieID +'/videos?api_key=' + MDB_API_KEY;
