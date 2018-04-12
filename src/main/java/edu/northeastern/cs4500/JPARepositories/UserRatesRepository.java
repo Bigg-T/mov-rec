@@ -35,7 +35,7 @@ public interface UserRatesRepository extends JpaRepository<UserRatesObject, Inte
 
 	@Async //movies user have not watched with highest rating to low
 	@Query(value = "SELECT t from user_rates t WHERE"
-			+ " t.is_watched = 0 AND t.user_id = ?1 ORDER BY t.rate")
+			+ " t.is_watched = 0 AND t.user_id = ?1 ORDER BY t.rate DESC")
 	public List<UserRatesObject> getReccomendedMovieforUser(Integer user_id);
 
 	@Async //dev delete

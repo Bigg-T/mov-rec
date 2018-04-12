@@ -184,6 +184,13 @@ public class UserRatesController {
       //get the prediction
       ICFAlgo algo = new SimpleSVD(userItem,.65);
       double[][] prediction = algo.compute();
+      double[] minMax = UtilsTN.getMinMax(prediction);
+      RealMatrix predRealMatrix = new Array2DRowRealMatrix(prediction);
+
+      prediction = predRealMatrix
+          .scalarAdd(-minMax[0])
+          .scalarMultiply(5/(minMax[1]-minMax[0]))
+          .getData();
 
       for (int user = 0; user < userIDList.size(); user++) {
         int userID = userIDList.get(user);

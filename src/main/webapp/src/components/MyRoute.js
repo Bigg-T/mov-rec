@@ -10,6 +10,7 @@ import EditProfile from '../pages/EditProfile'
 import MovieDescription from './MovieDescription';
 import Profile from './Profile'
 import FindFriend from '../pages/FindUsers';
+import Admin from '../admin/Admin';
 class MyRoute extends Component {
 
   render() {
@@ -23,6 +24,7 @@ class MyRoute extends Component {
             <Route path='/profile/:id' component={Profile}/>
             <Route path='/profile_edit' component={EditProfile}/>
             <Route path='/find_friends' component={FindFriend}/>
+            <Route path='/admin' component={Admin}/>
           </Switch>
       </main>
     );
