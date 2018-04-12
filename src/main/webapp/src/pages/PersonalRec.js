@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import {Card, Container} from 'semantic-ui-react';
+import {Card, Container, Button} from 'semantic-ui-react';
 import MovieCard from '../components/MovieCard';
 import axios from 'axios';
 import * as constant from '../config';
@@ -84,6 +84,13 @@ class SCard extends Component {
       sCard : ''
     }
   }
+
+  handleDismiss(movieID) {
+    let userID = window.localStorage['user_id'];
+    let API = 'api/movie/dismiss/?user_id='+userID+'&movie_id='+movieID;
+    let API_REST = constant.MOVI3HALL_BASE_API+API;
+    axios.get(API_REST).then(res => console.log(res.data));
+  }
   componentDidMount() {
     let movieID = this.props.movieID;
 
@@ -99,12 +106,16 @@ class SCard extends Component {
       let overview = _.truncate(tb.overview, {'length': 50, 'separator': ' '});
 
 
-      let mCard = (<MovieCard key={ids} movieName={names} id={ids}
-                              movieURL={genImageURL3(imageURL)}
-                              movieOverview={overview}
-                              rate={vote_average}
-                              year={release_date}
-                              movieJSON={tb}/>);
+      let mCard = (
+          <Card>
+            <Button content='Dismiss Recommendation' color='orange' onClick={() => this.handleDismiss(ids)}/>
+            <MovieCard key={ids} movieName={names} id={ids}
+                       movieURL={genImageURL3(imageURL)}
+                       movieOverview={overview}
+                       rate={vote_average}
+                       year={release_date}
+                       movieJSON={tb}/>
+          </Card>);
 
       // this.state.movies.push(tmdbRes.data);
 

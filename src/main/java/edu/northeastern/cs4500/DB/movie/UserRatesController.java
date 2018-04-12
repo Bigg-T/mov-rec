@@ -136,6 +136,14 @@ public class UserRatesController {
       return userRatesData;
     }
 
+    @RequestMapping("/api/movie/dismiss/")
+    public Map<String, Object> dissmisMovie(Integer user_id, Integer movie_id) {
+      userRatesRepository.dismissRecMovie(user_id, movie_id);
+      Map<String, Object> res = new HashMap<>();
+      res.put("status", HttpStatus.OK);
+      return res;
+    }
+
     @GetMapping("/api/movie/calculateRec/")
     public Map<String, Object> getCalculated() {
       //delete previous exist

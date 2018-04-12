@@ -35,13 +35,13 @@ public interface UserRatesRepository extends JpaRepository<UserRatesObject, Inte
 
 	@Async //movies user have not watched with highest rating to low
 	@Query(value = "SELECT t from user_rates t WHERE"
-			+ " t.is_watched = 0 AND t.user_id = ?1 ORDER BY t.rate DESC")
+			+ " t.is_watched = FALSE AND t.user_id = ?1 ORDER BY t.rate DESC")
 	public List<UserRatesObject> getReccomendedMovieforUser(Integer user_id);
 
 	@Async //dev delete
 	@Modifying
 	@Transactional
-	@Query(value = "DELETE FROM user_rates t WHERE t.is_watched = 0")
+	@Query(value = "DELETE FROM user_rates t WHERE t.is_watched = false")
 	public void deleteAllRec();
 
 	@Async //get a list of movies with certain user id and movie id
@@ -49,7 +49,10 @@ public interface UserRatesRepository extends JpaRepository<UserRatesObject, Inte
 			+ "t.user_id = ?1 AND t.movie_id = ?2 AND t.is_watched = ?3")
 	public List<UserRatesObject> getRateByUserIdMoiveId(Integer user_id, Integer movie_id, Boolean is_watched);
 
-	@Async
-	@Query("SELECT u FROM user u WHERE u.id = ?1")
-	public List<UserObject> getUserRatesData(Integer movie_id, Integer user_id, Integer rate);
+	@Async //dev delete
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE user_rates t SET t.is_watched = true, t.rate = 0"
+			+ " WHERE t.user_id=?1 AND t.movie_id = ?2")
+	public void dismissRecMovie(Integer user_id, Integer movie_id);
 }
