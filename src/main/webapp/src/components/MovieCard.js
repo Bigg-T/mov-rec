@@ -21,7 +21,7 @@ class MovieCard extends Component {
     return (
         <div>
           <div>
-            <Route exact path="/" render={() => (
+            <Route path="/" render={() => (
                 this.state.isRedirect ? (
                         <Redirect to={{
                           pathname: '/movie/'+this.props.id,

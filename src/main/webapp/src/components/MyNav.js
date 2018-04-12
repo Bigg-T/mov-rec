@@ -98,7 +98,7 @@ class LoggedInNav extends Component {
                 <Navbar.Collapse>
                   <Nav>
                     <Navbar.Brand eventKey={1}>
-                      <NavLink to={`/`}><h4>MyRec</h4></NavLink>
+                      <NavLink to={`/personal`}><h4>MyRec</h4></NavLink>
                     </Navbar.Brand>
                     <Navbar.Brand eventKey={2}>
                       <NavLink to={`/`}><h4>Watch Later</h4></NavLink>
