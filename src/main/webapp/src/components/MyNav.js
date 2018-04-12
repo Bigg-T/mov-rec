@@ -3,8 +3,11 @@
  */
 
 import React, {Component} from 'react';
-import {NavLink} from 'react-router-dom'
+import {Route, Redirect,NavLink} from 'react-router-dom';
 import {Navbar, NavItem, Nav} from 'react-bootstrap';
+import * as util from '../utils/LogOut';
+import axios from 'axios';
+import * as constant from '../config';
 class MyNav extends Component {
 	
   constructor(props) {
@@ -64,45 +67,67 @@ class LoggedInNav extends Component {
 		    super(props);
 		    this.state = {
 		      user: '/profile/' + window.localStorage.getItem("user_id"),
+          redirLogout: "",
+
 		    }
 		  }
+  onClickLogout() {
+    let ENDPOINT = 'api/user/validate_logout/?';
+    let userId = window.localStorage['user_id'];
+    let REST = constant.MOVI3HALL_BASE_API+ENDPOINT+'user_request='+userId;
+    axios.get(REST).then(res => {
+      console.log(res.data);
+
+      window.localStorage.clear();
+      window.localStorage['isLoggedIn'] = false;
+      this.setState({redirLogout:"", isRedir:true});
+      window.location.reload();
+      return res.data;
+    });
+  }
+
   render() {
     return (
-        <Navbar inverse collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <NavLink to={`/`}><h2>Movi3Hall</h2></NavLink>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav>
-              <Navbar.Brand eventKey={1} >
-                <NavLink to={`/`}><h4>MyRec</h4></NavLink>
-              </Navbar.Brand>
-              <Navbar.Brand eventKey={2} >
-                <NavLink to={`/`}><h4>Watch Later</h4></NavLink>
-              </Navbar.Brand>
-              <Navbar.Brand eventKey={3} >
-                <NavLink to={`/`}><h4>Group</h4></NavLink>
-              </Navbar.Brand>
-              <Navbar.Brand eventKey={4} >
-                <NavLink to={`/`}><h4>Movie News</h4></NavLink>
-              </Navbar.Brand>
-              <Navbar.Brand eventKey={4} >
-                <NavLink to={`/find_friends`}><h4>Find Friends</h4></NavLink>
-              </Navbar.Brand>
-            </Nav>
-            <Nav pullRight>
-               <Navbar.Brand eventKey={1} >
-            <NavLink to={this.state.user}><h4>Profile</h4></NavLink>
-             </Navbar.Brand>
-             <Navbar.Brand eventKey={2}>
-                <NavLink to={`/`}><h4>Sign Out</h4></NavLink>
-              </Navbar.Brand>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
+              <Navbar inverse collapseOnSelect>
+                <Navbar.Header>
+                  <Navbar.Brand>
+                    <NavLink to={`/`}><h2>Movi3Hall</h2></NavLink>
+                  </Navbar.Brand>
+                  <Navbar.Toggle />
+                </Navbar.Header>
+                <Navbar.Collapse>
+                  <Nav>
+                    <Navbar.Brand eventKey={1}>
+                      <NavLink to={`/`}><h4>MyRec</h4></NavLink>
+                    </Navbar.Brand>
+                    <Navbar.Brand eventKey={2}>
+                      <NavLink to={`/`}><h4>Watch Later</h4></NavLink>
+                    </Navbar.Brand>
+                    <Navbar.Brand eventKey={3}>
+                      <NavLink to={`/`}><h4>Group</h4></NavLink>
+                    </Navbar.Brand>
+                    <Navbar.Brand eventKey={4}>
+                      <NavLink to={`/`}><h4>Movie News</h4></NavLink>
+                    </Navbar.Brand>
+                    <Navbar.Brand eventKey={4}>
+                      <NavLink to={`/find_friends`}><h4>Find Friends</h4>
+                      </NavLink>
+                    </Navbar.Brand>
+                  </Nav>
+                  <Nav pullRight>
+                    <Navbar.Brand eventKey={1}>
+                      <NavLink to={this.state.user}><h4>Profile</h4></NavLink>
+                    </Navbar.Brand>
+                    <Navbar.Brand eventKey={2}>
+                      <NavLink to={`/`}>
+                        <button onClick={() => this.onClickLogout()}>
+                          <h4>Sign Out</h4>
+                        </button>
+                      </NavLink>
+                    </Navbar.Brand>
+                  </Nav>
+                </Navbar.Collapse>
+              </Navbar>
     );
   }
 }
