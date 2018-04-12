@@ -198,8 +198,17 @@ public class UserRatesController {
         for(int item = 0; item < tmdbMovieID.size(); item++) {
           int itemID = tmdbMovieID.get(item);
           int iPos = movieId2Pos.get(itemID);
-          if(watchedMovieIds.keySet().contains(userID)
-              && !watchedMovieIds.get(userID).contains(itemID)) {
+          if(watchedMovieIds.keySet().contains(userID)) {
+            if (!watchedMovieIds.get(userID).contains(itemID)) {
+              double pRate = prediction[uPos][iPos];
+              // rating
+              UserRatesObject ratesObject =
+                  new UserRatesObject(itemID, userID, pRate, false);
+              Runnable temp = () -> userRatesRepository.save(ratesObject);
+              executor.submit(temp);
+            }
+            continue; //already watched
+          } else { //have not watched/rated anything
             double pRate = prediction[uPos][iPos];
             // rating
             UserRatesObject ratesObject =
