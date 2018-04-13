@@ -38,7 +38,7 @@ public class TopMoviesController {
   @GetMapping("/api/movie/addTopMovie/")
   @ResponseBody
   public HashMap<String, Object> addTopMovies(Integer movie_id, Integer user_id, Integer rank, String description){
-	  System.out.println("TOP MOVIES CONTROLLER");
+
 	  HashMap<String, Object> topMoviesResponse = new HashMap<String, Object>();
 	  
 	  if(movie_id == null|| user_id == null || rank == null || description == null) {
@@ -47,16 +47,13 @@ public class TopMoviesController {
   		return topMoviesResponse; 
 	  }
 	  UserObject userObj;
-	  System.out.println("Try Catch");
 	  try {
 		  userObj = userRepository.getOne(user_id);
 		  userObj.getId();
 		  topMoviesResponse.put("isSuccess", true);
 	  	  topMoviesResponse.put("status", HttpStatus.OK);
-	  	  System.out.println("GETS OUR OF FIRST TRY");
 
 	  } catch(Exception e) {
-		  System.out.println("Gets to first catch");
 		  	topMoviesResponse.put("isSuccess", false);
 	  		topMoviesResponse.put("status", HttpStatus.NOT_ACCEPTABLE);
 	  		return topMoviesResponse; 
@@ -69,15 +66,12 @@ public class TopMoviesController {
     topMoviesRepository.save(obj);
     topMoviesResponse.put("isSuccess", true);
     topMoviesResponse.put("status", HttpStatus.OK);
-    System.out.println("GETS TO END OF SECOND TRY");
     }
     catch(Exception e){
-    		System.out.println("GETS TO SECOND CATCH");
     	    topMoviesResponse.put("isSuccess", false);
     		topMoviesResponse.put("status", HttpStatus.NOT_ACCEPTABLE);
     		
   }
-//    System.out.println("DOES IT EVER RETURn????????");
   return topMoviesResponse;
 }
   
@@ -101,8 +95,7 @@ public class TopMoviesController {
 		   topMoviesResponse.put("isSuccess", true);
 		   topMoviesResponse.put("status", HttpStatus.OK);
 	  } catch(Exception e) {
-		  	topMoviesResponse.put("isSuccess", false);
-	  		topMoviesResponse.put("status", HttpStatus.NOT_ACCEPTABLE);
+		  
 	  }
 	  
     return topMoviesResponse;
