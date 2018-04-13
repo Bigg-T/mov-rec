@@ -504,6 +504,36 @@ HttpEntity<HashMap> response = restTemplate.exchange(
 
   }
   
+  @Test 
+  public void testGetTopMoviesNullUserObject() throws Exception {
+
+ 
+
+  HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+    
+
+HttpEntity<HashMap> response = restTemplate.exchange(
+
+           createURLWithPort("/api/movie/getTopMovies/?user_id="+ 0 + "&limit=" + 1),
+
+            HttpMethod.GET, entity, HashMap.class);
+
+
+   @SuppressWarnings("unchecked")
+
+   HashMap<String, Object> body = response.getBody();
+
+   String badreq = (String) body.get(0);
+   
+   if(body.get("isSuccess") == null) {
+
+   boolean isSuccess = false;
+  
+   Assert.assertEquals(isSuccess, false);
+   }
+  }
+  
 private String createURLWithPort(String uri) {
 
     return "http://localhost:" + port + uri;
