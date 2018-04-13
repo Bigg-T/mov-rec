@@ -59,7 +59,12 @@ public class TopMoviesObject {
   }
 
   public void setUser_id(int user_id) {
+	 if(user_id <0) {
+		 System.out.println("false");
+	 }
+	 else {
     this.user_id = user_id;
+	 }
   }
 
   public String getDescription() {

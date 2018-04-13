@@ -175,6 +175,70 @@ public class TopMoviesControllerTest {
   }
   
 
+  @Test
+  public void testAddTopMovieUserDoesNotExist() throws Exception {
+
+    String first_name = "use64r13214";
+
+    String last_name = "use456r13214";
+
+    String email = "hello1";
+
+    String password = "us456er13214";
+
+    String username = "hello1";
+
+
+
+    UserObject user = new UserObject(first_name, last_name, email, password, username);
+
+    userRepository.save(user);
+
+    user.setLogged(true);
+
+
+
+    //we have some random movie_id
+
+    Integer movie_id = 3;
+
+    Integer rank = 3;
+
+    Integer user_id = -1;
+
+    String description= "asdf";
+
+    
+
+    TopMoviesObject uro = new TopMoviesObject(movie_id, user_id);
+
+    uro.setRank(rank);
+    
+
+    HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+
+    HttpEntity<HashMap> response = restTemplate.exchange(
+
+            createURLWithPort("/api/movie/addTopMovie/?movie_id=" + movie_id + "&user_id=" + user_id + "&rank=" +
+
+            rank + "&description=" + description),
+
+            HttpMethod.GET, entity, HashMap.class);
+
+   
+    @SuppressWarnings("unchecked")
+    HashMap<String, Object> body = response.getBody();
+    System.out.println("IS SUCCESS");
+     boolean NOT_ACCEPTABLE = (boolean)body.get("isSuccess");
+     System.out.println(NOT_ACCEPTABLE);
+     System.out.println("BODY");
+     System.out.println(body);
+     Assert.assertEquals(false, NOT_ACCEPTABLE);
+   userRepository.delete(user);
+
+  }
+
 
 
   @Test 
@@ -230,7 +294,7 @@ HttpEntity<HashMap> response = restTemplate.exchange(
 
     @SuppressWarnings("unchecked")
 
-HashMap<String, Object> body = response.getBody();
+    HashMap<String, Object> body = response.getBody();
 
     String badreq = (String) body.get("message");
 
@@ -321,11 +385,11 @@ HashMap<String, Object> body = response.getBody();
 
     String last_name = "uasdfser1";
 
-    String email = "amritavadhera";
+    String email = "amritavadhera!!!!!!";
 
     String password = "usaasdfsdfkjher11";
 
-    String username = "amritavadhera";
+    String username = "amritavadhera!!!!!!";
 
 
 
@@ -439,16 +503,11 @@ HttpEntity<HashMap> response = restTemplate.exchange(
    Assert.assertEquals(isSuccess, false);
 
   }
-
   
-
-
 private String createURLWithPort(String uri) {
 
     return "http://localhost:" + port + uri;
 
   }
-
-
 
 }
