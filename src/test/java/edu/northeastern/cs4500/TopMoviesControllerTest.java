@@ -407,101 +407,40 @@ HashMap<String, Object> responseBody = responseTopMovies.getBody();
 
   }
   
-//  @Test
-//  public void testGetTopMoviesNullUserId() throws Exception {
-//
-//
-//	  String first_name = "usasdfer1";
-//
-//	    String last_name = "uasdfser1";
-//
-//	    String email = "amritavad";
-//
-//	    String password = "usaasdfsdfkjher11";
-//
-//	    String username = "amritavad";
-//
-//
-//
-//	    UserObject user = new UserObject(first_name, last_name, email, password, username);
-//
-//	    user.setLogged(true);
-//
-//	    userRepository.save(user);
-//
-//
-//
-//	    //we have some random movie_id
-//
-//	    Integer movie_id = 389;
-//
-//	    Integer rank = 3;
-//
-//	    Integer user_id = user.getId();
-//
-//	    String description= "asdf";
-//
-//	   
-//
-//	    TopMoviesObject uro = new TopMoviesObject(movie_id, user_id);
-//
-//	    uro.setRank(rank);
-//
-//	    topMoviesRepository.save(uro);
-//
-//	   
-//
-//	    HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-//
-//	   
-//
-//
-//
-//	    HttpEntity<HashMap> responseTopMovies = restTemplate.exchange(
-//
-//	            createURLWithPort("/api/movie/getTopMovies/?user_id=" + user_id + "&limit=" + 3),
-//
-//	            HttpMethod.GET, entity, HashMap.class);
-//
-//	   
-//
-//	    @SuppressWarnings("unchecked")
-//
-//	HashMap<String, Object> responseBody = responseTopMovies.getBody();
-//
-//	    String statusOK = (String) responseBody.get("status");
-//
-//	    Assert.assertEquals(true, statusOK.equals("OK"));
-//
-//	    boolean isSuccess = (boolean) responseBody.get("isSuccess");
-//
-//
-//
-//	    @SuppressWarnings("unchecked")
-//
-//	    List<Object> topMovies =(ArrayList<Object>) responseBody.get("movies");
-//
-//	    Map<Object, Object> mov = (LinkedHashMap<Object, Object>) topMovies.get(0);
-//
-//	    int movId = (Integer) mov.get("movie_id");
-//
-//	    int rank1 = (Integer) mov.get("rank");
-//
-//	   
-//
-//	    Assert.assertEquals(3, rank1);
-//
-//	    Assert.assertEquals(389, movId);
-//
-//	 
-//
-//	    topMoviesRepository.delete(uro);
-//
-//	    userRepository.delete(user);
-//
-//	  }
-//  
 
+  @Test 
+  public void testGetTopMoviesNullValues() throws Exception {
+
+ 
+
+  HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+    
+
+HttpEntity<HashMap> response = restTemplate.exchange(
+
+           createURLWithPort("/api/movie/getTopMovies/?user_id=" + "&limit="),
+
+            HttpMethod.GET, entity, HashMap.class);
+
+
+   @SuppressWarnings("unchecked")
+
+   HashMap<String, Object> body = response.getBody();
+
+   String badreq = (String) body.get("status");
+
+   boolean isSuccess = (boolean) body.get("isSuccess");
+
+   System.out.println(badreq);
+
+
+
+   Assert.assertEquals(isSuccess, false);
+
+  }
+
+  
 
 
 private String createURLWithPort(String uri) {
