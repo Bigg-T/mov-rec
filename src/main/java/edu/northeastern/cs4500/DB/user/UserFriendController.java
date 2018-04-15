@@ -39,5 +39,14 @@ public class UserFriendController {
 	public HashMap<String,Object> removeFriend(int userId, int friendId) {
 		return userService.removeFriend(userId, friendId);
 	}
+	
+	/**
+	 * Removes ALL friends
+	 */
+	@PostMapping("/api/user/remove_all/")
+	@ResponseBody
+	public HashMap<String, Object> removeAllFriends(Integer user_id) {
+		return userService.removeAllFriends(user_id);
+	}
 }
 

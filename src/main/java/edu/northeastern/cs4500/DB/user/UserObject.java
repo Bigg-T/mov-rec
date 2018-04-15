@@ -1,5 +1,6 @@
 package edu.northeastern.cs4500.DB.user;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
@@ -67,6 +68,7 @@ public class UserObject {
 		this.email = email;
 		this.password = password;
 		this.username = username;
+		this.friends = new ArrayList<UserObject>();
 	}
 	
 	public int getId() {

@@ -523,6 +523,32 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		Assert.assertEquals((boolean)context3.get("isSuccess"), false);
 		Assert.assertEquals((String)context3.get("message"), "User Does Not Exist");
     	}
+    	
+        @Test
+        public void testDeleteAllFriends() {
+        		Collection<UserObject> userFriends = test_user_1.getFriends();
+        		userFriends.add(test_user_2);
+    			userRepo.save(test_user_1);
+    			Integer test_user_1_id = test_user_1.getId();
+    			HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
+    			ResponseEntity<HashMap> response3 = restTemplate.exchange(
+    					createURLWithPort("/api/user/remove_all/?user_id=" + test_user_1_id),
+    					HttpMethod.POST, entity3, HashMap.class);
+    			HashMap<String, Object> context3 = response3.getBody();
+    			Boolean isSuccess = (Boolean) context3.get("isSuccess");
+    			Assert.assertEquals(isSuccess, true);
+        }
+        
+        @Test
+        public void testAddBadUser() {
+			HttpEntity<String> entity3 = new HttpEntity<String>(null, headers);
+			ResponseEntity<HashMap> response3 = restTemplate.exchange(
+					createURLWithPort("/api/user/remove_all/?user_id=0"),
+					HttpMethod.POST, entity3, HashMap.class);
+			HashMap<String, Object> context3 = response3.getBody();
+			Boolean isSuccess = (Boolean) context3.get("isSuccess");
+			Assert.assertEquals(isSuccess, false);
+        }
 
     	private String createURLWithPort(String uri) {
     		return "http://localhost:" + port + uri;
