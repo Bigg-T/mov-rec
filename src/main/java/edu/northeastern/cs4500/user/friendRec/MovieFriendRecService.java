@@ -22,8 +22,14 @@ public class MovieFriendRecService {
 	@Autowired
 	MovieRatingRepository movieRepo;
 	
+	private final String SUCCESS = "isSuccess"; 
+	private final String STATUS = "status";
+	private final String MESSAGE = "message";
+
+
 	/**
-	 * 
+	 * User is able to recommend a movie to another friend
+	 * NOTE: Need to add validation to see if the two users are friends
 	 */
 	public HashMap<String,Object> recommendMovie(int userId, int friendId, int movieId) {
 		HashMap<String, Object> context = new HashMap<String, Object>();
@@ -32,17 +38,25 @@ public class MovieFriendRecService {
 		MovieRatingsObject movie = movieRepo.getOne(movieId);
 		if (user == null || friend == null) {
 			//error, one or more of the users does not exist
+			context.put(SUCCESS, false);
+			context.put(STATUS, HttpStatus.NOT_FOUND);
+			context.put(MESSAGE, "Error: One of the users does not exist");
+			return context;
 		}
 		
 		if (movie == null) {
 			//error, movie does not exist
+			context.put(SUCCESS, false);
+			context.put(STATUS, HttpStatus.NOT_FOUND);
+			context.put(MESSAGE, "Error: The movie does not exist");
+			return context;
 		}
 		
 		MovieFriendRecObject rec = new MovieFriendRecObject(userId, friendId, movieId);
 		MFRepo.save(rec);
-		//good to go
-		
-		return context;	
+		context.put(SUCCESS, true);
+		context.put(STATUS, HttpStatus.OK);
+		return context;
 	}
 	
 	
@@ -54,6 +68,10 @@ public class MovieFriendRecService {
 		UserObject user = userRepo.getOne(userId);
 		if (user == null) {
 			//error, user does not exist
+			context.put(SUCCESS, false);
+			context.put(STATUS, HttpStatus.NOT_FOUND);
+			context.put(MESSAGE, "Error: Uers does not exist");
+			return context;
 		}
 		//call a query that gets you all the movies recommended to you
 		//Filter the data, if the same movie was recommended by multiple users
@@ -73,9 +91,16 @@ public class MovieFriendRecService {
 		
 		if (user == null) {
 			//error, user does not exist
+			context.put(SUCCESS, false);
+			context.put(STATUS, HttpStatus.NOT_FOUND);
+			context.put(MESSAGE, "Error: User does not exist");
+			return context;
 		}
 		
 		if (movie == null || rec == null) {
+			context.put(SUCCESS, false);
+			context.put(STATUS, HttpStatus.NOT_FOUND);
+			context.put(MESSAGE, "Error: Movie was not found");
 			//error, movie or rec does not exist
 		}
 		
@@ -94,6 +119,10 @@ public class MovieFriendRecService {
 
 		if (user == null) {
 			//error, user does not exist
+			context.put(SUCCESS, false);
+			context.put(STATUS, HttpStatus.NOT_FOUND);
+			context.put(MESSAGE, "Error: Uers does not exist");
+			return context;
 		}
 		
 		if (movie == null) {

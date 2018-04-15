@@ -39,7 +39,7 @@ public class MovieFriendRecController {
 	/**
 	 * A user can see all the movies other users recommended to them
 	 */
-	@GetMapping("/api/user/friend_recommendation/")
+	@GetMapping("/api/user/recommend/get_all")
 	@ResponseBody
 	public HashMap<String, Object> getFriendRecs(int userId) {
 		return MFCService.getFriendRecommendations(userId);
@@ -48,11 +48,19 @@ public class MovieFriendRecController {
 	/**
 	 * A user can delete movies that were recommended to them by other users
 	 */
-	@PostMapping("/api/user/delete_friend_recommend/")
+	@PostMapping("/api/user/recommend/delete")
 	@ResponseBody
 	public HashMap<String, Object> deleteFriendRec(int movieId, int userId, int recId) {
 		return MFCService.deleteFriendRecommendation(userId, movieId, recId);
 	}
 	
+	/**
+	 * The list of users a person can recommend a movie to
+	 */
+	@GetMapping("/api/user/recommend/get_friends/")
+	@ResponseBody
+	public HashMap<String, Object> getFriends(int userId, int movieId) {
+		return MFCService.getFriendsToRecommend(userId, movieId);
+	}
 	
 }
