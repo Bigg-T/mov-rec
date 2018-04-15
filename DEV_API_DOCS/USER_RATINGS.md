@@ -105,3 +105,15 @@ No params needed
   "isSuccess": true
 }
 ```
+
+--------
+
+#### Dismiss Recommendations predictions
+```$xslt
+GET /api/movie/dismiss/
+/api/movie/dismiss/?user_id=17&movie_id=189
+```
+
+```json
+{"status":"OK"}
+```

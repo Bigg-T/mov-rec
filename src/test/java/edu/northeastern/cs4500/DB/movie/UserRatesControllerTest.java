@@ -107,8 +107,9 @@ public class UserRatesControllerTest {
     String statusOK = (String) body.get("status");
     Assert.assertEquals(true, statusOK.equals("OK"));
     uro.setId((Integer) body.get("userRatingId"));
-    userRatesRepository.delete(uro);
     userRepository.delete(user);
+    userRatesRepository.delete(uro);
+    userRatesRepository.delete(recUserRate);
   }
 
 
@@ -126,6 +127,10 @@ public class UserRatesControllerTest {
     HashMap<String, Object> body = response.getBody();
     String badreq = (String) body.get("status");
     Assert.assertEquals(true, badreq.equals("BAD_REQUEST"));
+
+    userRepository.delete(user);
+    userRatesRepository.delete(uro);
+    userRatesRepository.delete(recUserRate);
   }
 
   @Test // Non existing users
@@ -140,6 +145,10 @@ public class UserRatesControllerTest {
     HashMap<String, Object> body = response.getBody();
     String badreq = (String) body.get("message");
     Assert.assertEquals(true, badreq.equals("User Does Not Exist"));
+
+    userRepository.delete(user);
+    userRatesRepository.delete(uro);
+    userRatesRepository.delete(recUserRate);
   }
 
   @Test // user does, rate will not benefit from the system
@@ -199,7 +208,30 @@ public class UserRatesControllerTest {
     HashMap<String, Object> objectHashMap = resCalculated.getBody();
     System.out.println("TTT"+ objectHashMap);
     Assert.assertEquals("true",resCalculated.getBody().get("isSuccess").toString());
+
+
+    userRepository.delete(user);
+    userRatesRepository.delete(uro);
+    userRatesRepository.delete(recUserRate);
   }
+
+  @Test
+  public void testDismissRec() throws Exception {
+    HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+    HttpEntity<HashMap> response =
+        restTemplate
+            .exchange(
+                createURLWithPort(
+                    "/api/movie/dismiss/?user_id="+user_id+"&movie_id=" + movie_id),
+                HttpMethod.GET, entity, HashMap.class);
+    System.out.println("ADD: " + response.getBody());
+    Assert.assertEquals("OK",response.getBody().get("status").toString());
+
+    userRepository.delete(user);
+    userRatesRepository.delete(uro);
+    userRatesRepository.delete(recUserRate);
+  }
+
 
   private String createURLWithPort(String uri) {
     return "http://localhost:" + port + uri;
