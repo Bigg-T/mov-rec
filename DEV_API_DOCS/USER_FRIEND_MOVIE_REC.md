@@ -20,7 +20,7 @@ Example: /api/user/recommend/getAll/?userId=14
 #### Deletes a movie recommended to the given user by a friend
 ```$xslt
 POST /api/user/recommend/delete/
-Example: /api/user/recommend/delete/?userId=14&movieId=3&recId=5
+Example: /api/user/recommend/delete/?userId=14&movieId=3
 ```
 
 --------
