@@ -174,7 +174,7 @@ public class UserObjectTest {
 
     @Test
 	public void testGetFriends() {
-		Assert.assertEquals(test_user_1.getFriends(), null);
+		Assert.assertEquals(test_user_1.getFriends().size(), 0);
 		Collection<UserObject> friends = new ArrayList<UserObject>();
 		friends.add(test_user_2);
 		test_user_1.setFriends(friends);

@@ -34,7 +34,14 @@ public class MovieRatingsObject {
 	public MovieRatingsObject() {
 		this.vote_count = 0;
 		this.vote_average = 0;
-		
+	}
+	
+	
+	public MovieRatingsObject(String title, String genres) {
+		this.title = title;
+		this.genres = genres;
+		this.vote_count = 0;
+		this.vote_average = 0;
 	}
 	
 	public int getmovieId() {

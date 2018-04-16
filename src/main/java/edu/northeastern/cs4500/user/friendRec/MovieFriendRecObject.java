@@ -30,6 +30,10 @@ public class MovieFriendRecObject {
 		this.setFriend_id(friend_id);
 	}
 
+	public int getId() {
+		return id;
+    }
+	
 	public int getMovie_id() {
 		return movie_id;
 	}
