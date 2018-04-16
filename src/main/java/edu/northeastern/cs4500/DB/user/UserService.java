@@ -309,9 +309,8 @@ public class UserService {
 		HashMap<String, Object> context = new HashMap<>();
 		UserObject user = userRepository.getOne(user_id);
 		try {
-			if (user.getFriends().size() > 0) {
-				removeAllFriends(user_id);
-			}
+			user.getId();	
+			removeAllFriends(user_id);
 		} catch (Exception e) {
 			context.put("isSuccess", false);
 			context.put("status", HttpStatus.NOT_FOUND);

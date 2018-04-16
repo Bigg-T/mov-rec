@@ -66,7 +66,7 @@ public class UserController {
 		return userService.addUser(fname, lname, email, pw, username);
 	}
 	
-	  @GetMapping("/api/delete/user")
+	  @PostMapping("/api/delete/user")
 	  @ResponseBody
 	  public Map<String, Object> deleteUser(Integer user_id) {
 		  return userService.deleteUser(user_id);
