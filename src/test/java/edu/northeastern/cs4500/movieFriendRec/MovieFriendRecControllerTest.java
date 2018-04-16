@@ -113,7 +113,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     	HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
 				createURLWithPort("/api/user/remove_friend/?userId=" + test_user_1.getId() + "&" + "friendId=" + test_user_2.getId()),
-				HttpMethod.POST, entity, HashMap.class);
+				HttpMethod.GET, entity, HashMap.class);
 		try {
 			userRepo.delete(test_user_1);
 		} catch (Exception e) {
@@ -122,7 +122,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     	HttpEntity<String> entity2 = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response2 = restTemplate.exchange(
 				createURLWithPort("/api/user/remove_friend/?userId=" + test_user_2.getId() + "&" + "friendId=" + test_user_1.getId()),
-				HttpMethod.POST, entity2, HashMap.class);
+				HttpMethod.GET, entity2, HashMap.class);
 		try {
 			userRepo.delete(test_user_2);
 		} catch(Exception e) {
@@ -146,7 +146,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	public void setUp() {
 		createUsers();
 		createMovie();
-		rec = new MovieFriendRecObject(test_user_1.getId(), test_user_2.getId(), movie.getmovieId());
+		rec = new MovieFriendRecObject(test_user_1.getId(), test_user_2.getId(), movie.getTmdbId());
 		MFCRepo.save(rec);
 	}
 
@@ -165,7 +165,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
 		createURLWithPort("/api/user/recommend/?userId=" + test_user_1.getId() + "&friendId=" + test_user_2.getId() + "&movieId=" + movie.getTmdbId()),
-		HttpMethod.POST, entity, HashMap.class);
+		HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), true);
 		Integer recId = (Integer) body.get("recId");
@@ -182,11 +182,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		Integer movieId = rec.getMovie_id();
 		ResponseEntity<HashMap> response = restTemplate.exchange(
 		createURLWithPort("/api/user/recommend/delete/?userId=" + userId + "&movieId=" + movieId),
-		HttpMethod.POST, entity, HashMap.class);
+		HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body = response.getBody();
+		System.out.println("------------HEAFSDFSDSDFSDFSDF----------");
+		System.out.println(body);
 		Assert.assertEquals(body.get("isSuccess"), true);		
 	}
- 
+// 
 	/**
 	 * Gets all the recommendations a user has from friends
 	 */
@@ -200,7 +202,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), true);			
 	}
-	
+//	
 	/**
 	 * Gets all the recommendations a user has from friends
 	 */
@@ -215,10 +217,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), true);			
 	}
-	
-
-//-------------------BAD REQUETS-------------------
-	
+//	
+//
+////-------------------BAD REQUETS-------------------
+//	
 	/**
 	 * Sends a bad user ID
 	 */
@@ -227,7 +229,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
 				createURLWithPort("/api/user/recommend/?userId=" + 0 + "&friendId=" + test_user_2.getId() + "&movieId=" + movie.getmovieId()),
-		HttpMethod.POST, entity, HashMap.class);
+		HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), false);
 	}
@@ -240,7 +242,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
 				createURLWithPort("/api/user/recommend/?userId=" + test_user_1.getId() + "&friendId=" + 0 + "&movieId=" + movie.getmovieId()),
-		HttpMethod.POST, entity, HashMap.class);
+		HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), false);
 	}
@@ -253,7 +255,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<HashMap> response = restTemplate.exchange(
 				createURLWithPort("/api/user/recommend/?userId=" + test_user_1.getId() + "&friendId=" + test_user_2.getId() + "&movieId=" + 0),
-		HttpMethod.POST, entity, HashMap.class);
+		HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), false);
 	}
@@ -269,7 +271,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		Integer recId = rec.getId();
 		ResponseEntity<HashMap> response = restTemplate.exchange(
 		createURLWithPort("/api/user/recommend/delete/?userId=" + userId + "&movieId=" + movieId),
-		HttpMethod.POST, entity, HashMap.class);
+		HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), false);
 	}
@@ -285,7 +287,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		Integer recId = rec.getId();
 		ResponseEntity<HashMap> response = restTemplate.exchange(
 				createURLWithPort("/api/user/recommend/delete/?userId=" + userId + "&movieId=" + movieId),
-		HttpMethod.POST, entity, HashMap.class);
+		HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), false);
 	}

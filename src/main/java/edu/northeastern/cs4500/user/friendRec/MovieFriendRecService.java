@@ -3,6 +3,7 @@ package edu.northeastern.cs4500.user.friendRec;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,7 +132,9 @@ public class MovieFriendRecService {
 		
 		try {
 			movie = tmdbMovie.get(0);
+			System.out.println("IT IS ABLE TO GET A MOVIE");
 			rec = MFRepo.getRecMovie(user.getId(), movie.getTmdbId()).get(0);
+			System.out.println("IT IS NOT ABLE TO GET A RECOMMENDATION");
 		} catch(Exception e) {
 			context.put(SUCCESS, false);
 			context.put(STATUS, HttpStatus.NOT_FOUND);
@@ -188,21 +191,28 @@ public class MovieFriendRecService {
 		for (int j = 0; j < friendIds.size(); j++) {
 			alreadyRecommended.put(friendIds.get(j), true);
 		}
-		List<UserObject> friends = new ArrayList<>();
+		List<HashMap<String, Object>> allFriends = new ArrayList<>();
 		
-		while (userFriends.iterator().hasNext()) {
-			UserObject currentFriend = userFriends.iterator().next();
+		
+		List<UserObject> friends = new ArrayList<>();
+		HashMap<String, Object> friend2 = new HashMap<String, Object>(); 
+		
+		for (Iterator<UserObject> iterator = userFriends.iterator(); iterator.hasNext();) {
+	        //System.out.println("value= " + iterator.next());
+			UserObject currentFriend = iterator.next();
 			if (alreadyRecommended.get(currentFriend.getId())) {
 				continue;
 			} else {
-				friends.add(currentFriend);
-
+				HashMap<String, Object> currentFriendHash = new HashMap<>();
+				currentFriendHash.put("name", currentFriend.getFirst_name() + " " + currentFriend.getLast_name());
+				currentFriendHash.put("id", currentFriend.id);
+				allFriends.add(currentFriendHash);				
 			}
 		}
 
 		context.put(SUCCESS, true);
 		context.put(STATUS, HttpStatus.OK);
-		context.put("friends", friends);
+		context.put("friends", allFriends);
 		return context;
 		
 		//return all the friends that the user has not recommend the movie to
