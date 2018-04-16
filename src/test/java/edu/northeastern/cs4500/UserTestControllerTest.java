@@ -91,7 +91,10 @@ public class UserTestControllerTest {
 	@After
 	public void destroy() {
 		test_user_1.setFriends(null);
-		userRepo.delete(test_user_1);
+		try {
+			userRepo.delete(test_user_1);
+		} catch (Exception e) {
+		}
 		if (api_created_user != 0) {
 			userRepo.delete(api_created_user);
 		}
@@ -162,6 +165,30 @@ public class UserTestControllerTest {
 					HttpMethod.GET, entity, HashMap.class);
 			HashMap<String,Object> body3 = response3.getBody();
 			Assert.assertEquals((boolean)body3.get("isSuccess"), false);
+	}
+	
+	@Test
+	public void testDeleteUser() throws Exception {
+		Integer user_id = test_user_1.getId();
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+		ResponseEntity<HashMap> response = restTemplate.exchange(
+				createURLWithPort("/api/delete/user/?user_id=" + user_id),
+				HttpMethod.POST, entity, HashMap.class);
+		HashMap<String, Object> body = response.getBody();
+		boolean isSuccess = (boolean) body.get("isSuccess");
+		Assert.assertEquals((boolean)body.get("isSuccess"), true);		
+	}
+	
+	@Test
+	public void testDeleteUserBad() throws Exception {
+		Integer user_id = 0;
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+		ResponseEntity<HashMap> response = restTemplate.exchange(
+				createURLWithPort("/api/delete/user/?user_id=" + user_id),
+				HttpMethod.POST, entity, HashMap.class);
+		HashMap<String, Object> body = response.getBody();
+		boolean isSuccess = (boolean) body.get("isSuccess");
+		Assert.assertEquals((boolean)body.get("isSuccess"), false);		
 	}
 	
 	private String createURLWithPort(String uri) {
