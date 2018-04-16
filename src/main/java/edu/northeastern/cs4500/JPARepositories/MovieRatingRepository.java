@@ -33,4 +33,13 @@ public interface MovieRatingRepository extends JpaRepository<MovieRatingsObject,
 			+ " title LIKE \'%(2015)%\' OR title LIKE \'%(2014)%\'" 
 			+ " AND tmdb_id IS NOT NULL AND tmdb_id != 0 ORDER BY rating")
 	public List<Integer> gettmdbIdByInteger();
+	
+	/**
+	 * Should return a list of the most popular movies from 2016 that is of size numMovies.
+	 * @param numMovies This is a string so that it's easier to integrate into query.
+	 */
+	@Async
+	@Query
+	(value = "SELECT movie FROM movie_ratings movie WHERE tmdb_id = ?1")
+	public List<MovieRatingsObject> getMovieByTmdbId(Integer tmdb_id);
 }

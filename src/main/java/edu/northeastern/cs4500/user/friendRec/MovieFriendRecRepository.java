@@ -20,4 +20,9 @@ public interface MovieFriendRecRepository extends JpaRepository<MovieFriendRecOb
 	(value = "SELECT friend_id FROM MovieFriendRecommendation WHERE user_id = ?1 AND movie_id = ?2")
 	public List<Integer> getFriendsRecommenedTo(Integer user_id, Integer movie_id);
 	
+	@Async
+	@Query
+	(value = "SELECT movieRec FROM MovieFriendRecommendation movieRec WHERE user_id = ?1 AND movie_id = ?2")
+	public List<MovieFriendRecObject> getRecMovie(Integer user_id, Integer movie_id);
+	
 }

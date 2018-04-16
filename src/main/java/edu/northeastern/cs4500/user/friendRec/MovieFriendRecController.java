@@ -50,8 +50,8 @@ public class MovieFriendRecController {
 	 */
 	@PostMapping("/api/user/recommend/delete/")
 	@ResponseBody
-	public HashMap<String, Object> deleteFriendRec(int userId, int movieId, int recId) {
-		return MFCService.deleteFriendRecommendation(userId, movieId, recId);
+	public HashMap<String, Object> deleteFriendRec(int userId, int movieId) {
+		return MFCService.deleteFriendRecommendation(userId, movieId);
 	}
 	
 	/**

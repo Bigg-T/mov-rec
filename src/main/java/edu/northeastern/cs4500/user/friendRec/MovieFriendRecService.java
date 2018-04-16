@@ -33,14 +33,15 @@ public class MovieFriendRecService {
 	 * User is able to recommend a movie to another friend
 	 * NOTE: Need to add validation to see if the two users are friends
 	 */
-	public HashMap<String,Object> recommendMovie(int userId, int friendId, int movieId) {
+	public HashMap<String,Object> recommendMovie(int userId, int friendId, int tmdbId) {
 		HashMap<String, Object> context = new HashMap<String, Object>();
 		UserObject user = userRepo.getOne(userId);
 		UserObject friend = userRepo.getOne(friendId);
-		MovieRatingsObject movie = movieRepo.getOne(movieId);
-	//	if (user == null || friend == null) {
-			//error, one or more of the users does not exist
+		//MovieRatingsObject movie = movieRepo.getOne(movieId);
+		MovieRatingsObject movie;
+		List<MovieRatingsObject> tmbdMovie = movieRepo.getMovieByTmdbId(tmdbId);
 		try {
+			movie = tmbdMovie.get(0);
 			user.getId();
 			friend.getId();
 		}catch(Exception e) {
@@ -61,7 +62,7 @@ public class MovieFriendRecService {
 		}
 
 		
-		MovieFriendRecObject rec = new MovieFriendRecObject(userId, friendId, movieId);
+		MovieFriendRecObject rec = new MovieFriendRecObject(userId, friendId, tmdbId);
 		MFRepo.save(rec);
 		context.put(SUCCESS, true);
 		context.put(STATUS, HttpStatus.OK);
@@ -88,34 +89,36 @@ public class MovieFriendRecService {
 		
 		
 		List<MovieFriendRecObject> recMovies = MFRepo.getMFR(user_id);
-		ArrayList<HashMap<String, Object>> allRecs = new ArrayList<>();
-		ArrayList<Integer> recIds = new ArrayList<>();
+		//ArrayList<Integer> allRecs = new ArrayList<>();
+		ArrayList<Integer> tmdbIds = new ArrayList<>();
 		for (int i = 0; i < recMovies.size(); i++) {
-			System.out.println("Inside the loop");
 			//adds movies to the list
-			MovieRatingsObject currentMovie = movieRepo.getOne(recMovies.get(i).getMovie_id());
-			HashMap<String, Object> currentMovieHash = new HashMap<>();
-			currentMovieHash.put("genres", currentMovie.getGenres());
-			currentMovieHash.put("title", currentMovie.getTitle());
-			currentMovieHash.put("movie_id", currentMovie.getmovieId());
-			allRecs.add(currentMovieHash);
-			recIds.add(recMovies.get(i).getId());
+			//MovieRatingsObject currentMovie = movieRepo.getOne(recMovies.get(i).getMovie_id());
+			//HashMap<String, Object> currentMovieHash = new HashMap<>();
+			//currentMovieHash.put("tmdb_id", currentMovie.getTmdbId());
+			//allRecs.add(currentMovie.getTmdbId());
+			tmdbIds.add(recMovies.get(i).getMovie_id());
+			
 		}
 		context.put(SUCCESS, true);
 		context.put(STATUS, HttpStatus.OK);
-		context.put("recIds", recMovies);
-		context.put("size", allRecs.size());
+		context.put("tmdb_ids", tmdbIds);
 		return context;	
 	}
 	
 	/**
 	 * 
 	 */
-	public HashMap<String,Object> deleteFriendRecommendation(int userId, int movieId, int recId) {
+	public HashMap<String,Object> deleteFriendRecommendation(int userId, int tmdbId) {
 		HashMap<String, Object> context = new HashMap<String, Object>();
 		UserObject user = userRepo.getOne(userId);
-		MovieRatingsObject movie = movieRepo.getOne(movieId);
-		MovieFriendRecObject rec = MFRepo.getOne(recId); //should not have rec id but it'll be easier for now
+		List<MovieRatingsObject> tmdbMovie = movieRepo.getMovieByTmdbId(tmdbId);
+		MovieFriendRecObject rec;
+		MovieRatingsObject movie;
+		
+		
+		//MovieRatingsObject movie = movieRepo.getOne(movieId);
+		//MovieFriendRecObject rec = MFRepo.getOne(recId); //should not have rec id but it'll be easier for now
 		
 		try {
 			user.getId();
@@ -127,8 +130,8 @@ public class MovieFriendRecService {
 		}
 		
 		try {
-			movie.getmovieId();
-		    rec.getId();
+			movie = tmdbMovie.get(0);
+			rec = MFRepo.getRecMovie(user.getId(), movie.getTmdbId()).get(0);
 		} catch(Exception e) {
 			context.put(SUCCESS, false);
 			context.put(STATUS, HttpStatus.NOT_FOUND);
@@ -148,10 +151,11 @@ public class MovieFriendRecService {
 	/**
 	 * Gets user's whom you have not yet recommended a specific movie to
 	 */
-	public HashMap<String,Object> getFriendsToRecommend(int user_id, int movie_id) {
+	public HashMap<String,Object> getFriendsToRecommend(int user_id, int tmdb_id) {
 		HashMap<String, Object> context = new HashMap<String, Object>();
 		UserObject user = userRepo.getOne(user_id);
-		MovieRatingsObject movie = movieRepo.getOne(movie_id);
+		//MovieRatingsObject movie = movieRepo.getOne(movie_id);
+		MovieRatingsObject movie;
 
 		try {
 			user.getId();
@@ -161,40 +165,41 @@ public class MovieFriendRecService {
 			context.put(MESSAGE, "Error: Uers does not Exist");
 			return context;
 		}
-
 		
 		try {
+			movie = movieRepo.getMovieByTmdbId(tmdb_id).get(0);
 			movie.getmovieId();
-		}catch(Exception e) {
+		} catch(Exception e) {
 			context.put(SUCCESS, false);
 			context.put(STATUS, HttpStatus.NOT_FOUND);
 			context.put(MESSAGE, "Error: Movie Does Not Exist");
 			return context;
 		}
+
+		//-----END VALIDATION
 		
-		List<Integer> friendIds = MFRepo.getFriendsRecommenedTo(user_id, movie_id);
-		HashMap<Integer, Boolean> seenFriends = new HashMap<>();
-		Collection<UserObject> userFriends =  user.getFriends(); 
-		for (int j = 0; j < userFriends.size(); j++) {
-			if (userFriends.iterator().hasNext()) {
-				int id = userFriends.iterator().next().getId();
-				seenFriends.put(id, true);
-			}
+		List<Integer> friendIds = MFRepo.getFriendsRecommenedTo(user_id, tmdb_id);
+		Collection<UserObject> userFriends =  user.getFriends(); //user's friends
+		HashMap<Integer, Boolean> alreadyRecommended = new HashMap<>();
+
+			
+		
+		//IF I see a friend ID in getFriendRecommened then I don't want to see them again
+		for (int j = 0; j < friendIds.size(); j++) {
+			alreadyRecommended.put(friendIds.get(j), true);
 		}
-		
-		
 		List<UserObject> friends = new ArrayList<>();
-		//the list of friends shown
-		for (int i = 0; i < userFriends.size(); i++) {
-			if (userFriends.iterator().hasNext()) {
-				UserObject currentFriend = userFriends.iterator().next();
-				if (seenFriends.get(currentFriend.getId())) {
-					continue;
-				} else {
-					friends.add(currentFriend);
-				}
+		
+		while (userFriends.iterator().hasNext()) {
+			UserObject currentFriend = userFriends.iterator().next();
+			if (alreadyRecommended.get(currentFriend.getId())) {
+				continue;
+			} else {
+				friends.add(currentFriend);
+
 			}
 		}
+
 		context.put(SUCCESS, true);
 		context.put(STATUS, HttpStatus.OK);
 		context.put("friends", friends);
