@@ -2,6 +2,7 @@
  * Created by t on 2/14/18.
  */
 import React, {Component} from 'react';
+
 import {Route, Switch} from 'react-router-dom';
 import MovieRecPage from '../pages/MovieRecPage';
 import SignUp from '../pages/SignUp';
@@ -12,6 +13,7 @@ import Profile from './Profile'
 import FindFriend from '../pages/FindUsers';
 import Admin from '../admin/Admin';
 import PersonalRec from '../pages/PersonalRec';
+import MovieFriendRec from '../pages/MovieFriendRec'
 class MyRoute extends Component {
 
   render() {
@@ -27,7 +29,8 @@ class MyRoute extends Component {
             <Route path='/find_friends' component={FindFriend}/>
             <Route path='/admin' component={Admin}/>
             <Route path='/personal' component={PersonalRec}/>
-          </Switch>
+            <Route path='/friend_rec/:movie_id/:movie_title' component={MovieFriendRec}/>
+            </Switch>
       </main>
     );
   }

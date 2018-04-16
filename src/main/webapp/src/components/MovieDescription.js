@@ -22,12 +22,11 @@ import YouTube from './YouTube';
     }
     componentWillMount() {
       let movieID = this.props.location.state.referrer.id;//
+      //let testing = "../friend_rec/"
       axios.get(genMovieVid(movieID))
       .then(res => {
         if (res.data.results.length != 0) {
           let data = res.data.results[0];
-          console.log('KEYYYYYYY');
-          console.log(data);
           this.setState({youtube : [data.key]});
         }
 
@@ -36,8 +35,6 @@ import YouTube from './YouTube';
     }
     render() {
       let YOUTUBE_BASE = 'https://www.youtube.com/watch?v=';
-      console.log("referrer")
-      console.log(this.props.location.state.referrer);
       let name = this.state.youtube.map(a => a);
       let YOUTUBE_VID = YOUTUBE_BASE+name[0];
       return (
@@ -56,6 +53,7 @@ import YouTube from './YouTube';
            <Grid.Column width={2}>
            <Rating icon="star" maxStar={5} />
            <h8> Rate Movie </h8>
+           <a href={"../friend_rec/" + this.props.location.state.referrer.id + "/" + this.props.location.state.referrer.title}> Recommend To A Friend </a>
            </Grid.Column>
        </Grid.Row>
 

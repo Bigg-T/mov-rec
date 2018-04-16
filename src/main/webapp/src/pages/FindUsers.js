@@ -30,15 +30,11 @@ class FindUsers extends Component {
       let myfriendList = users.find(aUser => {
         return aUser.id == window.localStorage['user_id']
       }).friends;
-      console.log("MYYYYYYY FIRNESSS");
-      console.log(myfriendList);
-      console.log("MYYYYYYY FIRNESSS" + res.data[0].id);
       let friendsMap = new Map();
       friendsMap.set(parseInt(window.localStorage['user_id']), parseInt(window.localStorage['user_id']));
       myfriendList.forEach(function(aFriend) {
         friendsMap.set(aFriend.id, aFriend.id);
       });
-      console.log(res.data);
       this.setState({data:res.data, myFriend:friendsMap});
     });
   }
@@ -127,7 +123,6 @@ class FindUsers extends Component {
       }
 
       users.push(object);
-      console.log(" ddddddddddddddddddddddddddddddd Fuck");
     });
     return (
         <Container>

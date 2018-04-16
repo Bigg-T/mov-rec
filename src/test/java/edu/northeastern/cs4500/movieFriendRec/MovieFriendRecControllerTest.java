@@ -83,6 +83,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 	UserObject test_user_1;
 	UserObject test_user_2;
+	UserObject test_user_3;
 
 	MovieRatingsObject movie;
 	
@@ -102,9 +103,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		username = "test-username-3" + rand;
 		test_user_1 = new UserObject(first_name, last_name, email, password, username);
 		test_user_2 = new UserObject(first_name + "_2", last_name + "_2", email + "_2", password + "_2", username +"_2");
+		test_user_3 = new UserObject(first_name + "_3", last_name + "_3", email + "_3", password + "_3", username +"_3");
 		userRepo.save(test_user_1);
 		userRepo.save(test_user_2);
+		userRepo.save(test_user_3);
 		test_user_1.getFriends().add(test_user_2);
+		test_user_1.getFriends().add(test_user_3);
 		userRepo.save(test_user_1);
 	
 	}
@@ -215,12 +219,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		createURLWithPort("/api/user/recommend/get_friends/?userId=" + userId + "&movieId=" + movieId),
 		HttpMethod.GET, entity, HashMap.class);
 		HashMap<String, Object> body = response.getBody();
+		Assert.assertEquals(body.get("isSuccess"), true);	
+		List<HashMap<String, Object>> friends = (List<HashMap<String, Object>>)body.get("friends");
+		Assert.assertEquals(friends.size(), 1);
+	}
+	
+	/**
+	 * Gets all the recommendations a user has from friends
+	 */
+	@Test
+	public void testAllFriendsToRec2() throws Exception {
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+		Integer userId = rec.getUser_id();
+		Integer movieId = rec.getMovie_id();
+		ResponseEntity<HashMap> response = restTemplate.exchange(
+		createURLWithPort("/api/user/recommend/get_friends/?userId=" + userId + "&movieId=" + movieId),
+		HttpMethod.GET, entity, HashMap.class);
+		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), true);			
 	}
 //	
 //
-////-------------------BAD REQUETS-------------------
-//	
+//////-------------------BAD REQUETS-------------------
+////	
 	/**
 	 * Sends a bad user ID
 	 */
@@ -246,7 +267,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), false);
 	}
-	
+//	
 	/**
 	 * Sends a bad friend Id
 	 */
@@ -259,7 +280,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), false);
 	}
-	
+//	
 	/**
 	 * Sends a bad user Id
 	 */
@@ -330,8 +351,5 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		HashMap<String, Object> body = response.getBody();
 		Assert.assertEquals(body.get("isSuccess"), false);			
 	}
-	 
-
-
 }
 

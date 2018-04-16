@@ -132,9 +132,7 @@ public class MovieFriendRecService {
 		
 		try {
 			movie = tmdbMovie.get(0);
-			System.out.println("IT IS ABLE TO GET A MOVIE");
 			rec = MFRepo.getRecMovie(user.getId(), movie.getTmdbId()).get(0);
-			System.out.println("IT IS NOT ABLE TO GET A RECOMMENDATION");
 		} catch(Exception e) {
 			context.put(SUCCESS, false);
 			context.put(STATUS, HttpStatus.NOT_FOUND);
@@ -196,13 +194,12 @@ public class MovieFriendRecService {
 		
 		//List<UserObject> friends = new ArrayList<>();
 		//HashMap<String, Object> friend2 = new HashMap<String, Object>(); 
-		System.out.println("--------BEFORE WEIRD ITERATOR THING-------");
 		userFriends.forEach(currentFriend -> {
-			if (alreadyRecommended.get(currentFriend.getId()) != null) {
+			if (alreadyRecommended.get(currentFriend.getId()) == null) {
 				HashMap<String, Object> currentFriendHash = new HashMap<>();
 				currentFriendHash.put("name", currentFriend.getFirst_name() + " " + currentFriend.getLast_name());
 				currentFriendHash.put("id", currentFriend.id);
-				allFriends.add(currentFriendHash);				
+				allFriends.add(currentFriendHash);	
 			}
 		});
 		context.put(SUCCESS, true);
