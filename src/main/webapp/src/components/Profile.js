@@ -1,10 +1,11 @@
 
 import React, {Component} from 'react';
-import {Item, Image, Grid, Rating, Container} from 'semantic-ui-react';
+import {Item, Image, Grid, Rating, Container,Button} from 'semantic-ui-react';
 import {Badge, Glyphicon, Label} from 'react-bootstrap';
 import { View, Text, AppRegistry } from 'react';
 import axios from 'axios';
 import '../css/Profile.css';
+import * as constant from '../config';
 
   //import {View} from 'react-native';
 
@@ -109,6 +110,18 @@ import '../css/Profile.css';
     }
     }
 
+    handleDeleteAccount() {
+			let userId = window.localStorage['user_id'];
+			let API = '/api/delete/user/?user_id='+userId;
+			axios.post(constant.MOVI3HALL_BASE_API+API).then(res => {
+				let isSuc = res.data.isSuccess;
+				if(isSuc) {
+					window.localStorage.clear();
+					window.localStorage['isLoggedIn'] = false;
+          window.location.replace('/');
+				}
+			})
+		}
 
     render() {
 
@@ -140,6 +153,9 @@ import '../css/Profile.css';
 			<Grid.Row>
 			 <p>{this.state.aboutMe}</p>
 			 </Grid.Row>
+			<Grid.Row>
+				<Button onClick={() => this.handleDeleteAccount()} color="red">Delete My Account</Button>
+			</Grid.Row>
 		</Grid.Column>
 		<Grid.Column width={10} margin-right={40}>
 		<Grid.Row>
@@ -154,6 +170,7 @@ import '../css/Profile.css';
 
 		</Grid.Column>
 	</Grid>
+
           </Container>
          );
 
