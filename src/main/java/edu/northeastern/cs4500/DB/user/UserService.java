@@ -300,4 +300,27 @@ public class UserService {
 	    }		
 	    return context;
 	}
+	
+	/**
+	 * Deletes a users account
+	 * @param user_id the user's id
+	 */
+	public HashMap<String, Object> deleteUser(Integer user_id) {
+		HashMap<String, Object> context = new HashMap<>();
+		UserObject user = userRepository.getOne(user_id);
+		try {
+			if (user.getFriends().size() > 0) {
+				removeAllFriends(user_id);
+			}
+		} catch (Exception e) {
+			context.put("isSuccess", false);
+			context.put("status", HttpStatus.NOT_FOUND);
+			context.put("message", "user not found");
+			return context;
+		}
+		userRepository.delete(user);
+		context.put("isSuccess", true);
+		context.put("status", HttpStatus.OK);
+		return context;
+	}
 }

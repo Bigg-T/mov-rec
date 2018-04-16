@@ -3,10 +3,9 @@ package edu.northeastern.cs4500.DB.user;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import edu.northeastern.cs4500.JPARepositories.UserRepository;
@@ -66,4 +65,10 @@ public class UserController {
 	public HashMap<String,Object> addUser(String fname, String lname, String email, String pw, String username) {
 		return userService.addUser(fname, lname, email, pw, username);
 	}
+	
+	  @GetMapping("/api/delete/user")
+	  @ResponseBody
+	  public Map<String, Object> deleteUser(Integer user_id) {
+		  return userService.deleteUser(user_id);
+	  }
 }
