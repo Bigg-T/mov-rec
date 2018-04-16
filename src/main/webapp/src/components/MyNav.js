@@ -101,13 +101,10 @@ class LoggedInNav extends Component {
                       <NavLink to={`/personal`}><h4>MyRec</h4></NavLink>
                     </Navbar.Brand>
                     <Navbar.Brand eventKey={2}>
-                      <NavLink to={`/`}><h4>Watch Later</h4></NavLink>
+                      <NavLink to={`/watch_later`}><h4>Watch Later</h4></NavLink>
                     </Navbar.Brand>
                     <Navbar.Brand eventKey={3}>
                       <NavLink to={`/`}><h4>Group</h4></NavLink>
-                    </Navbar.Brand>
-                    <Navbar.Brand eventKey={4}>
-                      <NavLink to={`/`}><h4>Movie News</h4></NavLink>
                     </Navbar.Brand>
                     <Navbar.Brand eventKey={4}>
                       <NavLink to={`/find_friends`}><h4>Find Friends</h4>
