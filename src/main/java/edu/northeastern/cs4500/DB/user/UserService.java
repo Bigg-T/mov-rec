@@ -2,6 +2,7 @@ package edu.northeastern.cs4500.DB.user;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -277,5 +278,26 @@ public class UserService {
 			return context;
 		}
 
+	}
+	
+	/**
+	 * Deletes all the user to user relations. Should be used before deleting a user's account
+	 */
+	public HashMap<String, Object> removeAllFriends(Integer user_id) {
+		HashMap<String, Object> context = new HashMap<>();
+		UserObject user = userRepository.getOne(user_id); 
+	    try {
+			Collection<UserObject> userFriends = user.getFriends();
+			Iterator<UserObject> userFriendsList = userFriends.iterator();
+			while (userFriends.size() > 0) {
+				UserObject currentFriend = userFriendsList.next(); 
+				userFriends.remove(currentFriend);
+			}
+			userRepository.save(user);
+			context.put("isSuccess", true);
+	    } catch(Exception e) {
+	    		context.put("isSuccess", false);
+	    }		
+	    return context;
 	}
 }
