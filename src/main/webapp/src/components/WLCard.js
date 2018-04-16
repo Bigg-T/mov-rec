@@ -1,14 +1,14 @@
 /**
- * Created by t on 2/10/18.
+ * Created by t on 4/16/18.
  */
 import React, {Component} from 'react';
-import {Card, Image, Grid,Container,Button, Rating} from 'semantic-ui-react'
+import {Card, Image, Grid,Rating} from 'semantic-ui-react'
 import {Badge, Glyphicon} from 'react-bootstrap';
 import {Route, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import * as constant from '../config';
 
-class MovieCard extends Component {
+class WLCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,34 +30,17 @@ class MovieCard extends Component {
     });
     this.setState({ rating, maxRating })
   };
-
-  watchLater(movieId) {
-    let userId = window.localStorage['user_id'];
-    let API = 'api/movie/addTopMovie/?movie_id='+movieId+'&user_id='
-        +userId+'&rank=1&description=asdf';
-    let API_END = constant.MOVI3HALL_BASE_API + API;
-    axios.get(API_END).then(res => {
-      console.log(res.data);
-    });
-  }
   render() {
     let rate = (window.localStorage['isLoggedIn']?
         (
-            <div>
-              <Grid.Row>
-                <Grid.Column width={8}>
-                  What would you rate this?
-                </Grid.Column>
-                <Grid.Column>
-                  <Rating maxRating={4} onRate={this.handleRate}/>
-                </Grid.Column>
-              </Grid.Row>
-              <Container>
-              <Grid.Row>
-                <Button content='Watch Later' color='orange' onClick={() => this.watchLater(this.props.id)}/>
-              </Grid.Row>
-              </Container>
-            </div>
+            <Grid.Row>
+              <Grid.Column width={8}>
+                What would you rate this?
+              </Grid.Column>
+              <Grid.Column>
+                <Rating maxRating={4} onRate={this.handleRate} />
+              </Grid.Column>
+            </Grid.Row>
         )
         :
         "");
@@ -106,5 +89,4 @@ class MovieCard extends Component {
   }
 }
 
-
-export default MovieCard;
+export default WLCard;

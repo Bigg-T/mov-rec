@@ -12,6 +12,7 @@ import Profile from './Profile'
 import FindFriend from '../pages/FindUsers';
 import Admin from '../admin/Admin';
 import PersonalRec from '../pages/PersonalRec';
+import TopMovie from '../pages/TopMovie';
 class MyRoute extends Component {
 
   render() {
@@ -27,6 +28,7 @@ class MyRoute extends Component {
             <Route path='/find_friends' component={FindFriend}/>
             <Route path='/admin' component={Admin}/>
             <Route path='/personal' component={PersonalRec}/>
+            <Route path='/watch_later' component={TopMovie}/>
           </Switch>
       </main>
     );
