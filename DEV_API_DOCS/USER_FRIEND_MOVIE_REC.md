@@ -1,4 +1,4 @@
-## USER FRIENDS
+## Movie Friend Recommendation
 
 #### User recommends friend a movie
 ```$xslt
