@@ -24,6 +24,10 @@ public interface UserRepoTN extends JpaRepository<UserObject, Integer> {
   @Query(value = "UPDATE user t SET t.logged = false WHERE t.id=?1")
   public void logoutUser(Integer id);
 
+  @Async
+  @Query(value = "SELECT t.is_admin FROM user t where t.id = ?1")
+  public boolean isUserAnAdmin(Integer id);
+
 //  @Async
 //  @Modifying
 //  @Transactional

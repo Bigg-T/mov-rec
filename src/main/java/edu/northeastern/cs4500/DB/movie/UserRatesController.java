@@ -144,79 +144,70 @@ public class UserRatesController {
       return res;
     }
 
-    @GetMapping("/api/movie/calculateRec/")
-    public Map<String, Object> getCalculated() {
-      //delete previous exist
-      ExecutorService executor = Executors.newFixedThreadPool(50);
-      Runnable delete = () -> userRatesRepository.deleteAllRec();
-      executor.execute(delete);
-      //setup
-      List<Integer> tmdbMovieID = movieRepoTN.getAllMovies();
-      List<UserRatesObject> userWatchedRateObjectList = userRatesRepository.getOnlyUserWatchedRate();
-      List<Integer> userIDList = userRepoTN.getAllIDUser();
-      //UserItem
-      double[][] userItem = new double[userIDList.size()][tmdbMovieID.size()];
-      RealMatrix realMatrix = new Array2DRowRealMatrix(userItem);
-      userItem = realMatrix.scalarAdd(1).getData();
-      //SetUp Map for indexing to user Item
+  @GetMapping("/api/movie/calculateRec/")
+  public Map<String, Object> getCalculated() {
+    //delete previous exist
+    ExecutorService executor = Executors.newFixedThreadPool(50);
+    Runnable delete = () -> userRatesRepository.deleteAllRec();
+    executor.execute(delete);
+    //setup
+    List<Integer> tmdbMovieID = movieRepoTN.getAllMovies();
+    List<UserRatesObject> userWatchedRateObjectList = userRatesRepository.getOnlyUserWatchedRate();
+    List<Integer> userIDList = userRepoTN.getAllIDUser();
+    //UserItem
+    double[][] userItem = new double[userIDList.size()][tmdbMovieID.size()];
+    RealMatrix realMatrix = new Array2DRowRealMatrix(userItem);
+    userItem = realMatrix.scalarAdd(1).getData();
+    //SetUp Map for indexing to user Item
 
-      //Mapping of the position (row) or the y direction are user
-      // <User_ID, PositionIn2DArray>
-      Map<Integer, Integer> userId2Pos = mapId2Pos(userIDList);
-      //Mapping of the position (column) or the x direction are movie id
-      // <PositionIn2DArray, Movie_ID>
-      Map<Integer, Integer> movieId2Pos = mapId2Pos(tmdbMovieID);
+    //Mapping of the position (row) or the y direction are user
+    // <User_ID, PositionIn2DArray>
+    Map<Integer, Integer> userId2Pos = mapId2Pos(userIDList);
+    //Mapping of the position (column) or the x direction are movie id
+    // <PositionIn2DArray, Movie_ID>
+    Map<Integer, Integer> movieId2Pos = mapId2Pos(tmdbMovieID);
 
-      ////userID, Set of Movie_ids watched
-      Map<Integer, Set<Integer>> watchedMovieIds = new TreeMap<>();
+    ////userID, Set of Movie_ids watched
+    Map<Integer, Set<Integer>> watchedMovieIds = new TreeMap<>();
 
-      for(int i = 0; i < userWatchedRateObjectList.size(); i++) {
-        UserRatesObject rateObject = userWatchedRateObjectList.get(i);
-        int movieId = rateObject.getMovie_id();
-        int userId = rateObject.getUser_id();
-        if(userId2Pos.containsKey(userId)
-            && movieId2Pos.containsKey(movieId)) {
-          int row = userId2Pos.get(userId);
-          int col = movieId2Pos.get(movieId);
-          userItem[row][col] = rateObject.getRate();
-          if (watchedMovieIds.containsKey(userId)) {
-            watchedMovieIds.get(userId).add(movieId);
-          } else {
-            Set<Integer> mids = new TreeSet<>();
-            mids.add(movieId);
-            watchedMovieIds.put(userId,mids);
-          }
+    for(int i = 0; i < userWatchedRateObjectList.size(); i++) {
+      UserRatesObject rateObject = userWatchedRateObjectList.get(i);
+      int movieId = rateObject.getMovie_id();
+      int userId = rateObject.getUser_id();
+      if(userId2Pos.containsKey(userId)
+          && movieId2Pos.containsKey(movieId)) {
+        int row = userId2Pos.get(userId);
+        int col = movieId2Pos.get(movieId);
+        userItem[row][col] = rateObject.getRate();
+        if (watchedMovieIds.containsKey(userId)) {
+          watchedMovieIds.get(userId).add(movieId);
+        } else {
+          Set<Integer> mids = new TreeSet<>();
+          mids.add(movieId);
+          watchedMovieIds.put(userId,mids);
         }
       }
+    }
 
-      //get the prediction
-      ICFAlgo algo = new SimpleSVD(userItem,.65);
-      double[][] prediction = algo.compute();
-      double[] minMax = UtilsTN.getMinMax(prediction);
-      RealMatrix predRealMatrix = new Array2DRowRealMatrix(prediction);
+    //get the prediction
+    ICFAlgo algo = new SimpleSVD(userItem,.55);
+    double[][] prediction = algo.compute();
+    double[] minMax = UtilsTN.getMinMax(prediction);
+    RealMatrix predRealMatrix = new Array2DRowRealMatrix(prediction);
 
-      prediction = predRealMatrix
-          .scalarAdd(-minMax[0])
-          .scalarMultiply(5/(minMax[1]-minMax[0]))
-          .getData();
+    prediction = predRealMatrix
+        .scalarAdd(-minMax[0])
+        .scalarMultiply(5/(minMax[1]-minMax[0]))
+        .getData();
 
-      for (int user = 0; user < userIDList.size(); user++) {
-        int userID = userIDList.get(user);
-        int uPos = userId2Pos.get(userID);
-        for(int item = 0; item < tmdbMovieID.size(); item++) {
-          int itemID = tmdbMovieID.get(item);
-          int iPos = movieId2Pos.get(itemID);
-          if(watchedMovieIds.keySet().contains(userID)) {
-            if (!watchedMovieIds.get(userID).contains(itemID)) {
-              double pRate = prediction[uPos][iPos];
-              // rating
-              UserRatesObject ratesObject =
-                  new UserRatesObject(itemID, userID, pRate, false);
-              Runnable temp = () -> userRatesRepository.save(ratesObject);
-              executor.submit(temp);
-            }
-            continue; //already watched
-          } else { //have not watched/rated anything
+    for (int user = 0; user < userIDList.size(); user++) {
+      int userID = userIDList.get(user);
+      int uPos = userId2Pos.get(userID);
+      for(int item = 0; item < tmdbMovieID.size(); item++) {
+        int itemID = tmdbMovieID.get(item);
+        int iPos = movieId2Pos.get(itemID);
+        if(watchedMovieIds.keySet().contains(userID)) {
+          if (!watchedMovieIds.get(userID).contains(itemID)) {
             double pRate = prediction[uPos][iPos];
             // rating
             UserRatesObject ratesObject =
@@ -224,15 +215,24 @@ public class UserRatesController {
             Runnable temp = () -> userRatesRepository.save(ratesObject);
             executor.submit(temp);
           }
+          continue; //already watched
+        } else { //have not watched/rated anything
+          double pRate = prediction[uPos][iPos];
+          // rating
+          UserRatesObject ratesObject =
+              new UserRatesObject(itemID, userID, pRate, false);
+          Runnable temp = () -> userRatesRepository.save(ratesObject);
+          executor.submit(temp);
         }
       }
-      Map<String, Object> temp = new HashMap<>();
-      temp.put("rates",prediction);
-      temp.put("movies", tmdbMovieID);
-      temp.put("user", userIDList);
-      temp.put("isSuccess", true);
-      return temp;
     }
+    Map<String, Object> temp = new HashMap<>();
+    temp.put("rates",prediction);
+    temp.put("movies", tmdbMovieID);
+    temp.put("user", userIDList);
+    temp.put("isSuccess", true);
+    return temp;
+  }
 
     private Map<Integer, Integer> mapId2Pos(List<Integer> id) {
       Map<Integer,Integer> temp = new TreeMap<>();
