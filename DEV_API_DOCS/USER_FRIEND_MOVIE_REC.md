@@ -15,8 +15,8 @@ Success JSON RESULT:
 GET /api/user/recommend/getAll/
 Example: /api/user/recommend/getAll/?userId=14
 
-Success:
-JSON RESULT: {"tmdb_ids":[234545452,234545455],"isSuccess":true,"status":"OK"}
+Success JSON RESULT:
+{"tmdb_ids":[234545452,234545455],"isSuccess":true,"status":"OK"}
 ```
 
 --------
@@ -27,8 +27,8 @@ JSON RESULT: {"tmdb_ids":[234545452,234545455],"isSuccess":true,"status":"OK"}
 GET /api/user/recommend/delete/
 Example: /api/user/recommend/delete/?userId=14&movieId=3
 
-Success 
-JSON RESULT: {"isSuccess":true,"status":"OK"}
+Success JSON RESULT:
+{"isSuccess":true,"status":"OK"}
 ```
 
 --------
