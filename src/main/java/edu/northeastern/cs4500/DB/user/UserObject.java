@@ -68,7 +68,7 @@ public class UserObject {
 		this.email = email;
 		this.password = password;
 		this.username = username;
-		this.friends = new ArrayList<UserObject>();
+		this.friends = new ArrayList<>();
 	}
 	
 	public int getId() {

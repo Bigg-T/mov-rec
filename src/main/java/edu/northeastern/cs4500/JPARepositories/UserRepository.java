@@ -19,4 +19,5 @@ public interface UserRepository extends JpaRepository<UserObject, Integer>{
 	@Async
 	@Query("SELECT u FROM user u WHERE u.username = ?1")
 	public List<UserObject> getUserByUsername(String username);
+	
 }
