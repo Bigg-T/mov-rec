@@ -15,7 +15,6 @@ import Admin from '../admin/Admin';
 import PersonalRec from '../pages/PersonalRec';
 import MovieFriendRec from '../pages/MovieFriendRec'
 import TopMovie from '../pages/TopMovie';
->>>>>>> sprint4
 class MyRoute extends Component {
 
   render() {

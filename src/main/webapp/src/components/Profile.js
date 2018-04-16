@@ -33,7 +33,7 @@ import * as constant from '../config';
     	    let user_request = window.localStorage.getItem("user_id");
     		if (user_request != null) {
     			let profileId = this.props.match.params.id;
-    			axios.post(this.state.curUrl + "/api/user/add_friend/?userId="
+    			axios.post(constant.MOVI3HALL_BASE_API + "api/user/add_friend/?userId="
           + user_request + "&friendId=" + profileId)
     			.then(function (response) {
 
@@ -62,8 +62,8 @@ import * as constant from '../config';
         	let user_request = window.localStorage.getItem("user_id");
         	if (user_request != null) {
         		let profileId = this.props.match.params.id;
-        		axios.post(this.state.curUrl +
-              "/api/user/remove_friend/?userId=" + user_request + "&friendId=" + profileId)
+        		axios.post(constant.MOVI3HALL_BASE_API +
+              "api/user/remove_friend/?userId=" + user_request + "&friendId=" + profileId)
         		.then(function (response) {
         			let isSuccess = response.data.isSuccess;
         			if (isSuccess) {
@@ -90,8 +90,8 @@ import * as constant from '../config';
     	let profileId = this.props.match.params.id;
     	console.log("profileId: " + profileId);
     	console.log("user_request: " + user_request);
-    	axios.get(this.state.curUrl +
-        "/api/user/profile/?id=" + profileId + "&user_request="+ user_request)
+    	axios.get(constant.MOVI3HALL_BASE_API +
+        "api/user/profile/?id=" + profileId + "&user_request="+ user_request)
         .then((code) => {
         	console.log("--------------------");
         	  console.log(window.localStorage.getItem("user_id"));
@@ -112,7 +112,7 @@ import * as constant from '../config';
 
     handleDeleteAccount() {
 			let userId = window.localStorage['user_id'];
-			let API = '/api/delete/user/?user_id='+userId;
+			let API = 'api/delete/user/?user_id='+userId;
 			axios.post(constant.MOVI3HALL_BASE_API+API).then(res => {
 				let isSuc = res.data.isSuccess;
 				if(isSuc) {

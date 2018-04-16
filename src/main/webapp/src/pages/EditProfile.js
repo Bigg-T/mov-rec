@@ -17,6 +17,8 @@ class EditProfile extends Component {
      // curUrl: 'http://moviehall.us-east-2.elasticbeanstalk.com'
       curUrl: "http://localhost:8081"
     };
+    this.BASE_API = constant.MOVI3HALL_BASE_API;
+
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
