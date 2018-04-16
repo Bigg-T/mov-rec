@@ -194,22 +194,17 @@ public class MovieFriendRecService {
 		List<HashMap<String, Object>> allFriends = new ArrayList<>();
 		
 		
-		List<UserObject> friends = new ArrayList<>();
-		HashMap<String, Object> friend2 = new HashMap<String, Object>(); 
-		
-		for (Iterator<UserObject> iterator = userFriends.iterator(); iterator.hasNext();) {
-	        //System.out.println("value= " + iterator.next());
-			UserObject currentFriend = iterator.next();
-			if (alreadyRecommended.get(currentFriend.getId())) {
-				continue;
-			} else {
+		//List<UserObject> friends = new ArrayList<>();
+		//HashMap<String, Object> friend2 = new HashMap<String, Object>(); 
+		System.out.println("--------BEFORE WEIRD ITERATOR THING-------");
+		userFriends.forEach(currentFriend -> {
+			if (alreadyRecommended.get(currentFriend.getId()) != null) {
 				HashMap<String, Object> currentFriendHash = new HashMap<>();
 				currentFriendHash.put("name", currentFriend.getFirst_name() + " " + currentFriend.getLast_name());
 				currentFriendHash.put("id", currentFriend.id);
 				allFriends.add(currentFriendHash);				
 			}
-		}
-
+		});
 		context.put(SUCCESS, true);
 		context.put(STATUS, HttpStatus.OK);
 		context.put("friends", allFriends);
