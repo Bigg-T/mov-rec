@@ -3,6 +3,7 @@ import {Container, Form, Header } from 'semantic-ui-react';
 import axios from 'axios';
 import Footer from '../components/Footer';
 import '../css/Footer.css';
+import * as constant from '../config';
 
 class SignIn extends Component {
   constructor(props) {
@@ -23,12 +24,13 @@ class SignIn extends Component {
     //should be doing post to backend
     // somehow this does not get updated in time before it git axios
     this.setState({ submittedUserName: username, submittedPassword: password });
-    let URL = "http://localhost:8081/api/user/add_User/?";
+    let URL = "http://localhost:8081/api/user/validate_login/?";
     let fname = "fname=bigt2&";
     let lname = "lname=mofo&";
     let email = "email=bigt2@mofo.com&";
     let pw = "pw=mypass&username=bigtmofo2";
-    let URL2 = "http://localhost:8081/api/user/validate_login/?";
+    let URL2 = constant.MOVI3HALL_BASE_API + "api/user/validate_login/?";
+    //"http://localhost:8081/api/user/validate_login/?";
     let un = "username=" + this.state.username;
     let pass = "pw=" + this.state.password;
     console.log("UserName:");
@@ -40,8 +42,9 @@ class SignIn extends Component {
       // console.log("Status of account logged in:" + code.data.isSuccess);
       let isSucess = code.data.isSuccess;
       if (isSucess) {
-        window.location.href = '/';// change the history path, to reroute (hack)
-        window.localStorage['isLoggedIn'] = true;
+    	  	 window.localStorage['isLoggedIn'] = true;
+         window.localStorage['user_id'] = code.data.user_id;
+         window.location.href = '/';// change the history path, to reroute (hack)
       } else {
         this.setState({errorMsg : "You incorrect password or username."})
       }

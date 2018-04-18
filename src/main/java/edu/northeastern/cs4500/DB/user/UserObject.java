@@ -1,26 +1,26 @@
 package edu.northeastern.cs4500.DB.user;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+
+import edu.northeastern.cs4500.DB.movie.UserRatesObject;
+
+import javax.persistence.*;
 
 
 /**
  * DATA MODEL for USER table in database
  *
  */
-@Entity(name="User")
+@Entity(name="user")
 public class UserObject {
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
 	
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public int id;
+
 	@NotNull
 	private String first_name;
 	@NotNull
@@ -28,7 +28,7 @@ public class UserObject {
 	@NotNull
 	@Column(unique=true)
 	private String email;
-	@NotNull
+	@NotNull //This should be hashed
 	private String password;
 	@NotNull
 	@Column(unique=true)
@@ -42,6 +42,13 @@ public class UserObject {
 	private String prof_pic;
 	private String about_me;
 	private boolean allow_location;
+	
+	@JoinTable(name = "user_friends", joinColumns = {
+			 @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
+			 @JoinColumn(name = "friendId", referencedColumnName = "id", nullable = false)})
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Collection<UserObject> friends;	
+	private boolean logged;
 	
 	/**
 	 * Can add any default fields here
@@ -61,9 +68,12 @@ public class UserObject {
 		this.email = email;
 		this.password = password;
 		this.username = username;
+		this.friends = new ArrayList<>();
 	}
 	
-	
+	public int getId() {
+		return id;
+	}
 	public boolean isAllow_location() {
 		return allow_location;
 	}
@@ -148,5 +158,20 @@ public class UserObject {
 	public void setFirst_name(String first_name) {
 		this.first_name = first_name;
 	}
-	
+
+	public Collection<UserObject> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(Collection<UserObject> friends) {
+		this.friends = friends;
+	}
+
+	public boolean isLogged() {
+		return logged;
+	}
+
+	public void setLogged(boolean logged) {
+		this.logged = logged;
+	}
 }

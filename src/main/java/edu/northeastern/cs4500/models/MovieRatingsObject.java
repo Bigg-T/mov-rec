@@ -1,18 +1,20 @@
 package edu.northeastern.cs4500.models;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-@Entity(name="MovieRatings")
+import edu.northeastern.cs4500.DB.movie.UserRatesObject;
+
+@Entity(name="movie_ratings")
 public class MovieRatingsObject {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int movieId;
+	private int movie_id;
 	
 	@NotNull
 	private String title;
@@ -22,15 +24,29 @@ public class MovieRatingsObject {
 	
 	private Double rating;
 	
-	private int tmdbId;
+	private int tmdb_id;
+	//MOVIE HALL RATING
+	private double vote_average;
+	private int vote_count;
+	//MOVIE HALL RATING
 	
 	//Empty constructor
 	public MovieRatingsObject() {
-		
+		this.vote_count = 0;
+		this.vote_average = 0;
+	}
+	
+	
+	public MovieRatingsObject(String title, String genres, int tmdb_id) {
+		this.title = title;
+		this.genres = genres;
+		this.tmdb_id = tmdb_id;
+		this.vote_count = 0;
+		this.vote_average = 0;
 	}
 	
 	public int getmovieId() {
-		return this.movieId;
+		return this.movie_id;
 	}
 	
 	public String getTitle() {
@@ -43,11 +59,11 @@ public class MovieRatingsObject {
 		return this.rating;
 	}
 	public int getTmdbId() {
-		return this.tmdbId;
+		return this.tmdb_id;
 	}
 	
 	public void setmovieId(int m) {
-		this.movieId = m;
+		this.movie_id = m;
 	}
 	
 	public void setTitle(String t) {
@@ -63,6 +79,15 @@ public class MovieRatingsObject {
 	}
 	
 	public void setTmdbId(Integer t) {
-		this.tmdbId = t;
+		this.tmdb_id = t;
+	}
+	
+	/**
+	 * recalculates the average vote average for this movie
+	 * @param vote 
+	 */
+	public void recalculateVoteAverage(double vote) {
+		this.vote_count++;
+		this.vote_average = (this.vote_average + vote) / this.vote_count;
 	}
 }

@@ -1,9 +1,9 @@
-jest.unmock('../APP');
+jest.unmock('../App');
 
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import App from '../APP';
+import App from '../App';
 import MyNav from '../components/MyNav';
 import MyRoute from '../components/MyRoute';
 import Footer from '../components/Footer'

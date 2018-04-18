@@ -2,6 +2,7 @@
  * Created by t on 2/12/18.
  */
 
+import * as constant from './config';
 export const MDB_IMG_BASE_URL5 = 'https://image.tmdb.org/t/p/w500/';
 export const MDB_IMG_BASE_URL3 = 'https://image.tmdb.org/t/p/w300/';
 export const MDB_BASE_URL = 'https://api.themoviedb.org/3/';
@@ -17,7 +18,8 @@ export const genImageURL3 = (poster_path) => {
 };
 
 export const genPopularList = () => {
-  return (MDB_BASE_URL + 'movie/popular?api_key='+ MDB_API_KEY +'&language=en-US&page=1');
+  return (constant.MOVI3HALL_BASE_API + 'api/movie/popular/?num=20');
+  //(MDB_BASE_URL + 'movie/popular?api_key='+ MDB_API_KEY +'&language=en-US&page=1');
 };
 
 export const genGenreID = (id) => {
@@ -26,6 +28,11 @@ export const genGenreID = (id) => {
 
 export const genPopular = (num) => {
   return '';
+};
+
+export const genTMDBMovie = (movieId) => {
+  // https://api.themoviedb.org/3/movie/157336?api_key={api_key}
+  return MDB_BASE_URL + 'movie/'+movieId+'?api_key='+MDB_API_KEY;
 };
 
 export const genMovieVid = (movieID) => {

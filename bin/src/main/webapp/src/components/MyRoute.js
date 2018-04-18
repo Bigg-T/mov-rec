@@ -6,6 +6,7 @@ import {Route, Switch} from 'react-router-dom';
 import MovieRecPage from '../pages/MovieRecPage';
 import SignUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
+import MovieDescription from './MovieDescription';
 class MyRoute extends Component {
 
   render() {
@@ -15,6 +16,7 @@ class MyRoute extends Component {
             <Route exact path='/' component={MovieRecPage}/>
             <Route path='/signup' component={SignUp}/>
             <Route path='/signin' component={SignIn}/>
+            <Route path='/movie/:id' component={MovieDescription}/>
           </Switch>
       </main>
     );

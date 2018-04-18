@@ -2,9 +2,11 @@
  * Created by t on 2/10/18.
  */
 import React, {Component} from 'react';
-import {Card, Image, Grid} from 'semantic-ui-react'
+import {Card, Image, Grid,Container,Button, Rating} from 'semantic-ui-react'
 import {Badge, Glyphicon} from 'react-bootstrap';
 import {Route, Redirect} from 'react-router-dom';
+import axios from 'axios';
+import * as constant from '../config';
 
 class MovieCard extends Component {
   constructor(props) {
@@ -17,11 +19,52 @@ class MovieCard extends Component {
   handleClick() {
     this.setState({isRedirect : true})
   }
+
+  handleRate = (e, { rating, maxRating }) => {
+    let user_id = window.localStorage['user_id'];
+    let API = 'api/movie/addUserRates/?movie_id='
+        +this.props.id+'&user_id='+user_id+'&rate='+rating;
+    let API_END = constant.MOVI3HALL_BASE_API + API;
+    axios.get(API_END).then(res => {
+      console.log(res.data);
+    });
+    this.setState({ rating, maxRating })
+  };
+
+  watchLater(movieId) {
+    let userId = window.localStorage['user_id'];
+    let API = 'api/movie/addTopMovie/?movie_id='+movieId+'&user_id='
+        +userId+'&rank=1&description=asdf';
+    let API_END = constant.MOVI3HALL_BASE_API + API;
+    axios.get(API_END).then(res => {
+      console.log(res.data);
+    });
+  }
   render() {
+    let rate = (window.localStorage['isLoggedIn']?
+        (
+            <div>
+              <Grid.Row>
+                <Grid.Column width={8}>
+                  What would you rate this?
+                </Grid.Column>
+                <Grid.Column>
+                  <Rating maxRating={4} onRate={this.handleRate}/>
+                </Grid.Column>
+              </Grid.Row>
+              <Container>
+              <Grid.Row>
+                <Button content='Watch Later' color='orange' onClick={() => this.watchLater(this.props.id)}/>
+              </Grid.Row>
+              </Container>
+            </div>
+        )
+        :
+        "");
     return (
         <div>
           <div>
-            <Route exact path="/" render={() => (
+            <Route path="/" render={() => (
                 this.state.isRedirect ? (
                         <Redirect to={{
                           pathname: '/movie/'+this.props.id,
@@ -32,28 +75,31 @@ class MovieCard extends Component {
                     )
             )}/>
           </div>
-          <Card link={true} onClick={() => this.handleClick()}>
+          <Card>
             <Card.Content>
               <Card.Header>
                 {this.props.movieName}
               </Card.Header>
               <Card.Meta>
                 <Grid columns="equal">
-                  <Grid.Column width={10}>
-                    <span className="date">
-                      Released on {this.props.year} {this.props.releaseDate}
-                    </span>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Badge>{this.props.rate}/10 <Glyphicon glyph="star" /></Badge>
-                  </Grid.Column>
+                  <Grid.Row>
+                    <Grid.Column width={10}>
+                      <span className="date">
+                        Released on {this.props.year} {this.props.releaseDate}
+                      </span>
+                    </Grid.Column>
+                    <Grid.Column>
+                      <Badge>{this.props.rate}/10 <Glyphicon glyph="star" /></Badge>
+                    </Grid.Column>
+                  </Grid.Row>
+                  {rate}
                 </Grid>
               </Card.Meta>
               <Card.Description>
                 {this.props.movieOverview}
               </Card.Description>
             </Card.Content>
-            <Image src={this.props.movieURL}/>
+            <Image as="a" src={this.props.movieURL} onClick={() => this.handleClick()}/>
           </Card>
         </div>
     );
