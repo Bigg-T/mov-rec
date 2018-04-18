@@ -1,8 +1,30 @@
-# team-31-spring18
-## Project repository for team 31
+# Project repository for team 31
+
+## Contributors
+Thien N. 
+Jean Paul T.
+Amrita V.
+Sajid R.
+Amit P.
+
+----
+
+## [Video for System Demo](https://youtu.be/EPMNCAEIkEQ)
+https://youtu.be/EPMNCAEIkEQ
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/EPMNCAEIkEQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+## [Video for System Setup](https://youtu.be/ictBcBIGBmk)
+https://youtu.be/ictBcBIGBmk
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ictBcBIGBmk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
 ## [Final Presentation](https://youtu.be/xkDbCfQVKNQ)
 https://youtu.be/xkDbCfQVKNQ
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/xkDbCfQVKNQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 ----- 
 
 ### Jenkins Endpoint
@@ -21,17 +43,6 @@ Password: team31
 --------
 
 ## System Setup
-
-### [Video to Run the Project](https://youtu.be/ictBcBIGBmk)
-https://youtu.be/ictBcBIGBmk
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ictBcBIGBmk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-### [Video to Demo The Project](https://youtu.be/EPMNCAEIkEQ)
-https://youtu.be/EPMNCAEIkEQ
-<iframe width="560" height="315" src="https://www.youtube.com/embed/EPMNCAEIkEQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
----- 
 
 We also have Jenkins for continuous integration. Every time new code are pushed in the code repository, or someone make a PR, it will trigger Jenkins webhook. Sonarqube used to check code quality.
 
@@ -59,6 +70,9 @@ Installation instructions to run frontend:
 - [Yarn](https://yarnpkg.com/lang/en/docs/install/#debian-stable)
 
 Once you have the tools install, the rest should be smooth. You will find the the code base in on Github.
+
+-----
+
 #### Clone Github Repository
 Install with SSH key
 ```$xslt
@@ -67,7 +81,10 @@ git clone git@github.ccs.neu.edu:CS4500/team-31-spring18.git
 Install with Github account username and password
 ```$xslt
 git clone https://github.ccs.neu.edu/CS4500/team-31-spring18.git
-```
+``` 
+
+-----
+
 #### Install backend 
 ##### Make sure you are in the top level directory, where ```pom.xml``` is located.
 
@@ -87,13 +104,13 @@ mvn test
 
 #### Install frontend
 ##### When installing/running front-end, you should be in ```<root>/src/main/webapp/```, where there will be a ```package.json``` file.
-Create a production build, a ```build``` folder will be created do be deploy on
+Create a production build, a ```build``` folder will be created do be deploy on AWS S3.
 
 Install all dependencies
 ```$xslt
 npm install
 ```
-AWS S3 or anything web-host server.  
+AWS S3 or anything web-host server. Running this will create a ```build``` folder in the ```webapp``` directory.
 ```$xslt
 yarn build_prod
 ```
