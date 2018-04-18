@@ -1,11 +1,11 @@
 # Project repository for team 31
 
 ## Contributors
-Thien N. 
-Jean Paul T.
-Amrita V.
-Sajid R.
-Amit P.
+- Thien N. 
+- Jean Paul T.
+- Amrita V.
+- Sajid R.
+- Amit P.
 
 ----
 
